@@ -14,16 +14,17 @@ body{background:#f5f5f5;color:#333;font-family:Arial,sans-serif;font-size:13px}
 .topbar-sub{font-size:11px;color:#2D3277;opacity:.8}
 .live-badge{background:#2D3277;color:#FFE600;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
 .topbar-date{font-size:12px;color:#2D3277;font-weight:600}
-.upload-area{background:#fff;padding:10px 16px;border-bottom:1px solid #eee;display:flex;gap:10px}
-.upload-box{flex:1;border:2px dashed #2D3277;border-radius:8px;padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:.2s}
+.upload-area{background:#fff;padding:10px 16px;border-bottom:1px solid #eee;display:flex;gap:8px}
+.upload-box{flex:1;border:2px dashed #2D3277;border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s}
 .upload-box:hover,.upload-box.drag{background:#fffde7;border-color:#FFE600}
 .upload-box.loaded{background:#f0faf4;border-color:#00A650;border-style:solid}
 .upload-box.loaded2{background:#f0f4ff;border-color:#2D3277;border-style:solid}
-.ub-icon{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
-.ub-title{font-size:12px;font-weight:700;color:#2D3277}
+.upload-box.loaded3{background:#fff8f0;border-color:#FF6B00;border-style:solid}
+.ub-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.ub-title{font-size:11px;font-weight:700;color:#2D3277}
 .ub-sub{font-size:10px;color:#999;margin-top:1px}
-.ub-status{font-size:10px;font-weight:700;margin-top:3px}
-.ub-btn{margin-left:auto;background:#2D3277;color:#FFE600;border:none;padding:6px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.ub-status{font-size:10px;font-weight:700;margin-top:2px}
+.ub-btn{margin-left:auto;background:#2D3277;color:#FFE600;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
 .ub-btn:hover{background:#3a42a0}
 .filters{background:#fff;border-bottom:1px solid #ddd;padding:8px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .filter-label{font-size:11px;color:#555}
@@ -32,12 +33,12 @@ select.fsel{background:#fff;border:1.5px solid #ddd;color:#333;padding:4px 8px;b
 .btn-clear{background:#FFE600;border:none;color:#2D3277;padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:700}
 .content{padding:12px 16px}
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
-.welcome-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:16px;padding:40px;max-width:580px;width:100%}
+.welcome-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:16px;padding:40px;max-width:600px;width:100%}
 .welcome-title{font-size:20px;font-weight:700;color:#2D3277;margin:16px 0 8px}
 .welcome-sub{font-size:13px;color:#888;margin-bottom:28px;line-height:1.6}
-.welcome-steps{display:flex;flex-direction:column;gap:12px;text-align:left;margin-bottom:28px}
-.welcome-step{display:flex;align-items:flex-start;gap:12px;background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:8px;padding:12px}
-.step-num{background:#2D3277;color:#FFE600;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.welcome-steps{display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:24px}
+.welcome-step{display:flex;align-items:flex-start;gap:12px;background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:8px;padding:10px 12px}
+.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
 .step-text{font-size:12px;color:#555;line-height:1.5}
 .step-text strong{color:#2D3277}
 .welcome-note{background:#fffde7;border:1.5px solid #FFE600;border-radius:8px;padding:10px 14px;font-size:11px;color:#555;text-align:left}
@@ -52,24 +53,31 @@ select.fsel{background:#fff;border:1.5px solid #ddd;color:#333;padding:4px 8px;b
 .alert-item{background:rgba(255,255,255,.12);border-left:3px solid #FFE600;padding:5px 10px;border-radius:6px;font-size:11px;color:#fff}
 .alert-item.warn{border-left-color:#ff6b6b}
 .alert-item.suc{border-left-color:#51cf66}
+.alert-item.orange{border-left-color:#FF6B00}
 .section-title{font-size:11px;font-weight:700;color:#2D3277;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .section-title::before{content:'';display:inline-block;width:3px;height:13px;background:#FFE600;border-radius:2px}
 .dit-banner{background:#fff;border:1.5px solid #2D3277;border-radius:12px;padding:14px;margin-bottom:12px}
 .dit-banner-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .dit-badge{background:#2D3277;color:#FFE600;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.sp-banner{background:#fff;border:1.5px solid #FF6B00;border-radius:12px;padding:14px;margin-bottom:12px}
+.sp-badge{background:#FF6B00;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
 .dit-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
 .dit-kpi{background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:8px;padding:10px 12px;text-align:center}
 .dit-kpi.highlight{background:#fff8e1;border-color:#FFE600}
 .dit-kpi.danger{background:#fff0f0;border-color:#E5002B}
 .dit-kpi.success{background:#f0faf4;border-color:#00A650}
+.dit-kpi.orange{background:#fff8f0;border-color:#FF6B00}
 .dit-kpi-val{font-size:22px;font-weight:700;color:#2D3277}
 .dit-kpi.highlight .dit-kpi-val{color:#c17f00}
 .dit-kpi.danger .dit-kpi-val{color:#E5002B}
 .dit-kpi.success .dit-kpi-val{color:#00A650}
+.dit-kpi.orange .dit-kpi-val{color:#FF6B00}
 .dit-kpi-label{font-size:10px;color:#888;margin-top:2px}
 .dit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dit-card{background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:8px;padding:12px}
+.sp-card{background:#fff8f0;border:1.5px solid #ffe0c8;border-radius:8px;padding:12px}
 .dit-card-title{font-size:11px;font-weight:700;color:#2D3277;margin-bottom:8px}
+.sp-card-title{font-size:11px;font-weight:700;color:#FF6B00;margin-bottom:8px}
 .dit-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
 .dit-bar-label{font-size:11px;color:#555;width:175px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;flex-shrink:0}
 .dit-bar-track{flex:1;background:#e8e8f0;border-radius:3px;height:14px}
@@ -115,6 +123,8 @@ tr:hover td{background:#fffde7}
 .b-at{background:#fff8e1;color:#f57c00}
 .b-dit{background:#e8f0ff;color:#2D3277}
 .b-nodit{background:#f0f0f0;color:#666}
+.b-sp{background:#fff0e0;color:#FF6B00}
+.b-ins{background:#e8f5e9;color:#00A650}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:#555}
 .leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
@@ -135,7 +145,7 @@ tr:hover td{background:#fffde7}
     <svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#2D3277"/><text x="16" y="21" text-anchor="middle" fill="#FFE600" font-size="18" font-weight="bold" font-family="Arial">M</text></svg>
     <div>
       <div class="topbar-title" id="page-title">INSUCESSOS DE ENTREGA</div>
-      <div class="topbar-sub">Monitoramento + Confronto DIT (Delay in Transit)</div>
+      <div class="topbar-sub">Monitoramento + DIT + Solução de Problemas</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:10px">
@@ -145,24 +155,34 @@ tr:hover td{background:#fffde7}
 </div>
 <div class="upload-area">
   <div class="upload-box" id="ub1" onclick="document.getElementById('csv1').click()">
-    <div class="ub-icon" style="background:#e8eaf6">&#128230;</div>
+    <div class="ub-icon" style="background:#e8f5e9">&#9888;</div>
     <div>
-      <div class="ub-title">1. Arquivo de Insucessos <span style="color:#E5002B">*</span></div>
-      <div class="ub-sub" id="ub1-sub">Clique ou arraste o CSV aqui</div>
+      <div class="ub-title">1. Insucessos <span style="color:#E5002B">*</span></div>
+      <div class="ub-sub" id="ub1-sub">Clique ou arraste o CSV</div>
       <div class="ub-status" id="ub1-status"></div>
     </div>
     <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv1').click()">&#128194; Selecionar</button>
     <input type="file" id="csv1" accept=".csv" style="display:none" onchange="handleFile1(this.files[0])">
   </div>
   <div class="upload-box" id="ub2" onclick="document.getElementById('csv2').click()">
-    <div class="ub-icon" style="background:#fff8e1">&#9200;</div>
+    <div class="ub-icon" style="background:#e8eaf6">&#9201;</div>
     <div>
-      <div class="ub-title">2. Arquivo DIT <span style="color:#888;font-weight:400">(opcional)</span></div>
-      <div class="ub-sub" id="ub2-sub">Clique ou arraste o CSV aqui</div>
+      <div class="ub-title">2. DIT <span style="color:#888;font-weight:400">(opcional)</span></div>
+      <div class="ub-sub" id="ub2-sub">Clique ou arraste o CSV</div>
       <div class="ub-status" id="ub2-status"></div>
     </div>
     <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv2').click()">&#128194; Selecionar</button>
     <input type="file" id="csv2" accept=".csv" style="display:none" onchange="handleFile2(this.files[0])">
+  </div>
+  <div class="upload-box" id="ub3" onclick="document.getElementById('csv3').click()">
+    <div class="ub-icon" style="background:#fff3e0">&#128295;</div>
+    <div>
+      <div class="ub-title">3. Solução de Problemas <span style="color:#888;font-weight:400">(opcional)</span></div>
+      <div class="ub-sub" id="ub3-sub">Clique ou arraste o CSV</div>
+      <div class="ub-status" id="ub3-status"></div>
+    </div>
+    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv3').click()">&#128194; Selecionar</button>
+    <input type="file" id="csv3" accept=".csv" style="display:none" onchange="handleFile3(this.files[0])">
   </div>
 </div>
 <div class="filters">
@@ -174,13 +194,16 @@ tr:hover td{background:#fffde7}
   <select class="fsel" id="f-nodo"><option value="">Todos</option></select>
   <span class="filter-label">&#9201; DIT</span>
   <select class="fsel" id="f-dit"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select>
+  <span class="filter-label">&#128196; Origem</span>
+  <select class="fsel" id="f-origem"><option value="">Todas</option><option value="INS">Insucessos</option><option value="SP">Soluc. Problemas</option></select>
   <button class="btn-clear" onclick="clearFilters()">&#10005; Limpar</button>
   <span class="filter-count" id="filter-count"></span>
 </div>
 <div class="content" id="main-content"></div>
-<div class="footer">Mercado Livre &#8212; Dashboard de Insucessos &#183; Gerado automaticamente</div>
+<div class="footer">Mercado Livre &#8212; Dashboard Unificado &#183; Insucessos + DIT + Solução de Problemas</div>
 <script>
-let DATA=[], DIT_DATA=[], DIT_IDS=new Set(), sortCol='', sortDir=1, charts={};
+let DATA=[], DIT_DATA=[], SP_DATA=[], DIT_IDS=new Set(), SP_IDS=new Set(), SP_MAP={};
+let sortCol='', sortDir=1, charts={};
 const ML_COLORS=['#2D3277','#FFE600','#00A650','#E5002B','#0077C8','#FF6B00','#7B4FBE','#00BCD4','#FF4081','#4CAF50'];
 
 function setDate(){
@@ -189,11 +212,11 @@ function setDate(){
 }
 setDate(); setInterval(setDate,60000);
 
-['ub1','ub2'].forEach((id,idx)=>{
+['ub1','ub2','ub3'].forEach((id,idx)=>{
   const el=document.getElementById(id);
   el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag');});
   el.addEventListener('dragleave',()=>el.classList.remove('drag'));
-  el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag');const f=e.dataTransfer.files[0];if(f){idx===0?handleFile1(f):handleFile2(f);}});
+  el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag');const f=e.dataTransfer.files[0];if(f){[handleFile1,handleFile2,handleFile3][idx](f);}});
 });
 
 function readCSV(file,cb){const r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsText(file,'UTF-8');}
@@ -225,13 +248,13 @@ function showWelcome(){
     '<div class="welcome-card">'+
     '<svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="36" fill="#e8eaf6"/><rect x="18" y="22" width="36" height="28" rx="4" fill="#2D3277"/><path d="M36 10v16m0-16l-5 5m5-5l5 5" stroke="#FFE600" stroke-width="3" stroke-linecap="round"/><rect x="24" y="32" width="24" height="3" rx="1.5" fill="#FFE600" opacity=".8"/><rect x="24" y="38" width="18" height="3" rx="1.5" fill="#fff" opacity=".4"/><rect x="24" y="44" width="20" height="3" rx="1.5" fill="#fff" opacity=".4"/></svg>'+
     '<div class="welcome-title">Bem-vindo ao Dashboard de Insucessos</div>'+
-    '<div class="welcome-sub">Para visualizar as an\u00e1lises, carregue os dois arquivos CSV do dia usando os campos acima.</div>'+
+    '<div class="welcome-sub">Para visualizar as an\u00e1lises, carregue os arquivos CSV do dia usando os campos acima.</div>'+
     '<div class="welcome-steps">'+
-    '<div class="welcome-step"><div class="step-num">1</div><div class="step-text"><strong>Arquivo de Insucessos</strong><br>Exporte do sistema e carregue no campo da esquerda acima. Colunas esperadas: ID, Nodo, Status_principal, Sub_status, Transportadora...</div></div>'+
-    '<div class="welcome-step"><div class="step-num">2</div><div class="step-text"><strong>Arquivo DIT</strong> (opcional)<br>Carregue no campo da direita para habilitar o confronto de Delay in Transit. Coluna chave: SHP_SHIPMENT_ID.</div></div>'+
-    '<div class="welcome-step"><div class="step-num">3</div><div class="step-text"><strong>Dashboard carrega automaticamente</strong><br>Assim que o arquivo de Insucessos for carregado, todos os gr\u00e1ficos e tabelas aparecem.</div></div>'+
+    '<div class="welcome-step"><div class="step-num" style="background:#00A650;color:#fff">1</div><div class="step-text"><strong>Arquivo de Insucessos</strong> \u2014 obrigat\u00f3rio<br>Colunas esperadas: ID, Nodo, Status_principal, Sub_status, Transportadora...</div></div>'+
+    '<div class="welcome-step"><div class="step-num" style="background:#2D3277;color:#FFE600">2</div><div class="step-text"><strong>Arquivo DIT</strong> \u2014 opcional<br>Habilita o painel de Delay in Transit. Coluna chave: SHP_SHIPMENT_ID.</div></div>'+
+    '<div class="welcome-step"><div class="step-num" style="background:#FF6B00;color:#fff">3</div><div class="step-text"><strong>Pacotes em Solu\u00e7\u00e3o de Problemas</strong> \u2014 opcional<br>IDs exclusivos (n\u00e3o presentes em Insucessos) ser\u00e3o inclu\u00eddos no demonstrativo. Coluna chave: ID do envio.</div></div>'+
     '</div>'+
-    '<div class="welcome-note">\ud83d\udca1 <strong>Dica:</strong> Voc\u00ea tamb\u00e9m pode arrastar os arquivos diretamente para os campos acima.</div>'+
+    '<div class="welcome-note">\ud83d\udca1 <strong>Dica:</strong> Voc\u00ea pode arrastar os arquivos diretamente nos campos acima. O arquivo 1 \u00e9 obrigat\u00f3rio para iniciar.</div>'+
     '</div></div>';
 }
 
@@ -244,10 +267,9 @@ function handleFile1(file){
     setSvcTitle(file.name);
     document.getElementById('ub1').className='upload-box loaded';
     document.getElementById('ub1-sub').textContent=file.name+' \u2014 '+DATA.length+' registros';
-    document.getElementById('ub1-status').textContent='\u2705 Carregado com sucesso';
+    document.getElementById('ub1-status').textContent='\u2705 Carregado';
     document.getElementById('ub1-status').style.color='#00A650';
-    populateSelects();
-    renderDashboard();
+    populateSelects(); renderDashboard();
   });
 }
 
@@ -255,12 +277,38 @@ function handleFile2(file){
   if(!file)return;
   readCSV(file,text=>{
     DIT_DATA=parseGeneric(text).filter(r=>r.SHP_SHIPMENT_ID);
-    if(!DIT_DATA.length){alert('Arquivo DIT vazio ou coluna SHP_SHIPMENT_ID nao encontrada.');return;}
+    if(!DIT_DATA.length){alert('Arquivo DIT vazio.');return;}
     DIT_IDS=new Set(DIT_DATA.map(r=>r.SHP_SHIPMENT_ID.trim()));
     document.getElementById('ub2').className='upload-box loaded2';
-    document.getElementById('ub2-sub').textContent=file.name+' \u2014 '+DIT_DATA.length+' registros DIT';
-    document.getElementById('ub2-status').textContent='\u2705 Carregado com sucesso';
+    document.getElementById('ub2-sub').textContent=file.name+' \u2014 '+DIT_DATA.length+' registros';
+    document.getElementById('ub2-status').textContent='\u2705 Carregado';
     document.getElementById('ub2-status').style.color='#2D3277';
+    if(DATA.length)renderDashboard();
+  });
+}
+
+function handleFile3(file){
+  if(!file)return;
+  readCSV(file,text=>{
+    const rows=parseGeneric(text).filter(r=>r['ID do envio']);
+    if(!rows.length){alert('Arquivo SP vazio ou coluna "ID do envio" nao encontrada.');return;}
+    SP_DATA=rows;
+    // Monta mapa ID -> dados SP
+    SP_MAP={};
+    rows.forEach(r=>{
+      const id=r['ID do envio'].trim();
+      SP_MAP[id]={
+        nodo: r['Facility de destino'].trim()||'SVC',
+        status: r['Status do envio'].trim(),
+        subtatus: r['Subtatus do envio'].trim(),
+        rota: r['Rota'].trim()
+      };
+    });
+    SP_IDS=new Set(Object.keys(SP_MAP));
+    document.getElementById('ub3').className='upload-box loaded3';
+    document.getElementById('ub3-sub').textContent=file.name+' \u2014 '+SP_DATA.length+' registros';
+    document.getElementById('ub3-status').textContent='\u2705 Carregado';
+    document.getElementById('ub3-status').style.color='#FF6B00';
     if(DATA.length)renderDashboard();
   });
 }
@@ -270,17 +318,42 @@ function pct(v,t){return t?Math.round(v/t*100):0;}
 function acColor(ag){return ag<=3?'#00A650':ag<=7?'#FF6B00':'#E5002B';}
 function acBg(ag){return ag<=3?'#e8f5e9':ag<=7?'#fff3e0':'#fde8e8';}
 
+// Retorna o conjunto unificado: INS + SP exclusivos (sem duplicatas)
+function getUnified(){
+  const insIds=new Set(DATA.map(r=>r.ID));
+  // SP exclusivos: IDs no SP que NÃO estão em Insucessos
+  const spExclusivos=Object.keys(SP_MAP).filter(id=>!insIds.has(id));
+  // Transforma SP exclusivos em formato compatível
+  const spRows=spExclusivos.map(id=>{
+    const sp=SP_MAP[id];
+    return {
+      ID: id,
+      Nodo: sp.nodo,
+      Status_principal: sp.status,
+      Sub_status: sp.subtatus,
+      Transportadora: '',
+      ID_Rota: sp.rota,
+      Tipo_veiculo: '',
+      _origem: 'SP'
+    };
+  });
+  return [...DATA.map(r=>({...r,_origem:'INS'})), ...spRows];
+}
+
 function getFiltered(){
+  const unified=getUnified();
   const t=(document.getElementById('f-transp')||{}).value||'';
   const s=(document.getElementById('f-status')||{}).value||'';
   const n=(document.getElementById('f-nodo')||{}).value||'';
   const d=(document.getElementById('f-dit')||{}).value||'';
-  return DATA.filter(r=>{
+  const o=(document.getElementById('f-origem')||{}).value||'';
+  return unified.filter(r=>{
     if(t&&r.Transportadora!==t)return false;
     if(s&&r.Status_principal!==s)return false;
-    if(n&&r.Nodo!==n)return false;
+    if(n&&(r.Nodo||'SVC')!==n)return false;
     if(d==='dit'&&!DIT_IDS.has(r.ID))return false;
     if(d==='nodit'&&DIT_IDS.has(r.ID))return false;
+    if(o&&r._origem!==o)return false;
     return true;
   });
 }
@@ -292,25 +365,28 @@ function getSearchFiltered(base){
   const s1=(document.getElementById('s-status1')||{}).value||'';
   const sb=(document.getElementById('s-sub1')||{}).value||'';
   const sd=(document.getElementById('s-dit-filter')||{}).value||'';
+  const so=(document.getElementById('s-origem')||{}).value||'';
   return base.filter(r=>{
     if(id&&!r.ID.includes(id))return false;
-    if(nd&&r.Nodo!==nd)return false;
+    if(nd&&(r.Nodo||'SVC')!==nd)return false;
     if(rt&&!r.ID_Rota.includes(rt))return false;
     if(s1&&r.Status_principal!==s1)return false;
     if(sb&&r.Sub_status!==sb)return false;
     if(sd==='dit'&&!DIT_IDS.has(r.ID))return false;
     if(sd==='nodit'&&DIT_IDS.has(r.ID))return false;
+    if(so&&r._origem!==so)return false;
     return true;
   });
 }
 
 function populateSelects(){
+  const unified=getUnified();
   const transpV=[...new Set(DATA.map(r=>r.Transportadora).filter(Boolean))].sort();
-  const statusV=[...new Set(DATA.map(r=>r.Status_principal).filter(Boolean))].sort();
-  const nodoV=[...new Set(DATA.map(r=>r.Nodo).filter(Boolean))].sort();
+  const statusV=[...new Set(unified.map(r=>r.Status_principal).filter(Boolean))].sort();
+  const nodoV=[...new Set(unified.map(r=>r.Nodo||'SVC').filter(Boolean))].sort();
   function fill(id,vals,all){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">'+all+'</option>';vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});el.value=cur;}
   fill('f-transp',transpV,'Todas');fill('f-status',statusV,'Todos');fill('f-nodo',nodoV,'Todos');
-  ['f-transp','f-status','f-nodo','f-dit'].forEach(id=>{const el=document.getElementById(id);if(el)el.onchange=renderDashboard;});
+  ['f-transp','f-status','f-nodo','f-dit','f-origem'].forEach(id=>{const el=document.getElementById(id);if(el)el.onchange=renderDashboard;});
 }
 
 function downloadCSV(){
@@ -318,11 +394,11 @@ function downloadCSV(){
   const rows=getSearchFiltered(base);
   const ditMap={};
   DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
-  const header=['ID','Nodo','ID_Rota','Status_principal','Sub_status','Transportadora','Tipo_veiculo','DIT','Motivo_DIT','Aging_DIT'];
+  const header=['ID','Nodo','ID_Rota','Status_principal','Sub_status','Transportadora','Tipo_veiculo','Origem','DIT','Motivo_DIT','Aging_DIT'];
   const lines=[header.join(',')];
   rows.forEach(r=>{
     const dit=ditMap[r.ID];
-    lines.push([r.ID,r.Nodo,r.ID_Rota,r.Status_principal,r.Sub_status,r.Transportadora,r.Tipo_veiculo,dit?'SIM':'NAO',dit?dit.motivo:'',dit?dit.aging:''].join(','));
+    lines.push([r.ID,r.Nodo||'SVC',r.ID_Rota,r.Status_principal,r.Sub_status,r.Transportadora,r.Tipo_veiculo,r._origem,dit?'SIM':'NAO',dit?dit.motivo:'',dit?dit.aging:''].join(','));
   });
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
   const url=URL.createObjectURL(blob);
@@ -335,15 +411,22 @@ function renderDashboard(){
   if(!DATA.length){showWelcome();return;}
   const filt=getFiltered(),total=filt.length;
   if(!total){document.getElementById('main-content').innerHTML='<div style="text-align:center;padding:40px;color:#aaa">Nenhum registro encontrado com os filtros aplicados.</div>';return;}
-  document.getElementById('filter-count').textContent=total+' de '+DATA.length+' pacotes';
+  document.getElementById('filter-count').textContent=total+' de '+getUnified().length+' pacotes';
 
+  const insRows=filt.filter(r=>r._origem==='INS');
+  const spRows=filt.filter(r=>r._origem==='SP');
   const inDIT=filt.filter(r=>DIT_IDS.has(r.ID));
   const notDIT=filt.filter(r=>!DIT_IDS.has(r.ID));
   const byNodo=freq(filt,'Nodo').filter(x=>x[0]!='(vazio)');
-  const topNodo=byNodo[0];
+  // Corrige SVC para itens sem nodo
+  const nodoFiltAjustado=filt.map(r=>({...r,Nodo:r.Nodo||'SVC'}));
+  const byNodoAjust=freq(nodoFiltAjustado,'Nodo').filter(x=>x[0]!='(vazio)');
+  const topNodo=byNodoAjust[0];
   const onR=filt.filter(r=>r.Status_principal==='on_route').length;
   const atS=filt.filter(r=>r.Status_principal==='at_station').length;
   const perdidos=filt.filter(r=>r.Sub_status==='Perdido').length;
+
+  // DIT
   const ditMatchIds=new Set(inDIT.map(r=>r.ID));
   const ditRows=DIT_DATA.filter(r=>ditMatchIds.has(r.SHP_SHIPMENT_ID));
   const motivoFreq={};
@@ -352,16 +435,27 @@ function renderDashboard(){
   const agingFreq={};
   ditRows.forEach(r=>{const a=parseInt(r.Aging)||0;const k=a<=3?'1-3 dias':(a<=7?'4-7 dias':'8+ dias');agingFreq[k]=(agingFreq[k]||0)+1;});
   const agingAvg=ditRows.length?Math.round(ditRows.reduce((s,r)=>s+(parseInt(r.Aging)||0),0)/ditRows.length*10)/10:0;
+
+  // SP subtatus
+  const spSubFreq={};
+  spRows.forEach(r=>{spSubFreq[r.Sub_status]=(spSubFreq[r.Sub_status]||0)+1;});
+  const spSubSorted=Object.entries(spSubFreq).sort((a,b)=>b[1]-a[1]);
+  const spInDIT=spRows.filter(r=>DIT_IDS.has(r.ID)).length;
+
   const svcName=document.getElementById('page-title').textContent.replace('INSUCESSOS DE ENTREGA \u2014 ','');
 
   let html='';
+
+  // HERO
   html+='<div class="hero-card">';
   html+='<div style="width:70px;height:70px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 80 80" width="70" height="70"><rect x="8" y="30" width="50" height="24" rx="5" fill="#FFE600"/><rect x="38" y="22" width="22" height="18" rx="3" fill="#fff" opacity=".9"/><rect x="40" y="24" width="18" height="14" rx="2" fill="#a8d8ff"/><circle cx="18" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="18" cy="56" r="3" fill="#FFE600"/><circle cx="46" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="46" cy="56" r="3" fill="#FFE600"/><rect x="56" y="36" width="16" height="18" rx="3" fill="#FFE600" stroke="#2D3277" stroke-width="1.5"/></svg></div>';
   html+='<div><div class="hero-title">MERCADO LIVRE \u2014 '+svcName+'</div>';
-  html+='<div class="hero-desc">Painel de controle de pacotes com pend\u00eancias de entrega e confronto DIT.</div>';
+  html+='<div class="hero-desc">Painel unificado: Insucessos + Solu\u00e7\u00e3o de Problemas + Confronto DIT.</div>';
   html+='<div class="hero-stats">';
-  html+='<div class="hstat"><div class="hstat-val">'+total+'</div><div class="hstat-label">Total Insucessos</div></div>';
-  html+='<div class="hstat"><div class="hstat-val">'+[...new Set(filt.map(r=>r.Nodo).filter(Boolean))].length+'</div><div class="hstat-label">Nodos Ativos</div></div>';
+  html+='<div class="hstat"><div class="hstat-val">'+total+'</div><div class="hstat-label">Total Unificado</div></div>';
+  html+='<div class="hstat"><div class="hstat-val">'+insRows.length+'</div><div class="hstat-label">Insucessos</div></div>';
+  if(SP_IDS.size)html+='<div class="hstat" style="background:rgba(255,107,0,.2)"><div class="hstat-val">'+spRows.length+'</div><div class="hstat-label">Soluc. Problemas</div></div>';
+  html+='<div class="hstat"><div class="hstat-val">'+[...new Set(nodoFiltAjustado.map(r=>r.Nodo).filter(Boolean))].length+'</div><div class="hstat-label">Nodos Ativos</div></div>';
   html+='<div class="hstat"><div class="hstat-val">'+[...new Set(filt.map(r=>r.ID_Rota).filter(Boolean))].length+'</div><div class="hstat-label">Rotas</div></div>';
   html+='<div class="hstat"><div class="hstat-val">'+perdidos+'</div><div class="hstat-label">Perdidos</div></div>';
   if(DIT_IDS.size)html+='<div class="hstat" style="background:rgba(255,230,0,.2)"><div class="hstat-val">'+inDIT.length+'</div><div class="hstat-label">Em DIT</div></div>';
@@ -371,13 +465,40 @@ function renderDashboard(){
   html+='<div class="alert-item warn"><span style="font-weight:700;color:#ff6b6b">'+perdidos+' perdidos</span><span style="color:rgba(255,255,255,.7)"> \u2014 aten\u00e7\u00e3o</span></div>';
   html+='<div class="alert-item suc"><span style="font-weight:700;color:#51cf66">'+onR+' em rota</span><span style="color:rgba(255,255,255,.7)"> ('+pct(onR,total)+'%)</span></div>';
   if(DIT_IDS.size)html+='<div class="alert-item" style="border-left-color:#FFE600"><span style="font-weight:700;color:#FFE600">'+inDIT.length+' em DIT</span><span style="color:rgba(255,255,255,.7)"> ('+pct(inDIT.length,total)+'%)</span></div>';
+  if(SP_IDS.size)html+='<div class="alert-item orange"><span style="font-weight:700;color:#FF6B00">'+spRows.length+' em SP</span><span style="color:rgba(255,255,255,.7)"> ('+pct(spRows.length,total)+'%)</span></div>';
   html+='</div></div>';
 
+  // PAINEL SP
+  if(SP_IDS.size && spRows.length>0){
+    html+='<div class="section-title">\ud83d\udd27 SOLU\u00c7\u00c3O DE PROBLEMAS \u2014 DEMONSTRATIVO</div>';
+    html+='<div class="sp-banner">';
+    html+='<div class="dit-banner-top"><div class="sp-badge">SP \u2014 Solu\u00e7\u00e3o de Problemas</div><div style="font-size:12px;color:#555">IDs exclusivos (n\u00e3o presentes em Insucessos) com nodo via Facility de destino</div></div>';
+    html+='<div class="dit-kpis">';
+    html+='<div class="dit-kpi orange"><div class="dit-kpi-val">'+spRows.length+'</div><div class="dit-kpi-label">Pacotes SP exclusivos</div></div>';
+    html+='<div class="dit-kpi"><div class="dit-kpi-val">'+(SP_IDS.size-spRows.length)+'</div><div class="dit-kpi-label">SP j\u00e1 em Insucessos</div></div>';
+    html+='<div class="dit-kpi success"><div class="dit-kpi-val">'+pct(spRows.length,total)+'%</div><div class="dit-kpi-label">% do total unificado</div></div>';
+    html+='<div class="dit-kpi highlight"><div class="dit-kpi-val">'+spInDIT+'</div><div class="dit-kpi-label">SP tamb\u00e9m em DIT</div></div>';
+    html+='</div>';
+    html+='<div class="dit-grid">';
+    html+='<div class="sp-card"><div class="sp-card-title">\ud83d\udccb Subtatus SP</div>';
+    spSubSorted.forEach((x,i)=>{const maxS=spSubSorted[0][1];html+='<div class="dit-bar-row"><div class="dit-bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/maxS*100)+'%;background:'+(['#FF6B00','#2D3277','#00A650'][i%3])+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],spRows.length)+'%</div></div>';});
+    html+='</div>';
+    // Nodos SP
+    const spNodoFreq={};
+    spRows.forEach(r=>{const n=r.Nodo||'SVC';spNodoFreq[n]=(spNodoFreq[n]||0)+1;});
+    const spNodoSorted=Object.entries(spNodoFreq).sort((a,b)=>b[1]-a[1]);
+    const maxSN=spNodoSorted[0]?spNodoSorted[0][1]:1;
+    html+='<div class="sp-card"><div class="sp-card-title">\ud83d\udccd Distribui\u00e7\u00e3o por Nodo (SP)</div>';
+    spNodoSorted.slice(0,8).forEach((x,i)=>{html+='<div class="dit-bar-row"><div class="dit-bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/maxSN*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],spRows.length)+'%</div></div>';});
+    html+='</div></div></div>';
+  }
+
+  // PAINEL DIT
   if(DIT_IDS.size){
-    html+='<div class="section-title">\u23f1 DEMONSTRATIVO DIT \u2014 CONFRONTO COM INSUCESSOS</div>';
-    html+='<div class="dit-banner"><div class="dit-banner-top"><div class="dit-badge">DIT \u2014 Delay in Transit</div><div style="font-size:12px;color:#555">Pacotes com insucesso que tamb\u00e9m constam na base de atrasos em tr\u00e2nsito</div></div>';
-    html+='<div class="dit-kpis"><div class="dit-kpi highlight"><div class="dit-kpi-val">'+inDIT.length+'</div><div class="dit-kpi-label">Insucessos em DIT</div></div><div class="dit-kpi"><div class="dit-kpi-val">'+notDIT.length+'</div><div class="dit-kpi-label">Insucessos sem DIT</div></div><div class="dit-kpi success"><div class="dit-kpi-val">'+pct(inDIT.length,total)+'%</div><div class="dit-kpi-label">% em DIT do total</div></div><div class="dit-kpi danger"><div class="dit-kpi-val">'+agingAvg+'d</div><div class="dit-kpi-label">Aging m\u00e9dio (dias)</div></div></div>';
-    html+='<div class="dit-grid"><div class="dit-card"><div class="dit-card-title">\ud83d\udccb Motivos DIT dos Insucessos</div>';
+    html+='<div class="section-title">\u23f1 DEMONSTRATIVO DIT \u2014 CONFRONTO COM BASE UNIFICADA</div>';
+    html+='<div class="dit-banner"><div class="dit-banner-top"><div class="dit-badge">DIT \u2014 Delay in Transit</div><div style="font-size:12px;color:#555">IDs presentes na base unificada (Insucessos + SP) que constam em DIT</div></div>';
+    html+='<div class="dit-kpis"><div class="dit-kpi highlight"><div class="dit-kpi-val">'+inDIT.length+'</div><div class="dit-kpi-label">Unificados em DIT</div></div><div class="dit-kpi"><div class="dit-kpi-val">'+notDIT.length+'</div><div class="dit-kpi-label">Sem DIT</div></div><div class="dit-kpi success"><div class="dit-kpi-val">'+pct(inDIT.length,total)+'%</div><div class="dit-kpi-label">% em DIT do total</div></div><div class="dit-kpi danger"><div class="dit-kpi-val">'+agingAvg+'d</div><div class="dit-kpi-label">Aging m\u00e9dio</div></div></div>';
+    html+='<div class="dit-grid"><div class="dit-card"><div class="dit-card-title">\ud83d\udccb Motivos DIT</div>';
     motivosSorted.slice(0,8).forEach((x,i)=>{const maxM=motivosSorted[0][1];html+='<div class="dit-bar-row"><div class="dit-bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/maxM*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],inDIT.length)+'%</div></div>';});
     html+='</div><div class="dit-card"><div class="dit-card-title">\u23f3 Distribui\u00e7\u00e3o por Aging</div>';
     Object.entries(agingFreq).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([k,v])=>{const c=k.startsWith('1')?'#00A650':(k.startsWith('4')?'#FF6B00':'#E5002B');const bg=k.startsWith('1')?'#e8f5e9':(k.startsWith('4')?'#fff3e0':'#fde8e8');html+='<div class="aging-row"><span class="aging-badge" style="background:'+bg+';color:'+c+'">'+k+'</span><div style="flex:1;margin:0 8px;background:#e8e8f0;border-radius:3px;height:11px"><div style="width:'+pct(v,inDIT.length)+'%;height:100%;border-radius:3px;background:'+c+'"></div></div><span style="font-weight:700;color:#2D3277;min-width:28px;text-align:right">'+v+'</span><span style="color:#888;font-size:10px;min-width:34px;text-align:right">'+pct(v,inDIT.length)+'%</span></div>';});
@@ -387,33 +508,37 @@ function renderDashboard(){
     html+='</div></div></div></div></div>';
   }
 
+  // DIST
   html+='<div class="section-title">DISTRIBUI\u00c7\u00c3O DE STATUS D1 \u2014 VIS\u00c3O GERAL</div>';
   html+='<div class="dist-grid"><div class="dist-card"><div style="width:40px;height:40px;border-radius:10px;background:#fff8e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="26" height="26" viewBox="0 0 28 28"><rect x="3" y="8" width="18" height="14" rx="3" fill="#FFE600"/><circle cx="7" cy="23" r="3" fill="#2D3277"/><circle cx="17" cy="23" r="3" fill="#2D3277"/></svg></div><div style="flex:1"><div class="dist-num">'+atS+'</div><div class="dist-pct">'+pct(atS,total)+'%</div><div class="dist-label">Na Esta\u00e7\u00e3o</div><div class="dist-bar"><div class="dist-fill" style="width:'+pct(atS,total)+'%;background:#FFE600"></div></div></div></div>';
   html+='<div class="dist-card"><div style="width:40px;height:40px;border-radius:10px;background:#e8eaf6;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="26" height="26" viewBox="0 0 28 28"><rect x="2" y="10" width="18" height="11" rx="3" fill="#2D3277"/><circle cx="6" cy="22" r="3" fill="#2D3277" stroke="#fff" stroke-width="1.5"/><circle cx="16" cy="22" r="3" fill="#2D3277" stroke="#fff" stroke-width="1.5"/><path d="M20 14L26 14L26 18L20 18" fill="#FFE600"/></svg></div><div style="flex:1"><div class="dist-num">'+onR+'</div><div class="dist-pct">'+pct(onR,total)+'%</div><div class="dist-label">Em Rota</div><div class="dist-bar"><div class="dist-fill" style="width:'+pct(onR,total)+'%;background:#2D3277"></div></div></div></div></div>';
 
+  // CHARTS
   html+='<div class="charts-grid"><div class="chart-card"><div class="section-title">STATUS D1 \u2014 PROPOR\u00c7\u00c3O</div><div style="position:relative;height:185px"><canvas id="donut1" role="img" aria-label="Status D1">Status D1</canvas></div><div class="legend" id="leg1"></div></div>';
-  html+='<div class="chart-card"><div class="section-title">SUB-STATUS D1 MAIS FREQUENTES</div><div id="substatus-bars"></div></div></div>';
+  html+='<div class="chart-card"><div class="section-title">SUB-STATUS MAIS FREQUENTES</div><div id="substatus-bars"></div></div></div>';
   html+='<div class="charts-grid"><div class="chart-card"><div class="section-title">SUB-STATUS D0</div><div style="position:relative;height:185px"><canvas id="donut2" role="img" aria-label="Sub-status D0">Sub-status D0</canvas></div><div class="legend" id="leg2"></div></div>';
   html+='<div class="chart-card"><div class="section-title">DISTRIBUI\u00c7\u00c3O POR NODO</div><div style="position:relative;height:185px"><canvas id="donut3" role="img" aria-label="Nodos">Nodos</canvas></div><div class="legend" id="leg3"></div></div>';
   html+='<div class="chart-card"><div class="section-title">\u26a0 CR\u00cdTICOS POR NODO</div><div id="criticos-bars"></div></div>';
   html+='<div class="chart-card"><div class="section-title">TRANSPORTADORAS \u2014 TOP 8</div><div id="transp-bars"></div></div></div>';
-  html+='<div class="section-title">\ud83d\udce6 PACOTES POR NODO</div><div class="chart-card" style="margin-bottom:12px"><div id="nodo-bars"></div></div>';
+  html+='<div class="section-title">\ud83d\udce6 PACOTES POR NODO (UNIFICADO)</div><div class="chart-card" style="margin-bottom:12px"><div id="nodo-bars"></div></div>';
 
-  html+='<div class="search-section"><div class="search-title">\ud83d\udd0d BUSCA AVAN\u00c7ADA <span class="search-sub">Filtre e exporte os registros</span><button class="btn-download" onclick="downloadCSV()" style="margin-left:auto">\u2b07 Baixar CSV filtrado</button></div>';
+  // BUSCA
+  html+='<div class="search-section"><div class="search-title">\ud83d\udd0d BUSCA AVAN\u00c7ADA <span class="search-sub">Base unificada \u2014 Insucessos + SP</span><button class="btn-download" onclick="downloadCSV()" style="margin-left:auto">\u2b07 Baixar CSV filtrado</button></div>';
   html+='<div class="search-filters"><div class="sf-group"><div class="sf-label">ID PACOTE</div><input type="text" id="s-id" placeholder="" oninput="renderTable()"></div><div class="sf-group"><div class="sf-label">NODO</div><select id="s-nodo" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">ID ROTA</div><input type="text" id="s-rota" placeholder="" oninput="renderTable()"></div><div class="sf-group"><div class="sf-label">STATUS D1</div><select id="s-status1" onchange="renderTable()"><option value="">Todos</option></select></div></div>';
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:8px;margin-bottom:10px"><div class="sf-group"><div class="sf-label">SUB STATUS D1</div><select id="s-sub1" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">DIT</div><select id="s-dit-filter" onchange="renderTable()"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select></div><div style="display:flex;align-items:flex-end;gap:8px"><button class="btn-clear" onclick="clearSearch()">\u2715 Limpar</button><span class="filter-count" id="s-count" style="padding-bottom:4px"></span></div></div>';
-  html+='<div class="tbl-wrap"><table><thead><tr><th onclick="sortTable(\'ID\')">ID PACOTE \u2195</th><th onclick="sortTable(\'Nodo\')">NODO \u2195</th><th onclick="sortTable(\'ID_Rota\')">ID ROTA \u2195</th><th onclick="sortTable(\'Status_principal\')">STATUS D1 \u2195</th><th onclick="sortTable(\'Sub_status\')">SUB STATUS \u2195</th><th onclick="sortTable(\'Transportadora\')">TRANSPORTADORA \u2195</th><th>DIT</th><th>MOTIVO DIT</th><th>AGING</th></tr></thead><tbody id="tbl-body"></tbody></table></div></div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div class="sf-group"><div class="sf-label">SUB STATUS</div><select id="s-sub1" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">DIT</div><select id="s-dit-filter" onchange="renderTable()"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select></div><div class="sf-group"><div class="sf-label">ORIGEM</div><select id="s-origem" onchange="renderTable()"><option value="">Todos</option><option value="INS">Insucessos</option><option value="SP">Soluc. Problemas</option></select></div><div style="display:flex;align-items:flex-end;gap:6px"><button class="btn-clear" onclick="clearSearch()">\u2715 Limpar</button><span class="filter-count" id="s-count" style="padding-bottom:4px"></span></div></div>';
+  html+='<div class="tbl-wrap"><table><thead><tr><th onclick="sortTable(\'ID\')">ID PACOTE \u2195</th><th onclick="sortTable(\'Nodo\')">NODO \u2195</th><th onclick="sortTable(\'ID_Rota\')">ID ROTA \u2195</th><th onclick="sortTable(\'Status_principal\')">STATUS D1 \u2195</th><th onclick="sortTable(\'Sub_status\')">SUB STATUS \u2195</th><th onclick="sortTable(\'Transportadora\')">TRANSPORTADORA \u2195</th><th>ORIGEM</th><th>DIT</th><th>MOTIVO DIT</th><th>AGING</th></tr></thead><tbody id="tbl-body"></tbody></table></div></div>';
 
   document.getElementById('main-content').innerHTML=html;
   populateSearchSelects();
-  renderCharts(filt,total,byNodo,onR,atS);
+  renderCharts(filt,total,byNodoAjust,onR,atS);
   renderTable();
 }
 
 function populateSearchSelects(){
-  const nodoV=[...new Set(DATA.map(r=>r.Nodo).filter(Boolean))].sort();
-  const statusV=[...new Set(DATA.map(r=>r.Status_principal).filter(Boolean))].sort();
-  const subV=[...new Set(DATA.map(r=>r.Sub_status).filter(Boolean))].sort();
+  const unified=getUnified();
+  const nodoV=[...new Set(unified.map(r=>r.Nodo||'SVC').filter(Boolean))].sort();
+  const statusV=[...new Set(unified.map(r=>r.Status_principal).filter(Boolean))].sort();
+  const subV=[...new Set(unified.map(r=>r.Sub_status).filter(Boolean))].sort();
   function fill(id,vals){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">Todos</option>';vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});el.value=cur;}
   fill('s-nodo',nodoV);fill('s-status1',statusV);fill('s-sub1',subV);
 }
@@ -423,9 +548,10 @@ function renderCharts(filt,total,byNodo,onR,atS){
   const p=(v,t)=>t?Math.round(v/t*100):0;
   charts.d1=new Chart(document.getElementById('donut1'),{type:'doughnut',data:{labels:['Em Rota','Na Esta\u00e7\u00e3o'],datasets:[{data:[onR,atS],backgroundColor:['#2D3277','#FFE600'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+' ('+p(ctx.parsed,total)+'%)'}}}}});
   document.getElementById('leg1').innerHTML='<span class="leg-item"><span class="leg-dot" style="background:#2D3277"></span>Em Rota '+onR+' ('+pct(onR,total)+'%)</span><span class="leg-item"><span class="leg-dot" style="background:#FFE600"></span>Na Esta\u00e7\u00e3o '+atS+' ('+pct(atS,total)+'%)</span>';
-  const subD1=freq(filt,'Sub_status').slice(0,8);const maxD1=subD1[0]?subD1[0][1]:1;
+  const unified=getFiltered();
+  const subD1=freq(unified,'Sub_status').slice(0,8);const maxD1=subD1[0]?subD1[0][1]:1;
   document.getElementById('substatus-bars').innerHTML=subD1.map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/maxD1*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
-  const subD0=freq(filt,'Sub_status').slice(0,8);
+  const subD0=freq(unified,'Sub_status').slice(0,8);
   charts.d2=new Chart(document.getElementById('donut2'),{type:'doughnut',data:{labels:subD0.map(x=>x[0]),datasets:[{data:subD0.map(x=>x[1]),backgroundColor:ML_COLORS.slice(0,subD0.length),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+' ('+p(ctx.parsed,total)+'%)'}}}}});
   document.getElementById('leg2').innerHTML=subD0.slice(0,5).map((x,i)=>'<span class="leg-item"><span class="leg-dot" style="background:'+ML_COLORS[i]+'"></span>'+x[0].slice(0,20)+' '+pct(x[1],total)+'%</span>').join('');
   const nodoDist=byNodo.slice(0,10);
@@ -433,7 +559,7 @@ function renderCharts(filt,total,byNodo,onR,atS){
   document.getElementById('leg3').innerHTML=nodoDist.slice(0,5).map((x,i)=>'<span class="leg-item"><span class="leg-dot" style="background:'+ML_COLORS[i]+'"></span>'+x[0]+' '+pct(x[1],total)+'%</span>').join('');
   const maxN=byNodo[0]?byNodo[0][1]:1;
   document.getElementById('criticos-bars').innerHTML=byNodo.slice(0,8).map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/maxN*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
-  const transp=freq(filt,'Transportadora').slice(0,8);const maxT=transp[0]?transp[0][1]:1;
+  const transp=freq(filt,'Transportadora').filter(x=>x[0]!='(vazio)'&&x[0]!='').slice(0,8);const maxT=transp[0]?transp[0][1]:1;
   document.getElementById('transp-bars').innerHTML=transp.map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/maxT*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
   document.getElementById('nodo-bars').innerHTML=byNodo.map((x,i)=>'<div class="node-row"><div class="node-label" title="'+x[0]+'">'+x[0]+'</div><div class="node-bar-track"><div class="node-bar-fill" style="width:'+Math.round(x[1]/maxN*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+' pkg</div></div><div class="node-pct">'+pct(x[1],total)+'%</div></div>').join('');
 }
@@ -447,15 +573,15 @@ function renderTable(){
   DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
   tbody.innerHTML=rows.slice(0,300).map(r=>{
     const dit=ditMap[r.ID];const ag=dit?parseInt(dit.aging):null;
-    return '<tr><td style="font-family:monospace;font-size:11px">'+r.ID+'</td><td>'+(r.Nodo||'-')+'</td><td style="font-size:11px">'+r.ID_Rota+'</td><td><span class="badge '+(r.Status_principal==='on_route'?'b-on':'b-at')+'">'+(r.Status_principal==='on_route'?'\ud83d\ude97':'\ud83c\udfe2')+' '+r.Status_principal+'</span></td><td>'+r.Sub_status+'</td><td>'+r.Transportadora+'</td><td>'+(dit?'<span class="badge b-dit">\u23f1 DIT</span>':'<span class="badge b-nodit">\u2014</span>')+'</td><td style="font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis">'+(dit?dit.motivo:'-')+'</td><td>'+(dit?'<span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+dit.aging+'d</span>':'-')+'</td></tr>';
+    const nodo=r.Nodo||'SVC';
+    return '<tr><td style="font-family:monospace;font-size:11px">'+r.ID+'</td><td>'+nodo+'</td><td style="font-size:11px">'+r.ID_Rota+'</td><td><span class="badge '+(r.Status_principal==='on_route'?'b-on':'b-at')+'">'+(r.Status_principal==='on_route'?'\ud83d\ude97':'\ud83c\udfe2')+' '+r.Status_principal+'</span></td><td>'+r.Sub_status+'</td><td>'+(r.Transportadora||'-')+'</td><td><span class="badge '+(r._origem==='SP'?'b-sp':'b-ins')+'">'+(r._origem==='SP'?'\ud83d\udd27 SP':'\u26a0 INS')+'</span></td><td>'+(dit?'<span class="badge b-dit">\u23f1 DIT</span>':'<span class="badge b-nodit">\u2014</span>')+'</td><td style="font-size:11px;max-width:150px;overflow:hidden;text-overflow:ellipsis">'+(dit?dit.motivo:'-')+'</td><td>'+(dit?'<span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+dit.aging+'d</span>':'-')+'</td></tr>';
   }).join('');
 }
 
 function sortTable(col){sortCol=col;sortDir*=-1;renderTable();}
-function clearFilters(){['f-transp','f-status','f-nodo','f-dit'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderDashboard();}
-function clearSearch(){['s-id','s-rota'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});['s-nodo','s-status1','s-sub1','s-dit-filter'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderTable();}
+function clearFilters(){['f-transp','f-status','f-nodo','f-dit','f-origem'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderDashboard();}
+function clearSearch(){['s-id','s-rota'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});['s-nodo','s-status1','s-sub1','s-dit-filter','s-origem'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderTable();}
 
-// Inicia com tela de boas-vindas
 showWelcome();
 </script>
 </body>
