@@ -696,7 +696,17 @@ function gerarResumoWpp(){
     msg+='\n';
   }
 
-  msg+='_Gerado via Dashboard ML_';
+  // Lista de IDs com classificação
+  const ditMap={};
+  DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
+
+  msg+='*Relação de IDs:*\n';
+  rows.forEach(r=>{
+    const dit=ditMap[r.ID];
+    const classificacao=dit&&dit.motivo?r.Sub_status+' / DIT: '+dit.motivo+' ('+dit.aging+'d)':r.Sub_status;
+    msg+=r.ID+' _('+classificacao+')_\n';
+  });
+  msg+='\n_Gerado via Dashboard ML_';
 
   document.getElementById('wpp-preview').textContent=msg;
   const sub=filtrosAtivos.length?'Filtros: '+filtrosAtivos.join(' | '):'Todos os registros (sem filtros)';
