@@ -130,6 +130,19 @@ tr:hover td{background:#fffde7}
 .leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
 .btn-download{background:#00A650;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
 .btn-download:hover{background:#008a42}
+.btn-whatsapp{background:#25D366;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-whatsapp:hover{background:#1da851}
+.wpp-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.wpp-modal-overlay.open{display:flex}
+.wpp-modal{background:#fff;border-radius:16px;padding:24px;width:90%;max-width:500px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.wpp-modal-title{font-size:15px;font-weight:700;color:#2D3277;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.wpp-modal-sub{font-size:11px;color:#888;margin-bottom:14px}
+.wpp-preview{background:#e8f5e3;border:1px solid #c3e6c3;border-radius:10px;padding:14px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:Arial,sans-serif;color:#111;max-height:380px;overflow-y:auto;margin-bottom:14px}
+.wpp-modal-btns{display:flex;gap:8px;justify-content:flex-end}
+.wpp-btn-copy{background:#25D366;color:#fff;border:none;padding:8px 18px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
+.wpp-btn-copy:hover{background:#1da851}
+.wpp-btn-close{background:#f0f0f0;color:#555;border:none;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
+.wpp-btn-copy.copied{background:#2D3277}
 .footer{background:#2D3277;color:rgba(255,255,255,.5);text-align:center;padding:10px;font-size:11px;margin-top:8px}
 @media(max-width:700px){
   .hero-card{grid-template-columns:1fr}.alerts{min-width:unset}
@@ -200,6 +213,22 @@ tr:hover td{background:#fffde7}
   <span class="filter-count" id="filter-count"></span>
 </div>
 <div class="content" id="main-content"></div>
+
+<!-- Modal WhatsApp -->
+<div class="wpp-modal-overlay" id="wpp-overlay" onclick="closeWppModal(event)">
+  <div class="wpp-modal">
+    <div class="wpp-modal-title">
+      <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#25D366"/><path d="M14.5 12.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.8-.3-1.6-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.3 0-.1 0-.2-.1-.3-.1-.1-.5-1.1-.6-1.5-.2-.4-.3-.3-.5-.3h-.4c-.1 0-.4.1-.6.3-.2.2-.7.7-.7 1.7s.7 2 .8 2.1c.1.1 1.4 2.2 3.5 3 .5.2.9.3 1.2.4.5.1 1 .1 1.3.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2z" fill="#fff"/></svg>
+      Resumo para WhatsApp
+    </div>
+    <div class="wpp-modal-sub" id="wpp-modal-sub">Baseado nos filtros aplicados na Busca Avançada</div>
+    <div class="wpp-preview" id="wpp-preview"></div>
+    <div class="wpp-modal-btns">
+      <button class="wpp-btn-close" onclick="document.getElementById('wpp-overlay').classList.remove('open')">Fechar</button>
+      <button class="wpp-btn-copy" id="wpp-copy-btn" onclick="copyWpp()">📋 Copiar mensagem</button>
+    </div>
+  </div>
+</div>
 <div class="footer">Mercado Livre &#8212; Dashboard Unificado &#183; Insucessos + DIT + Solução de Problemas</div>
 <script>
 let DATA=[], DIT_DATA=[], SP_DATA=[], DIT_IDS=new Set(), SP_IDS=new Set(), SP_MAP={};
@@ -523,7 +552,7 @@ function renderDashboard(){
   html+='<div class="section-title">\ud83d\udce6 PACOTES POR NODO (UNIFICADO)</div><div class="chart-card" style="margin-bottom:12px"><div id="nodo-bars"></div></div>';
 
   // BUSCA
-  html+='<div class="search-section"><div class="search-title">\ud83d\udd0d BUSCA AVAN\u00c7ADA <span class="search-sub">Base unificada \u2014 Insucessos + SP</span><button class="btn-download" onclick="downloadCSV()" style="margin-left:auto">\u2b07 Baixar CSV filtrado</button></div>';
+  html+='<div class="search-section"><div class="search-title">\ud83d\udd0d BUSCA AVAN\u00c7ADA <span class="search-sub">Base unificada \u2014 Insucessos + SP</span><div style="margin-left:auto;display:flex;gap:6px"><button class="btn-download" onclick="downloadCSV()">\u2b07 Baixar CSV</button><button class="btn-whatsapp" onclick="gerarResumoWpp()">\ud83d\udcac Resumo WhatsApp</button></div></div>';
   html+='<div class="search-filters"><div class="sf-group"><div class="sf-label">ID PACOTE</div><input type="text" id="s-id" placeholder="" oninput="renderTable()"></div><div class="sf-group"><div class="sf-label">NODO</div><select id="s-nodo" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">ID ROTA</div><input type="text" id="s-rota" placeholder="" oninput="renderTable()"></div><div class="sf-group"><div class="sf-label">STATUS D1</div><select id="s-status1" onchange="renderTable()"><option value="">Todos</option></select></div></div>';
   html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div class="sf-group"><div class="sf-label">SUB STATUS</div><select id="s-sub1" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">DIT</div><select id="s-dit-filter" onchange="renderTable()"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select></div><div class="sf-group"><div class="sf-label">ORIGEM</div><select id="s-origem" onchange="renderTable()"><option value="">Todos</option><option value="INS">Insucessos</option><option value="SP">Soluc. Problemas</option></select></div><div style="display:flex;align-items:flex-end;gap:6px"><button class="btn-clear" onclick="clearSearch()">\u2715 Limpar</button><span class="filter-count" id="s-count" style="padding-bottom:4px"></span></div></div>';
   html+='<div class="tbl-wrap"><table><thead><tr><th onclick="sortTable(\'ID\')">ID PACOTE \u2195</th><th onclick="sortTable(\'Nodo\')">NODO \u2195</th><th onclick="sortTable(\'ID_Rota\')">ID ROTA \u2195</th><th onclick="sortTable(\'Status_principal\')">STATUS D1 \u2195</th><th onclick="sortTable(\'Sub_status\')">SUB STATUS \u2195</th><th onclick="sortTable(\'Transportadora\')">TRANSPORTADORA \u2195</th><th>ORIGEM</th><th>DIT</th><th>MOTIVO DIT</th><th>AGING</th></tr></thead><tbody id="tbl-body"></tbody></table></div></div>';
@@ -581,6 +610,116 @@ function renderTable(){
 function sortTable(col){sortCol=col;sortDir*=-1;renderTable();}
 function clearFilters(){['f-transp','f-status','f-nodo','f-dit','f-origem'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderDashboard();}
 function clearSearch(){['s-id','s-rota'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});['s-nodo','s-status1','s-sub1','s-dit-filter','s-origem'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderTable();}
+
+function closeWppModal(e){if(e.target===document.getElementById('wpp-overlay'))document.getElementById('wpp-overlay').classList.remove('open');}
+
+function gerarResumoWpp(){
+  const base=getFiltered();
+  const rows=getSearchFiltered(base);
+  if(!rows.length){alert('Nenhum registro com os filtros aplicados.');return;}
+
+  const fNodo=(document.getElementById('s-nodo')||{}).value||'';
+  const fStatus=(document.getElementById('s-status1')||{}).value||'';
+  const fSub=(document.getElementById('s-sub1')||{}).value||'';
+  const fDit=(document.getElementById('s-dit-filter')||{}).value||'';
+  const fOrigem=(document.getElementById('s-origem')||{}).value||'';
+  const fId=(document.getElementById('s-id')||{}).value||'';
+
+  const now=new Date();
+  const dataHora=now.toLocaleDateString('pt-BR')+' \u00e0s '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const svcName=document.getElementById('page-title').textContent.replace('INSUCESSOS DE ENTREGA \u2014 ','')||'SSP';
+
+  let filtrosAtivos=[];
+  if(fNodo)filtrosAtivos.push('Nodo: '+fNodo);
+  if(fStatus)filtrosAtivos.push('Status: '+fStatus);
+  if(fSub)filtrosAtivos.push('Sub-status: '+fSub);
+  if(fDit==='dit')filtrosAtivos.push('Somente DIT');
+  if(fDit==='nodit')filtrosAtivos.push('Sem DIT');
+  if(fOrigem==='INS')filtrosAtivos.push('Origem: Insucessos');
+  if(fOrigem==='SP')filtrosAtivos.push('Origem: Soluc. Problemas');
+  if(fId)filtrosAtivos.push('ID: '+fId);
+
+  const total=rows.length;
+
+  const statusCount={};
+  rows.forEach(r=>{const s=r.Status_principal||'(vazio)';statusCount[s]=(statusCount[s]||0)+1;});
+  const statusSorted=Object.entries(statusCount).sort((a,b)=>b[1]-a[1]);
+
+  const subCount={};
+  rows.forEach(r=>{const s=r.Sub_status||'(vazio)';subCount[s]=(subCount[s]||0)+1;});
+  const subSorted=Object.entries(subCount).sort((a,b)=>b[1]-a[1]);
+
+  const emDit=rows.filter(r=>DIT_IDS.has(r.ID)).length;
+  const semDit=total-emDit;
+  const insCount=rows.filter(r=>r._origem==='INS').length;
+  const spCount=rows.filter(r=>r._origem==='SP').length;
+
+  const nodoCount={};
+  rows.forEach(r=>{const n=r.Nodo||'SVC';nodoCount[n]=(nodoCount[n]||0)+1;});
+  const nodoSorted=Object.entries(nodoCount).sort((a,b)=>b[1]-a[1]);
+
+  let msg='';
+  msg+='\ud83d\udce6 *INSUCESSOS \u2014 '+svcName+'*\n';
+  msg+='\ud83d\udcc5 '+dataHora+'\n';
+  if(filtrosAtivos.length)msg+='\ud83d\udd0d _Filtro: '+filtrosAtivos.join(' | ')+'_\n';
+  msg+='\n*Total de pacotes: '+total+'*\n\n';
+
+  msg+='\ud83d\udcca *Status D1:*\n';
+  statusSorted.forEach(([s,v])=>{
+    const icon=s==='on_route'?'\ud83d\ude97':s==='at_station'?'\ud83c\udfe2':'\u2022';
+    msg+=icon+' '+s+': *'+v+'* ('+pct(v,total)+'%)\n';
+  });
+  msg+='\n';
+
+  msg+='\ud83d\udccb *Sub-status:*\n';
+  subSorted.slice(0,6).forEach(([s,v])=>{msg+='\u2022 '+s+': *'+v+'* ('+pct(v,total)+'%)\n';});
+  if(subSorted.length>6)msg+='\u2022 Outros: *'+(total-subSorted.slice(0,6).reduce((a,x)=>a+x[1],0))+'*\n';
+  msg+='\n';
+
+  if(DIT_IDS.size){
+    msg+='\u23f1 *DIT (Delay in Transit):*\n';
+    msg+='\u2705 Em DIT: *'+emDit+'* ('+pct(emDit,total)+'%)\n';
+    msg+='\u274c Sem DIT: *'+semDit+'* ('+pct(semDit,total)+'%)\n\n';
+  }
+
+  if(SP_IDS.size){
+    msg+='\ud83d\udccc *Origem:*\n';
+    if(insCount)msg+='\u26a0 Insucessos: *'+insCount+'*\n';
+    if(spCount)msg+='\ud83d\udd27 Soluc. Problemas: *'+spCount+'*\n';
+    msg+='\n';
+  }
+
+  if(!fNodo&&nodoSorted.length>1){
+    msg+='\ud83d\udccd *Top Nodos:*\n';
+    nodoSorted.slice(0,5).forEach(([n,v])=>{msg+='\u2022 '+n+': *'+v+'* ('+pct(v,total)+'%)\n';});
+    if(nodoSorted.length>5)msg+='\u2022 +outros '+(nodoSorted.length-5)+' nodos\n';
+    msg+='\n';
+  }
+
+  msg+='_Gerado via Dashboard ML_';
+
+  document.getElementById('wpp-preview').textContent=msg;
+  const sub=filtrosAtivos.length?'Filtros: '+filtrosAtivos.join(' | '):'Todos os registros (sem filtros)';
+  document.getElementById('wpp-modal-sub').textContent=sub+' \u2014 '+total+' pacotes';
+  document.getElementById('wpp-copy-btn').textContent='\ud83d\udccb Copiar mensagem';
+  document.getElementById('wpp-copy-btn').classList.remove('copied');
+  document.getElementById('wpp-overlay').classList.add('open');
+}
+
+function copyWpp(){
+  const txt=document.getElementById('wpp-preview').textContent;
+  const copy=()=>{
+    const btn=document.getElementById('wpp-copy-btn');
+    btn.textContent='\u2705 Copiado!';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='\ud83d\udccb Copiar mensagem';btn.classList.remove('copied');},2500);
+  };
+  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(copy).catch(()=>{fallbackCopy(txt);copy();});}
+  else{fallbackCopy(txt);copy();}
+}
+function fallbackCopy(txt){
+  const ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';
+  document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+}
 
 showWelcome();
 </script>
