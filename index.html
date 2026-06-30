@@ -1,152 +1,216 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard de Insucessos | Mercado Livre</title>
+<title>Dashboard ML</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#f5f5f5;color:#333;font-family:Arial,sans-serif;font-size:13px}
-.topbar{background:#FFE600;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #2D3277;position:sticky;top:0;z-index:100}
+.topbar{background:#FFE600;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #2D3277;position:sticky;top:0;z-index:200}
 .topbar-left{display:flex;align-items:center;gap:10px}
-.topbar-title{font-size:16px;font-weight:700;color:#2D3277}
+.topbar-title{font-size:15px;font-weight:700;color:#2D3277}
 .topbar-sub{font-size:11px;color:#2D3277;opacity:.8}
 .live-badge{background:#2D3277;color:#FFE600;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
 .topbar-date{font-size:12px;color:#2D3277;font-weight:600}
-.upload-area{background:#fff;padding:10px 16px;border-bottom:1px solid #eee;display:flex;gap:8px}
-.upload-box{flex:1;border:2px dashed #2D3277;border-radius:8px;padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s}
+.tabs{background:#2D3277;display:flex;position:sticky;top:47px;z-index:199}
+.tab-btn{padding:10px 20px;color:rgba(255,255,255,.6);font-size:13px;font-weight:700;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:.2s}
+.tab-btn:hover{color:#fff}
+.tab-btn.active{color:#FFE600;border-bottom-color:#FFE600}
+.upload-area{background:#fff;padding:8px 16px;border-bottom:1px solid #eee;display:flex;gap:6px;flex-wrap:wrap}
+.upload-box{flex:1;min-width:180px;border:2px dashed #2D3277;border-radius:8px;padding:8px 10px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s}
 .upload-box:hover,.upload-box.drag{background:#fffde7;border-color:#FFE600}
 .upload-box.loaded{background:#f0faf4;border-color:#00A650;border-style:solid}
 .upload-box.loaded2{background:#f0f4ff;border-color:#2D3277;border-style:solid}
 .upload-box.loaded3{background:#fff8f0;border-color:#FF6B00;border-style:solid}
-.ub-icon{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.upload-box.loaded4{background:#f3f0ff;border-color:#7B4FBE;border-style:solid}
+.ub-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
 .ub-title{font-size:11px;font-weight:700;color:#2D3277}
 .ub-sub{font-size:10px;color:#999;margin-top:1px}
 .ub-status{font-size:10px;font-weight:700;margin-top:2px}
-.ub-btn{margin-left:auto;background:#2D3277;color:#FFE600;border:none;padding:5px 10px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
-.ub-btn:hover{background:#3a42a0}
-.filters{background:#fff;border-bottom:1px solid #ddd;padding:8px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ub-btn{margin-left:auto;background:#2D3277;color:#FFE600;border:none;padding:4px 8px;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.filters{background:#fff;border-bottom:1px solid #ddd;padding:7px 16px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .filter-label{font-size:11px;color:#555}
-select.fsel{background:#fff;border:1.5px solid #ddd;color:#333;padding:4px 8px;border-radius:6px;font-size:12px;cursor:pointer}
+select.fsel{background:#fff;border:1.5px solid #ddd;color:#333;padding:3px 7px;border-radius:6px;font-size:12px;cursor:pointer}
 .filter-count{margin-left:auto;font-size:12px;color:#2D3277;font-weight:700}
-.btn-clear{background:#FFE600;border:none;color:#2D3277;padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;font-weight:700}
-.content{padding:12px 16px}
-.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
-.welcome-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:16px;padding:40px;max-width:600px;width:100%}
-.welcome-title{font-size:20px;font-weight:700;color:#2D3277;margin:16px 0 8px}
-.welcome-sub{font-size:13px;color:#888;margin-bottom:28px;line-height:1.6}
-.welcome-steps{display:flex;flex-direction:column;gap:10px;text-align:left;margin-bottom:24px}
-.welcome-step{display:flex;align-items:flex-start;gap:12px;background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:8px;padding:10px 12px}
-.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
-.step-text{font-size:12px;color:#555;line-height:1.5}
-.step-text strong{color:#2D3277}
-.welcome-note{background:#fffde7;border:1.5px solid #FFE600;border-radius:8px;padding:10px 14px;font-size:11px;color:#555;text-align:left}
-.hero-card{background:#2D3277;border-radius:12px;padding:14px 16px;margin-bottom:12px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
-.hero-title{font-size:14px;font-weight:700;color:#FFE600}
-.hero-desc{font-size:11px;color:rgba(255,255,255,.75);margin-top:3px}
-.hero-stats{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-.hstat{text-align:center;background:rgba(255,255,255,.1);padding:7px 11px;border-radius:8px}
-.hstat-val{font-size:20px;font-weight:700;color:#FFE600}
-.hstat-label{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px}
-.alerts{display:flex;flex-direction:column;gap:5px;min-width:210px}
-.alert-item{background:rgba(255,255,255,.12);border-left:3px solid #FFE600;padding:5px 10px;border-radius:6px;font-size:11px;color:#fff}
+.btn-clear{background:#FFE600;border:none;color:#2D3277;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-weight:700}
+.tab-content{display:none}.tab-content.active{display:block}
+.content{padding:10px 16px}
+.hero-card{background:#2D3277;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.hero-title{font-size:13px;font-weight:700;color:#FFE600}
+.hero-desc{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+.hero-stats{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+.hstat{text-align:center;background:rgba(255,255,255,.1);padding:6px 10px;border-radius:7px}
+.hstat-val{font-size:18px;font-weight:700;color:#FFE600}
+.hstat-label{font-size:10px;color:rgba(255,255,255,.65);margin-top:1px}
+.alerts{display:flex;flex-direction:column;gap:4px;min-width:200px}
+.alert-item{background:rgba(255,255,255,.12);border-left:3px solid #FFE600;padding:4px 9px;border-radius:5px;font-size:11px;color:#fff}
 .alert-item.warn{border-left-color:#ff6b6b}
 .alert-item.suc{border-left-color:#51cf66}
 .alert-item.orange{border-left-color:#FF6B00}
-.section-title{font-size:11px;font-weight:700;color:#2D3277;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.section-title::before{content:'';display:inline-block;width:3px;height:13px;background:#FFE600;border-radius:2px}
-.dit-banner{background:#fff;border:1.5px solid #2D3277;border-radius:12px;padding:14px;margin-bottom:12px}
-.dit-banner-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.dit-badge{background:#2D3277;color:#FFE600;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
-.sp-banner{background:#fff;border:1.5px solid #FF6B00;border-radius:12px;padding:14px;margin-bottom:12px}
-.sp-badge{background:#FF6B00;color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700}
-.dit-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
-.dit-kpi{background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:8px;padding:10px 12px;text-align:center}
+.section-title{font-size:11px;font-weight:700;color:#2D3277;text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.section-title::before{content:'';display:inline-block;width:3px;height:12px;background:#FFE600;border-radius:2px}
+.nodo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-bottom:12px}
+.nodo-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:12px;cursor:pointer;transition:.2s}
+.nodo-card:hover{border-color:#2D3277;box-shadow:0 2px 8px rgba(45,50,119,.1)}
+.nodo-card.selected{border-color:#2D3277;background:#f0f4ff}
+.nodo-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.nodo-code{font-size:13px;font-weight:700;color:#2D3277}
+.nodo-badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.risk-red{background:#fde8e8;color:#E5002B}
+.risk-yellow{background:#fff8e1;color:#c17f00}
+.risk-green{background:#e8f5e9;color:#00A650}
+.nodo-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:6px}
+.nodo-stat{background:#f7f8ff;border-radius:5px;padding:4px 6px;text-align:center}
+.nodo-stat-val{font-size:14px;font-weight:700;color:#2D3277}
+.nodo-stat-label{font-size:9px;color:#888}
+.nodo-dit-badge{font-size:10px;color:#2D3277;background:#e8f0ff;padding:2px 6px;border-radius:8px;margin-top:4px;display:inline-block}
+.detail-panel{background:#fff;border:1.5px solid #2D3277;border-radius:10px;padding:14px;margin-bottom:12px;display:none}
+.detail-panel.open{display:block}
+.detail-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.detail-title{font-size:15px;font-weight:700;color:#2D3277}
+.detail-addr{font-size:11px;color:#555;margin-top:2px}
+.detail-resp{font-size:11px;color:#888}
+.detail-actions{display:flex;gap:5px;margin-left:auto;flex-wrap:wrap}
+.ids-table-wrap{overflow-x:auto;max-height:340px;overflow-y:auto;border-radius:7px;border:1px solid #eee;margin-bottom:10px}
+.ids-table{width:100%;border-collapse:collapse;font-size:12px}
+.ids-table th{background:#2D3277;color:#FFE600;padding:7px 9px;text-align:left;position:sticky;top:0;white-space:nowrap;font-size:11px}
+.ids-table td{padding:5px 9px;border-bottom:1px solid #f0f0f0;white-space:nowrap}
+.ids-table tr:hover td{background:#fffde7}
+.ids-table tr.selected-row td{background:#e8f0ff}
+.badge{padding:2px 7px;border-radius:8px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;gap:2px}
+.b-dit{background:#e8f0ff;color:#2D3277}
+.b-nodit{background:#f0f0f0;color:#888}
+.b-stale{background:#fff3e0;color:#FF6B00}
+.b-missing{background:#fde8e8;color:#E5002B}
+.b-ps{background:#e8f5e9;color:#00A650}
+.b-sorting{background:#e3f2fd;color:#0077C8}
+.b-other{background:#f5f5f5;color:#666}
+.btn-primary{background:#2D3277;color:#FFE600;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer}
+.btn-primary:hover{background:#3a42a0}
+.btn-success{background:#00A650;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer}
+.btn-success:hover{background:#008a42}
+.btn-warning{background:#FFE600;color:#2D3277;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer}
+.btn-whatsapp{background:#25D366;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer}
+.btn-whatsapp:hover{background:#1da851}
+.btn-danger{background:#E5002B;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer}
+.sel-count{font-size:11px;color:#2D3277;font-weight:700;padding:5px 9px;background:#e8f0ff;border-radius:6px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.chart-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:12px}
+.bar-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.bar-label{font-size:11px;color:#555;width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;flex-shrink:0}
+.bar-track{flex:1;background:#f0f0f0;border-radius:3px;height:13px}
+.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:4px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;min-width:16px}
+.bar-pct{font-size:10px;color:#888;width:34px;text-align:right;flex-shrink:0}
+.node-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.node-label{font-size:11px;color:#555;width:90px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;flex-shrink:0}
+.node-bar-track{flex:1;background:#f0f0f0;border-radius:3px;height:17px}
+.node-bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 6px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;min-width:40px}
+.node-pct{font-size:11px;color:#888;width:34px;text-align:right;flex-shrink:0}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:14px;padding:22px;width:90%;max-width:500px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.modal-title{font-size:14px;font-weight:700;color:#2D3277;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.modal-sub{font-size:11px;color:#888;margin-bottom:12px}
+.wpp-preview{background:#e8f5e3;border:1px solid #c3e6c3;border-radius:8px;padding:12px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:Arial,sans-serif;color:#111;max-height:360px;overflow-y:auto;margin-bottom:12px}
+.modal-btns{display:flex;gap:7px;justify-content:flex-end}
+.btn-copy{background:#25D366;color:#fff;border:none;padding:7px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer}
+.btn-copy.copied{background:#2D3277}
+.btn-close-modal{background:#f0f0f0;color:#555;border:none;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer}
+.romaneio-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;align-items:center;justify-content:center}
+.romaneio-modal-overlay.open{display:flex}
+.romaneio-modal{background:#fff;border-radius:10px;width:95%;max-width:900px;max-height:95vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.3)}
+.romaneio-header{background:#2D3277;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-radius:10px 10px 0 0}
+.romaneio-header-title{font-size:15px;font-weight:700;color:#FFE600}
+.romaneio-actions{display:flex;gap:7px}
+.romaneio-body{padding:18px}
+.rom-header-table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.rom-header-table td{border:1px solid #333;padding:6px 10px;font-size:12px}
+.rom-title{font-size:18px;font-weight:700;text-align:center;color:#2D3277}
+.rom-info{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+.rom-info-card{background:#f7f8ff;border:1px solid #e0e3f5;border-radius:6px;padding:7px 9px;font-size:11px}
+.rom-info-label{color:#888;font-size:10px;margin-bottom:2px}
+.rom-info-val{font-weight:700;color:#2D3277}
+.rom-place-title{background:#2D3277;color:#FFE600;padding:6px 10px;font-size:12px;font-weight:700;border-radius:4px 4px 0 0}
+.rom-table{width:100%;border-collapse:collapse;font-size:11px}
+.rom-table th{background:#f0f0f0;padding:5px 7px;text-align:left;border:1px solid #ccc;font-size:11px;font-weight:700}
+.rom-table td{padding:5px 7px;border:1px solid #ddd;vertical-align:middle}
+.rom-checkbox{width:14px;height:14px;cursor:pointer}
+.rom-id{font-family:monospace;font-size:12px;font-weight:700}
+.rom-status-badge{padding:2px 6px;border-radius:7px;font-size:10px;font-weight:700}
+.rom-sign-table{width:100%;border-collapse:collapse;margin-top:14px}
+.rom-sign-table td{border:1px solid #ccc;padding:18px 9px 5px;text-align:center;font-size:11px;width:33%}
+.dist-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}
+.dist-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:11px}
+.dist-num{font-size:24px;font-weight:700;color:#2D3277}
+.dist-pct{font-size:12px;color:#888;font-weight:600}
+.dist-label{font-size:11px;color:#888;margin-top:2px}
+.dist-bar{height:3px;background:#f0f0f0;border-radius:2px;margin-top:5px;width:100%}
+.dist-fill{height:100%;border-radius:2px}
+.dit-banner{background:#fff;border:1.5px solid #2D3277;border-radius:10px;padding:12px;margin-bottom:10px}
+.dit-banner-top{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.dit-badge{background:#2D3277;color:#FFE600;padding:3px 10px;border-radius:18px;font-size:11px;font-weight:700}
+.sp-banner{background:#fff;border:1.5px solid #FF6B00;border-radius:10px;padding:12px;margin-bottom:10px}
+.sp-badge{background:#FF6B00;color:#fff;padding:3px 10px;border-radius:18px;font-size:11px;font-weight:700}
+.dit-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
+.dit-kpi{background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:7px;padding:9px;text-align:center}
 .dit-kpi.highlight{background:#fff8e1;border-color:#FFE600}
 .dit-kpi.danger{background:#fff0f0;border-color:#E5002B}
 .dit-kpi.success{background:#f0faf4;border-color:#00A650}
 .dit-kpi.orange{background:#fff8f0;border-color:#FF6B00}
-.dit-kpi-val{font-size:22px;font-weight:700;color:#2D3277}
+.dit-kpi-val{font-size:20px;font-weight:700;color:#2D3277}
 .dit-kpi.highlight .dit-kpi-val{color:#c17f00}
 .dit-kpi.danger .dit-kpi-val{color:#E5002B}
 .dit-kpi.success .dit-kpi-val{color:#00A650}
 .dit-kpi.orange .dit-kpi-val{color:#FF6B00}
 .dit-kpi-label{font-size:10px;color:#888;margin-top:2px}
-.dit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.dit-card{background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:8px;padding:12px}
-.sp-card{background:#fff8f0;border:1.5px solid #ffe0c8;border-radius:8px;padding:12px}
-.dit-card-title{font-size:11px;font-weight:700;color:#2D3277;margin-bottom:8px}
-.sp-card-title{font-size:11px;font-weight:700;color:#FF6B00;margin-bottom:8px}
-.dit-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.dit-bar-label{font-size:11px;color:#555;width:175px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;flex-shrink:0}
-.dit-bar-track{flex:1;background:#e8e8f0;border-radius:3px;height:14px}
-.dit-bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 5px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;min-width:16px}
-.dit-bar-pct{font-size:10px;color:#888;width:34px;text-align:right;flex-shrink:0}
-.aging-row{display:flex;align-items:center;justify-content:space-between;padding:4px 8px;border-radius:5px;margin-bottom:3px;font-size:12px}
+.dit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dit-card{background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:7px;padding:10px}
+.dit-card-title{font-size:11px;font-weight:700;color:#2D3277;margin-bottom:7px}
+.dit-bar-row{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.dit-bar-label{font-size:11px;color:#555;width:165px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;flex-shrink:0}
+.dit-bar-track{flex:1;background:#e8e8f0;border-radius:3px;height:13px}
+.dit-bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 4px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;min-width:14px}
+.dit-bar-pct{font-size:10px;color:#888;width:32px;text-align:right;flex-shrink:0}
+.aging-row{display:flex;align-items:center;justify-content:space-between;padding:3px 7px;border-radius:4px;margin-bottom:3px;font-size:12px}
 .aging-row:nth-child(odd){background:#f0f2ff}
-.aging-badge{padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;white-space:nowrap}
-.dist-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.dist-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px}
-.dist-num{font-size:26px;font-weight:700;color:#2D3277}
-.dist-pct{font-size:13px;color:#888;font-weight:600}
-.dist-label{font-size:12px;color:#888;margin-top:2px}
-.dist-bar{height:4px;background:#f0f0f0;border-radius:2px;margin-top:6px;width:100%}
-.dist-fill{height:100%;border-radius:2px}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.chart-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:12px 14px}
-.bar-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}
-.bar-label{font-size:11px;color:#555;width:155px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;flex-shrink:0}
-.bar-track{flex:1;background:#f0f0f0;border-radius:3px;height:14px}
-.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:5px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap;min-width:18px}
-.bar-pct{font-size:10px;color:#888;width:36px;text-align:right;flex-shrink:0}
-.node-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
-.node-label{font-size:11px;color:#555;width:90px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;flex-shrink:0}
-.node-bar-track{flex:1;background:#f0f0f0;border-radius:3px;height:18px}
-.node-bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding:0 7px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;min-width:44px}
-.node-pct{font-size:11px;color:#888;width:36px;text-align:right;flex-shrink:0}
-.search-section{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:14px;margin-bottom:24px}
-.search-title{font-size:13px;font-weight:700;color:#2D3277;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.search-sub{font-size:11px;color:#999;font-weight:400}
-.search-filters{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.aging-badge{padding:2px 7px;border-radius:8px;font-size:11px;font-weight:700;white-space:nowrap}
+.search-section{background:#fff;border:1.5px solid #e8e8e8;border-radius:10px;padding:12px;margin-bottom:18px}
+.search-title{font-size:13px;font-weight:700;color:#2D3277;margin-bottom:9px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .sf-group{display:flex;flex-direction:column;gap:3px}
 .sf-label{font-size:10px;color:#2D3277;font-weight:700}
-.sf-group input,.sf-group select{background:#fafafa;border:1.5px solid #ddd;color:#333;padding:5px 8px;border-radius:6px;font-size:12px;width:100%}
-.tbl-wrap{overflow-x:auto;max-height:380px;overflow-y:auto;border-radius:8px;border:1px solid #eee}
+.sf-group input,.sf-group select{background:#fafafa;border:1.5px solid #ddd;color:#333;padding:4px 7px;border-radius:6px;font-size:12px;width:100%}
+.search-filters{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-bottom:7px}
+.tbl-wrap{overflow-x:auto;max-height:340px;overflow-y:auto;border-radius:7px;border:1px solid #eee}
 table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:#2D3277;color:#FFE600;font-weight:700;padding:8px 10px;text-align:left;position:sticky;top:0;cursor:pointer;white-space:nowrap;font-size:11px;user-select:none}
+th{background:#2D3277;color:#FFE600;font-weight:700;padding:7px 9px;text-align:left;position:sticky;top:0;cursor:pointer;white-space:nowrap;font-size:11px;user-select:none}
 th:hover{background:#3a42a0}
-td{padding:6px 10px;border-bottom:1px solid #f0f0f0;color:#333;white-space:nowrap}
+td{padding:5px 9px;border-bottom:1px solid #f0f0f0;color:#333;white-space:nowrap}
 tr:hover td{background:#fffde7}
-.badge{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;gap:3px}
-.b-on{background:#e8f4ff;color:#1a73e8}
-.b-at{background:#fff8e1;color:#f57c00}
-.b-dit{background:#e8f0ff;color:#2D3277}
-.b-nodit{background:#f0f0f0;color:#666}
-.b-sp{background:#fff0e0;color:#FF6B00}
-.b-ins{background:#e8f5e9;color:#00A650}
-.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:#555}
-.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.btn-download{background:#00A650;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.btn-download:hover{background:#008a42}
-.btn-whatsapp{background:#25D366;color:#fff;border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.btn-whatsapp:hover{background:#1da851}
-.wpp-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
-.wpp-modal-overlay.open{display:flex}
-.wpp-modal{background:#fff;border-radius:16px;padding:24px;width:90%;max-width:500px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
-.wpp-modal-title{font-size:15px;font-weight:700;color:#2D3277;margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.wpp-modal-sub{font-size:11px;color:#888;margin-bottom:14px}
-.wpp-preview{background:#e8f5e3;border:1px solid #c3e6c3;border-radius:10px;padding:14px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:Arial,sans-serif;color:#111;max-height:380px;overflow-y:auto;margin-bottom:14px}
-.wpp-modal-btns{display:flex;gap:8px;justify-content:flex-end}
-.wpp-btn-copy{background:#25D366;color:#fff;border:none;padding:8px 18px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
-.wpp-btn-copy:hover{background:#1da851}
-.wpp-btn-close{background:#f0f0f0;color:#555;border:none;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer}
-.wpp-btn-copy.copied{background:#2D3277}
-.footer{background:#2D3277;color:rgba(255,255,255,.5);text-align:center;padding:10px;font-size:11px;margin-top:8px}
+.legend{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:#555}
+.leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.btn-download{background:#00A650;color:#fff;border:none;padding:5px 11px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 20px;text-align:center}
+.welcome-card{background:#fff;border:1.5px solid #e8e8e8;border-radius:14px;padding:34px;max-width:560px;width:100%}
+.welcome-title{font-size:18px;font-weight:700;color:#2D3277;margin:12px 0 6px}
+.welcome-step{display:flex;align-items:flex-start;gap:10px;background:#f7f8ff;border:1.5px solid #e0e3f5;border-radius:7px;padding:9px 11px;margin-bottom:8px;text-align:left}
+.step-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.step-text{font-size:12px;color:#555;line-height:1.5}
+.footer{background:#2D3277;color:rgba(255,255,255,.5);text-align:center;padding:9px;font-size:11px;margin-top:8px}
+@media print{
+  .topbar,.tabs,.upload-area,.filters,.romaneio-header,.romaneio-actions{display:none!important}
+  .romaneio-modal-overlay{position:static!important;display:block!important;background:none!important}
+  .romaneio-modal{width:100%!important;max-height:none!important;box-shadow:none!important;border-radius:0!important}
+  .romaneio-body{padding:10px!important}
+  body{background:#fff!important}
+  .rom-table td,.rom-table th{font-size:10px!important;padding:3px 5px!important}
+}
 @media(max-width:700px){
   .hero-card{grid-template-columns:1fr}.alerts{min-width:unset}
-  .charts-grid,.dist-grid,.dit-grid,.dit-kpis{grid-template-columns:1fr}
+  .charts-grid,.dist-grid,.dit-grid,.dit-kpis,.nodo-grid{grid-template-columns:1fr}
   .search-filters{grid-template-columns:1fr 1fr}
   .upload-area{flex-direction:column}
 }
@@ -155,583 +219,447 @@ tr:hover td{background:#fffde7}
 <body>
 <div class="topbar">
   <div class="topbar-left">
-    <svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#2D3277"/><text x="16" y="21" text-anchor="middle" fill="#FFE600" font-size="18" font-weight="bold" font-family="Arial">M</text></svg>
-    <div>
-      <div class="topbar-title" id="page-title">INSUCESSOS DE ENTREGA</div>
-      <div class="topbar-sub">Monitoramento + DIT + Solução de Problemas</div>
-    </div>
+    <svg width="30" height="30" viewBox="0 0 32 32"><circle cx="16" cy="16" r="16" fill="#2D3277"/><text x="16" y="21" text-anchor="middle" fill="#FFE600" font-size="18" font-weight="bold" font-family="Arial">M</text></svg>
+    <div><div class="topbar-title" id="page-title">DASHBOARD ML</div><div class="topbar-sub">Operacional do Dia + Gestão de Nodos</div></div>
   </div>
-  <div style="display:flex;align-items:center;gap:10px">
-    <span class="live-badge">&#9679; AO VIVO</span>
-    <span class="topbar-date" id="livedate"></span>
-  </div>
+  <div style="display:flex;align-items:center;gap:8px"><span class="live-badge">&#9679; AO VIVO</span><span class="topbar-date" id="livedate"></span></div>
+</div>
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('tab-op',this)">&#128666; Operacional do Dia</button>
+  <button class="tab-btn" onclick="switchTab('tab-nodos',this)">&#128205; Gestão de Nodos</button>
 </div>
 <div class="upload-area">
   <div class="upload-box" id="ub1" onclick="document.getElementById('csv1').click()">
     <div class="ub-icon" style="background:#e8f5e9">&#9888;</div>
-    <div>
-      <div class="ub-title">1. Insucessos <span style="color:#E5002B">*</span></div>
-      <div class="ub-sub" id="ub1-sub">Clique ou arraste o CSV</div>
-      <div class="ub-status" id="ub1-status"></div>
-    </div>
-    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv1').click()">&#128194; Selecionar</button>
+    <div><div class="ub-title">1. Insucessos <span style="color:#E5002B">*</span></div><div class="ub-sub" id="ub1-sub">Clique ou arraste</div><div class="ub-status" id="ub1-status"></div></div>
+    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv1').click()">&#128194;</button>
     <input type="file" id="csv1" accept=".csv" style="display:none" onchange="handleFile1(this.files[0])">
   </div>
   <div class="upload-box" id="ub2" onclick="document.getElementById('csv2').click()">
     <div class="ub-icon" style="background:#e8eaf6">&#9201;</div>
-    <div>
-      <div class="ub-title">2. DIT <span style="color:#888;font-weight:400">(opcional)</span></div>
-      <div class="ub-sub" id="ub2-sub">Clique ou arraste o CSV</div>
-      <div class="ub-status" id="ub2-status"></div>
-    </div>
-    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv2').click()">&#128194; Selecionar</button>
+    <div><div class="ub-title">2. DIT</div><div class="ub-sub" id="ub2-sub">Clique ou arraste</div><div class="ub-status" id="ub2-status"></div></div>
+    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv2').click()">&#128194;</button>
     <input type="file" id="csv2" accept=".csv" style="display:none" onchange="handleFile2(this.files[0])">
   </div>
   <div class="upload-box" id="ub3" onclick="document.getElementById('csv3').click()">
     <div class="ub-icon" style="background:#fff3e0">&#128295;</div>
-    <div>
-      <div class="ub-title">3. Solução de Problemas <span style="color:#888;font-weight:400">(opcional)</span></div>
-      <div class="ub-sub" id="ub3-sub">Clique ou arraste o CSV</div>
-      <div class="ub-status" id="ub3-status"></div>
-    </div>
-    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv3').click()">&#128194; Selecionar</button>
+    <div><div class="ub-title">3. Soluc. Problemas</div><div class="ub-sub" id="ub3-sub">Clique ou arraste</div><div class="ub-status" id="ub3-status"></div></div>
+    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv3').click()">&#128194;</button>
     <input type="file" id="csv3" accept=".csv" style="display:none" onchange="handleFile3(this.files[0])">
   </div>
+  <div class="upload-box" id="ub4" onclick="document.getElementById('csv4').click()">
+    <div class="ub-icon" style="background:#f3f0ff">&#128204;</div>
+    <div><div class="ub-title">4. Risco At Station</div><div class="ub-sub" id="ub4-sub">Clique ou arraste</div><div class="ub-status" id="ub4-status"></div></div>
+    <button class="ub-btn" onclick="event.stopPropagation();document.getElementById('csv4').click()">&#128194;</button>
+    <input type="file" id="csv4" accept=".csv" style="display:none" onchange="handleFile4(this.files[0])">
+  </div>
 </div>
-<div class="filters">
-  <span class="filter-label">&#128665; Transportadora</span>
-  <select class="fsel" id="f-transp"><option value="">Todas</option></select>
-  <span class="filter-label">&#128308; Status D1</span>
-  <select class="fsel" id="f-status"><option value="">Todos</option></select>
-  <span class="filter-label">&#128205; Nodo</span>
-  <select class="fsel" id="f-nodo"><option value="">Todos</option></select>
-  <span class="filter-label">&#9201; DIT</span>
-  <select class="fsel" id="f-dit"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select>
-  <span class="filter-label">&#128196; Origem</span>
-  <select class="fsel" id="f-origem"><option value="">Todas</option><option value="INS">Insucessos</option><option value="SP">Soluc. Problemas</option></select>
+<div class="filters" id="global-filters">
+  <span class="filter-label">&#128665; Transportadora</span><select class="fsel" id="f-transp"><option value="">Todas</option></select>
+  <span class="filter-label">&#128308; Status D1</span><select class="fsel" id="f-status"><option value="">Todos</option></select>
+  <span class="filter-label">&#128205; Nodo</span><select class="fsel" id="f-nodo"><option value="">Todos</option></select>
+  <span class="filter-label">&#9201; DIT</span><select class="fsel" id="f-dit"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select>
+  <span class="filter-label">&#128196; Origem</span><select class="fsel" id="f-origem"><option value="">Todas</option><option value="INS">Insucessos</option><option value="SP">SP</option></select>
   <button class="btn-clear" onclick="clearFilters()">&#10005; Limpar</button>
   <span class="filter-count" id="filter-count"></span>
 </div>
-<div class="content" id="main-content"></div>
-
-<!-- Modal WhatsApp -->
-<div class="wpp-modal-overlay" id="wpp-overlay" onclick="closeWppModal(event)">
-  <div class="wpp-modal">
-    <div class="wpp-modal-title">
-      <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#25D366"/><path d="M14.5 12.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.8-.3-1.6-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.3 0-.1 0-.2-.1-.3-.1-.1-.5-1.1-.6-1.5-.2-.4-.3-.3-.5-.3h-.4c-.1 0-.4.1-.6.3-.2.2-.7.7-.7 1.7s.7 2 .8 2.1c.1.1 1.4 2.2 3.5 3 .5.2.9.3 1.2.4.5.1 1 .1 1.3.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2z" fill="#fff"/></svg>
-      Resumo para WhatsApp
-    </div>
-    <div class="wpp-modal-sub" id="wpp-modal-sub">Baseado nos filtros aplicados na Busca Avançada</div>
+<div id="tab-op" class="tab-content active"><div class="content" id="main-content-op">
+  <div class="welcome"><div class="welcome-card">
+    <svg width="60" height="60" viewBox="0 0 72 72"><circle cx="36" cy="36" r="36" fill="#e8eaf6"/><rect x="18" y="22" width="36" height="28" rx="4" fill="#2D3277"/><path d="M36 10v16m0-16l-5 5m5-5l5 5" stroke="#FFE600" stroke-width="3" stroke-linecap="round"/></svg>
+    <div class="welcome-title">Dashboard Operacional</div>
+    <p style="font-size:12px;color:#888;margin-bottom:14px">Carregue os arquivos acima para visualizar</p>
+    <div class="welcome-step"><div class="step-num" style="background:#00A650;color:#fff">1</div><div class="step-text"><strong>Insucessos</strong> — obrigatório</div></div>
+    <div class="welcome-step"><div class="step-num" style="background:#2D3277;color:#FFE600">2</div><div class="step-text"><strong>DIT</strong> — habilita confronto de Delay in Transit</div></div>
+    <div class="welcome-step"><div class="step-num" style="background:#FF6B00;color:#fff">3</div><div class="step-text"><strong>SP</strong> — adiciona Solução de Problemas</div></div>
+    <div class="welcome-step"><div class="step-num" style="background:#7B4FBE;color:#fff">4</div><div class="step-text"><strong>Risco At Station</strong> — ativa aba Gestão de Nodos</div></div>
+  </div></div>
+</div></div>
+<div id="tab-nodos" class="tab-content"><div class="content" id="main-content-nodos">
+  <div class="welcome"><div class="welcome-card">
+    <svg width="60" height="60" viewBox="0 0 72 72"><circle cx="36" cy="36" r="36" fill="#f3f0ff"/><path d="M36 18a10 10 0 1 1 0 20 10 10 0 0 1 0-20zM20 54c0-8.8 7.2-16 16-16s16 7.2 16 16" fill="none" stroke="#7B4FBE" stroke-width="3"/></svg>
+    <div class="welcome-title">Gestão de Nodos</div>
+    <p style="font-size:12px;color:#888">Carregue o arquivo <strong>4. Risco At Station</strong> para ativar esta aba.</p>
+  </div></div>
+</div></div>
+<div class="footer">Mercado Livre &#8212; Dashboard Unificado &#183; Operacional + Nodos + DIT + Romanéio</div>
+<div class="modal-overlay" id="wpp-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <div class="modal-title"><svg width="18" height="18" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#25D366"/><path d="M14.5 12.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.8-.3-1.6-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.3 0-.1 0-.2-.1-.3-.1-.1-.5-1.1-.6-1.5-.2-.4-.3-.3-.5-.3h-.4c-.1 0-.4.1-.6.3-.2.2-.7.7-.7 1.7s.7 2 .8 2.1c.1.1 1.4 2.2 3.5 3 .5.2.9.3 1.2.4.5.1 1 .1 1.3.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2z" fill="#fff"/></svg>Resumo WhatsApp</div>
+    <div class="modal-sub" id="wpp-modal-sub"></div>
     <div class="wpp-preview" id="wpp-preview"></div>
-    <div class="wpp-modal-btns">
-      <button class="wpp-btn-close" onclick="document.getElementById('wpp-overlay').classList.remove('open')">Fechar</button>
-      <button class="wpp-btn-copy" id="wpp-copy-btn" onclick="copyWpp()">📋 Copiar mensagem</button>
+    <div class="modal-btns">
+      <button class="btn-close-modal" onclick="document.getElementById('wpp-overlay').classList.remove('open')">Fechar</button>
+      <button class="btn-copy" id="wpp-copy-btn" onclick="copyWpp()">&#128203; Copiar</button>
     </div>
   </div>
 </div>
-<div class="footer">Mercado Livre &#8212; Dashboard Unificado &#183; Insucessos + DIT + Solução de Problemas</div>
+<div class="romaneio-modal-overlay" id="rom-overlay">
+  <div class="romaneio-modal">
+    <div class="romaneio-header">
+      <div class="romaneio-header-title">&#128203; ROMANÉIO DE COLETA</div>
+      <div class="romaneio-actions">
+        <button class="btn-warning" onclick="window.print()">&#128438; Imprimir</button>
+        <button class="btn-danger" onclick="document.getElementById('rom-overlay').classList.remove('open')">&#10005; Fechar</button>
+      </div>
+    </div>
+    <div class="romaneio-body" id="romaneio-body"></div>
+  </div>
+</div>
 <script>
-let DATA=[], DIT_DATA=[], SP_DATA=[], DIT_IDS=new Set(), SP_IDS=new Set(), SP_MAP={};
+
+const NODOS_DB = {"BRDSP926": {"endereco": "RUA RIACHUELO N\u00b0 93, CENTRO, SANTOS - SP", "responsavel": "ADILSON DUARTE", "tel": "13 7402-8844", "tipo": "Delivery Cell"}, "BRDSP4062": {"endereco": "AVENIDA SENADOR FEIJ\u00d3 N\u00b0 81, CENTRO, SANTOS - SP, Terreo", "responsavel": "FABIANA DOS ANJOS MARTINS", "tel": "13 9.8110-0811", "tipo": "Delivery Cell"}, "BRDSP1146": {"endereco": "RUA JOANA MONTE BASTOS N\u00b0 46, BOQUEIR\u00c3O, SANTOS - SP", "responsavel": "ADRIANA DOS SANTOS", "tel": "13 9.8189-0777", "tipo": "Delivery Cell"}, "BRDSP1325": {"endereco": "RUA SIZINO PATUSCA N\u00b0 420, SANTA MARIA, SANTOS - SP, CASA FUNDO", "responsavel": "GLAUCIA JEANE DE ASSIS", "tel": "13 9.7423-1110", "tipo": "Delivery Cell"}, "BRDSP1442": {"endereco": "RUA LUIZ PEREIRA DE CAMPOS N\u00b0 56, CENTRO, BERTIOGA - SP, fundos", "responsavel": "DENIS WILLIAM SANTOS SILVA", "tel": "13 9.9690-5204", "tipo": "Delivery Cell"}, "BRDSP1124": {"endereco": "RUA MONTESE N\u00b0 211, VILA MARGARIDA, S\u00c3O VICENTE - SP", "responsavel": "MARCIO GONCALVES DE SOUZA", "tel": "13 9.9203-0845", "tipo": "Delivery Cell"}, "BRDSP850": {"endereco": "RUA JORGE MANSUR N\u00b0 108, VILA SAO JORGE, S\u00c3O VICENTE - SP", "responsavel": "ARIOVALDO GOMES GON\u00c7ALVES", "tel": "13 9.7403-0196", "tipo": "Delivery Cell"}, "BRDSP1005": {"endereco": "AVENIDA NOSSA SENHORA DA LAPA N\u00b0 1013, VILA NOVA, CUBAT\u00c3O - SP", "responsavel": "BRUNO MONTEIRO DOS REIS", "tel": "5513996560838", "tipo": "Delivery Cell"}, "BRDSP1031": {"endereco": "RUA GALDINO VICENTE N\u00b0 60, VILA PONTE NOVA, CUBAT\u00c3O - SP, CASA 2", "responsavel": "DANIELE FERNANDES DA SILVA TEIXEIRA", "tel": "5513981224533", "tipo": "Delivery Cell"}, "BRDSP1102": {"endereco": "RUA MARC\u00cdLIO DIAS N\u00b0 15, CANTO DO FORTE, PRAIA GRANDE - SP, Casa 7", "responsavel": "M\u00c9RCIA MONTOYA MACHADO", "tel": "5511989659598", "tipo": "Delivery Cell"}, "BRDSP1341": {"endereco": "RUA SEBASTI\u00c3O BATISTA RAMOS N\u00b0 118, MARACAN\u00c3, PRAIA GRANDE - SP, Pode entregar depois das 6:00", "responsavel": "WALBER CHAGAS DA SILVA", "tel": "13 9.9740-4009", "tipo": "Delivery Cell"}, "BRDSP7402": {"endereco": "RUA S\u00c9RGIO ORLANDO MANZON N\u00b0 235, SOLEMAR, PRAIA GRANDE - SP, Trav Kennedy lado praia", "responsavel": "F\u00c1BIO ALEXANDRE SILVA DE FARIA", "tel": "5513978220990", "tipo": "Delivery Cell"}, "BRDSP677": {"endereco": "R MONTE SERRAT N\u00b0 2355, JARDIM MELVI, PRAIA GRANDE - SP, CASA -TOCAR CAMPANHINHA", "responsavel": "FRANCISCA FRANCILENE DE LIMA", "tel": "13 9.9777-7942", "tipo": "Delivery Cell"}, "BRDSP1265": {"endereco": "RUA SEGUNDO-SARGENTO-POLICIA MILITAR GERSON ROGERIO AL N\u00b0 224, NOVA MIRIM, PRAIA GRANDE - SP, Antigo 650", "responsavel": "CLAUDIO DE OLIVEIRA MOURA", "tel": "13 9.8153-8422", "tipo": "Delivery Cell"}, "BRDSP798": {"endereco": "AVENIDA DO TRABALHADOR N\u00b0 2333, S\u00cdTIO DO CAMPO, PRAIA GRANDE - SP, Casa portao de ferro ,com o murro ainda no reboco .", "responsavel": "JO\u00c3O ANDRE", "tel": "13 9.8214-1830", "tipo": "Delivery Cell"}, "BRDSP4572": {"endereco": "RUA DONA ANA NERY N\u00b0 102, S\u00cdTIO DO CAMPO, PRAIA GRANDE - SP, Ao lado do 1101 de esquina com a rua amara ambrosina dos santos", "responsavel": "NATALIA", "tel": "13 9.9169-1211", "tipo": "Delivery Cell"}, "BRDSP721": {"endereco": "RUA SATURNINO DE BRITO N\u00b0 482, BOQUEIR\u00c3O, PRAIA GRANDE - SP, casa 4", "responsavel": "JOSE MARCELINO BEZERRA DA SILVA", "tel": "5513988730411", "tipo": "Delivery Cell"}, "BRDSP5422": {"endereco": "AV. NOVE DE JULHO N\u00b0 1145, JARDIM PRAIA GRANDE, MONGAGU\u00c1 - SP", "responsavel": "WESLEY SANTOS LOPES", "tel": "5513981679585", "tipo": "Delivery Cell"}, "BRNSP8512": {"endereco": "RUA DOM PEDRO II N\u00b0 960, VILA NOVA, CUBAT\u00c3O - SP, Toldo retr\u00e1til em cima da porta e placa de identifi...", "responsavel": "J\u00daLIO C\u00c9SAR", "tel": "5513974044737", "tipo": "NEX"}, "BRDSP971": {"endereco": "RUA MARCOLINA DA CONCEICAO N\u00b0 8, SANTOS, SANTOS - SP, Pr\u00f3ximo a policl\u00ednica da aparecida", "responsavel": "ALINE FARIA", "tel": "5513996671990", "tipo": "Delivery Cell"}, "BRDSP3028": {"endereco": "RUA MARIA DE LOURDES FERNANDES GUEDES N\u00b0 74, BORACEIA, BERTIOGA - SP, Tiago manuten\u00e7\u00e3o de celular", "responsavel": "TIAGO ROSS", "tel": "13 9.9748-8659", "tipo": "Delivery Cell"}, "BRDSP1182": {"endereco": "AVENIDA MONTEIRO LOBATO N\u00b0 8160, BALNEARIO ITAOCA, MONGAGU\u00c1 - SP, Supranatural", "responsavel": "CLEDIA", "tel": "551334111754", "tipo": "Delivery Cell"}, "BRDSP1414": {"endereco": "AV DOMINGOS DA COSTA GRIMALDI N\u00b0 241, CENTRO, PERU\u00cdBE - SP, ao lado do correio", "responsavel": "GUSTAVO GOMES COSTA", "tel": "13 9.9652-3516", "tipo": "Delivery Cell"}, "BRNSP1222": {"endereco": "AVENIDA RANGEL PESTANA N\u00b0 430, JABAQUARA, SANTOS - SP, Yes Assistencia Tecnica, de frente a Prodesan e a T...", "responsavel": "RUBIO LOPES", "tel": "5513982065277", "tipo": "NEX"}, "BRNSP853": {"endereco": "AVENIDA DOUTOR EPIT\u00c1CIO PESSOA N\u00b0 172, SANTOS, SANTOS - SP, LOJA 14", "responsavel": "MARCIA RODRIGUES REIS", "tel": "13 9.9183-1896", "tipo": "NEX"}, "BRNSP299": {"endereco": "RUA MARECHAL C\u00c2NDIDO MARIANO DA SILVA RONDON N\u00b0 761, VILA MARGARIDA, S\u00c3O VICENTE - SP, Loja", "responsavel": "ROBERTA OLIVEIRA SERPI", "tel": "5513974061860", "tipo": "NEX"}, "BRNSP83": {"endereco": "AVENIDA J\u00daLIO PRESTES DE ALBUQUERQUE N\u00b0 700, NOVA MIRIM, PRAIA GRANDE - SP", "responsavel": "ANA ELVIRA FERNANDES DE AZEVEDO", "tel": "5513981710047", "tipo": "NEX"}, "BRNSP782": {"endereco": "PRA\u00c7A TADASHI ABE N\u00b0 20, ANA DIAS, ANA DIAS - SP, Mercado Nova Flor", "responsavel": "BIANCA COSTA GOMES", "tel": "5513996538780", "tipo": "NEX"}, "BRNSP550": {"endereco": "AVENIDA AFONSO PENA N\u00b0 609, ESTU\u00c1RIO, SANTOS - SP, Loja", "responsavel": "PAULO OSHIRO / NOAH (13) 98100-4141", "tel": "13 9.9662-9010", "tipo": "NEX"}, "BRDSP1024": {"endereco": "AVENIDA DOUTOR PEDRO LESSA N\u00b0 2162, APARECIDA, SANTOS - SP, MBYTE CURSOS E ASSIST\u00caNCIA T\u00c9CNICA", "responsavel": "TATIANA DELLA CRUCCE DE AZEVEDO", "tel": "551332712122", "tipo": "Delivery Cell"}, "BRNSP841": {"endereco": "RUA GOI\u00c1S N\u00b0 79, GONZAGA, SANTOS - SP", "responsavel": "YARA MIYASIRO HENRIQUES", "tel": "5513974067000", "tipo": "NEX"}, "BRNSP1505": {"endereco": "RUA DOUTOR CARVALHO DE MENDON\u00c7A N\u00b0 518, VILA BELMIRO, SANTOS - SP", "responsavel": "8 ALCINO PEREIR", "tel": "5513997970310", "tipo": "NEX"}, "BRDSP1027": {"endereco": "RUA JOAQUIM T\u00c1VORA N\u00b0 170, VILA MATHIAS, SANTOS - SP, Loja 2", "responsavel": "MAURICIO FIGUEIREDO FORMOSO", "tel": "5513933453317", "tipo": "Delivery Cell"}, "BRDSP1248": {"endereco": "RUA ALAMEDA 2 N\u00b0 135, PARQUE CONTINENTAL, S\u00c3O VICENTE - SP, Loja Rodrigues Materiais para Constru\u00e7\u00e3o", "responsavel": "CRISTIAN JOS\u00c9", "tel": "5513974136578", "tipo": "Delivery Cell"}, "BRDSP911": {"endereco": "RUA MONTENEGRO N\u00b0 264, PITANGUEIRAS, GUARUJ\u00c1 - SP, Loja 1 - cjt 2", "responsavel": "SARAH CAVALCANTE L. DE SOUSA", "tel": "13 9.8808-5661", "tipo": "Delivery Cell"}, "BRNSP634": {"endereco": "RUA VINTE E CINCO DE DEZEMBRO N\u00b0 244, VILA NATAL, CUBAT\u00c3O - SP, DIGITEC INFORM\u00c1TICA", "responsavel": "RODRIGO GOMES DO COUTO", "tel": "5513996164772", "tipo": "NEX"}, "BRNSP728": {"endereco": "AVENIDA MARECHAL MAUR\u00cdCIO JOS\u00c9 CARDOSO N\u00b0 1179, CANTO DO FORTE, PRAIA GRANDE - SP", "responsavel": "JULIA MARQUES TOMAZ", "tel": "13 9.7423-5411", "tipo": "NEX"}, "BRDSP407": {"endereco": "RUA XAVANTES N\u00b0 955, TUPI, PRAIA GRANDE - SP, Loja 2", "responsavel": "RODRIGO", "tel": "5513996776185", "tipo": "Delivery Cell"}, "BRNSP523": {"endereco": "AVENIDA JOS\u00c9 BATISTA CAMPOS N\u00b0 821, CIDADE ANCHIETA, ITANHA\u00c9M - SP", "responsavel": "JOS\u00c9 RAFAEL MOREIRA PAES", "tel": "13 9.9797-4019", "tipo": "NEX"}, "BRNSP186": {"endereco": "RUA JOS\u00c9 DONAS N\u00b0 97, JARDIM SUAR\u00c3O (INTERIOR), ITANHA\u00c9M - SP, Ao Lado da Padaria Bia", "responsavel": "KAYCK MARCUS DE ANGELO FERREIRA OLIVEIRA COSTA", "tel": "5513981646089", "tipo": "NEX"}, "BRNSP386": {"endereco": "RUA PERU\u00cdBE N\u00b0 227, PRAIA DOS SONHOS, ITANHA\u00c9M - SP, LOJA 3", "responsavel": "CAROL", "tel": "13 9.8160-1270", "tipo": "NEX"}, "BRDSP4506": {"endereco": "AVENIDA ALMEIDA J\u00daNIOR N\u00b0 250, BELAS ARTES, ITANHA\u00c9M - SP, LOJA 02", "responsavel": "ELOIZA BARBOZA", "tel": "5513996027410", "tipo": "Delivery Cell"}, "BRNSP583": {"endereco": "", "responsavel": "", "tel": "", "tipo": ""}, "BRNSP00407": {"endereco": "", "responsavel": "", "tel": "", "tipo": ""}, "BRNSP412": {"endereco": "", "responsavel": "", "tel": "", "tipo": ""}, "BRDSP00583": {"endereco": "AVENIDA PADRE ANCHIETA N\u00b0 4350, CIDADE NOVA, PERU\u00cdBE - SP", "responsavel": "", "tel": "13 9.9175-7000", "tipo": ""}, "BRDSP01505": {"endereco": "RUA DOUTOR CARVALHO DE MENDON\u00c7A N\u00b0 518, VILA BELMIRO, SANTOS - SP", "responsavel": "", "tel": "5513997970310", "tipo": ""}, "BRNSP68": {"endereco": "RUA DO COMERCIO N\u00b0 313, CENTRO, ITARIRI - SP", "responsavel": "", "tel": "5513997575579", "tipo": ""}};
+
+let DATA=[], DIT_DATA=[], SP_DATA=[], RISK_DATA=[];
+let DIT_IDS=new Set(), SP_IDS=new Set(), SP_MAP={}, RISK_DIT_MAP={};
+let selectedNodo=null, selectedIds=new Set();
 let sortCol='', sortDir=1, charts={};
-const ML_COLORS=['#2D3277','#FFE600','#00A650','#E5002B','#0077C8','#FF6B00','#7B4FBE','#00BCD4','#FF4081','#4CAF50'];
+const ML=['#2D3277','#FFE600','#00A650','#E5002B','#0077C8','#FF6B00','#7B4FBE','#00BCD4','#FF4081','#4CAF50'];
 
-function setDate(){
-  const now=new Date();
-  document.getElementById('livedate').textContent=now.toLocaleDateString('pt-BR')+', '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+function setDate(){const n=new Date();document.getElementById('livedate').textContent=n.toLocaleDateString('pt-BR')+', '+n.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+setDate();setInterval(setDate,60000);
+
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active'); btn.classList.add('active');
+  document.getElementById('global-filters').style.display=id==='tab-op'?'flex':'none';
 }
-setDate(); setInterval(setDate,60000);
 
-['ub1','ub2','ub3'].forEach((id,idx)=>{
+['ub1','ub2','ub3','ub4'].forEach((id,idx)=>{
   const el=document.getElementById(id);
   el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag');});
   el.addEventListener('dragleave',()=>el.classList.remove('drag'));
-  el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag');const f=e.dataTransfer.files[0];if(f){[handleFile1,handleFile2,handleFile3][idx](f);}});
+  el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)[handleFile1,handleFile2,handleFile3,handleFile4][idx](f);});
 });
 
 function readCSV(file,cb){const r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsText(file,'UTF-8');}
-
-function parseGeneric(text){
+function parseG(text){
   const lines=text.trim().split('\n').filter(l=>l.trim());
   if(!lines.length)return[];
-  const header=lines[0].split(',').map(h=>h.trim().replace(/"/g,'').replace(/\r/g,''));
+  const hdr=lines[0].split(',').map(h=>h.trim().replace(/"/g,'').replace(/\r/g,''));
   return lines.slice(1).filter(l=>l.trim()).map(line=>{
-    const p=line.split(',');
-    const obj={};
-    header.forEach((h,i)=>{obj[h]=(p[i]||'').trim().replace(/"/g,'').replace(/\r/g,'');});
+    const p=line.split(',');const obj={};
+    hdr.forEach((h,i)=>{obj[h]=(p[i]||'').trim().replace(/"/g,'').replace(/\r/g,'');});
     return obj;
   });
 }
+function setSvc(name){const m=name.match(/SSP\d+/i);if(m){document.getElementById('page-title').textContent='DASHBOARD ML \u2014 '+m[0].toUpperCase();document.title='Dashboard ML \u2014 '+m[0].toUpperCase();}}
+function setUB(id,cls,sub,st,col){document.getElementById(id).className='upload-box '+cls;document.getElementById(id+'-sub').textContent=sub;const e=document.getElementById(id+'-status');e.textContent=st;e.style.color=col;}
 
-function setSvcTitle(name){
-  const m=name.match(/SSP\d+/i);
-  if(m){
-    const t=document.getElementById('page-title');
-    if(t)t.textContent='INSUCESSOS DE ENTREGA \u2014 '+m[0].toUpperCase();
-    document.title='Insucessos \u2014 '+m[0].toUpperCase()+' | Mercado Livre';
-  }
-}
-
-function showWelcome(){
-  document.getElementById('main-content').innerHTML=
-    '<div class="welcome">'+
-    '<div class="welcome-card">'+
-    '<svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="36" fill="#e8eaf6"/><rect x="18" y="22" width="36" height="28" rx="4" fill="#2D3277"/><path d="M36 10v16m0-16l-5 5m5-5l5 5" stroke="#FFE600" stroke-width="3" stroke-linecap="round"/><rect x="24" y="32" width="24" height="3" rx="1.5" fill="#FFE600" opacity=".8"/><rect x="24" y="38" width="18" height="3" rx="1.5" fill="#fff" opacity=".4"/><rect x="24" y="44" width="20" height="3" rx="1.5" fill="#fff" opacity=".4"/></svg>'+
-    '<div class="welcome-title">Bem-vindo ao Dashboard de Insucessos</div>'+
-    '<div class="welcome-sub">Para visualizar as an\u00e1lises, carregue os arquivos CSV do dia usando os campos acima.</div>'+
-    '<div class="welcome-steps">'+
-    '<div class="welcome-step"><div class="step-num" style="background:#00A650;color:#fff">1</div><div class="step-text"><strong>Arquivo de Insucessos</strong> \u2014 obrigat\u00f3rio<br>Colunas esperadas: ID, Nodo, Status_principal, Sub_status, Transportadora...</div></div>'+
-    '<div class="welcome-step"><div class="step-num" style="background:#2D3277;color:#FFE600">2</div><div class="step-text"><strong>Arquivo DIT</strong> \u2014 opcional<br>Habilita o painel de Delay in Transit. Coluna chave: SHP_SHIPMENT_ID.</div></div>'+
-    '<div class="welcome-step"><div class="step-num" style="background:#FF6B00;color:#fff">3</div><div class="step-text"><strong>Pacotes em Solu\u00e7\u00e3o de Problemas</strong> \u2014 opcional<br>IDs exclusivos (n\u00e3o presentes em Insucessos) ser\u00e3o inclu\u00eddos no demonstrativo. Coluna chave: ID do envio.</div></div>'+
-    '</div>'+
-    '<div class="welcome-note">\ud83d\udca1 <strong>Dica:</strong> Voc\u00ea pode arrastar os arquivos diretamente nos campos acima. O arquivo 1 \u00e9 obrigat\u00f3rio para iniciar.</div>'+
-    '</div></div>';
-}
-
-function handleFile1(file){
-  if(!file)return;
-  readCSV(file,text=>{
-    const rows=parseGeneric(text).filter(r=>r.ID);
-    if(!rows.length){alert('Arquivo vazio ou coluna ID nao encontrada.');return;}
-    DATA=rows;
-    setSvcTitle(file.name);
-    document.getElementById('ub1').className='upload-box loaded';
-    document.getElementById('ub1-sub').textContent=file.name+' \u2014 '+DATA.length+' registros';
-    document.getElementById('ub1-status').textContent='\u2705 Carregado';
-    document.getElementById('ub1-status').style.color='#00A650';
-    populateSelects(); renderDashboard();
-  });
-}
-
-function handleFile2(file){
-  if(!file)return;
-  readCSV(file,text=>{
-    DIT_DATA=parseGeneric(text).filter(r=>r.SHP_SHIPMENT_ID);
-    if(!DIT_DATA.length){alert('Arquivo DIT vazio.');return;}
-    DIT_IDS=new Set(DIT_DATA.map(r=>r.SHP_SHIPMENT_ID.trim()));
-    document.getElementById('ub2').className='upload-box loaded2';
-    document.getElementById('ub2-sub').textContent=file.name+' \u2014 '+DIT_DATA.length+' registros';
-    document.getElementById('ub2-status').textContent='\u2705 Carregado';
-    document.getElementById('ub2-status').style.color='#2D3277';
-    if(DATA.length)renderDashboard();
-  });
-}
-
-function handleFile3(file){
-  if(!file)return;
-  readCSV(file,text=>{
-    const rows=parseGeneric(text).filter(r=>r['ID do envio']);
-    if(!rows.length){alert('Arquivo SP vazio ou coluna "ID do envio" nao encontrada.');return;}
-    SP_DATA=rows;
-    // Monta mapa ID -> dados SP
-    SP_MAP={};
-    rows.forEach(r=>{
-      const id=r['ID do envio'].trim();
-      SP_MAP[id]={
-        nodo: r['Facility de destino'].trim()||'SVC',
-        status: r['Status do envio'].trim(),
-        subtatus: r['Subtatus do envio'].trim(),
-        rota: r['Rota'].trim()
-      };
-    });
-    SP_IDS=new Set(Object.keys(SP_MAP));
-    document.getElementById('ub3').className='upload-box loaded3';
-    document.getElementById('ub3-sub').textContent=file.name+' \u2014 '+SP_DATA.length+' registros';
-    document.getElementById('ub3-status').textContent='\u2705 Carregado';
-    document.getElementById('ub3-status').style.color='#FF6B00';
-    if(DATA.length)renderDashboard();
-  });
-}
+function handleFile1(file){if(!file)return;readCSV(file,text=>{const rows=parseG(text).filter(r=>r.ID);if(!rows.length){alert('Coluna ID nao encontrada.');return;}DATA=rows;setSvc(file.name);setUB('ub1','loaded',file.name+' \u2014 '+rows.length+' reg.','\u2705 OK','#00A650');populateSelects();renderOp();});}
+function handleFile2(file){if(!file)return;readCSV(file,text=>{DIT_DATA=parseG(text).filter(r=>r.SHP_SHIPMENT_ID);DIT_IDS=new Set(DIT_DATA.map(r=>r.SHP_SHIPMENT_ID.trim()));RISK_DIT_MAP={};DIT_DATA.forEach(r=>{if(!RISK_DIT_MAP[r.SHP_SHIPMENT_ID])RISK_DIT_MAP[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});setUB('ub2','loaded2',file.name+' \u2014 '+DIT_DATA.length+' reg.','\u2705 OK','#2D3277');if(DATA.length)renderOp();if(RISK_DATA.length)renderNodos();});}
+function handleFile3(file){if(!file)return;readCSV(file,text=>{const rows=parseG(text).filter(r=>r['ID do envio']);SP_DATA=rows;SP_MAP={};rows.forEach(r=>{const id=r['ID do envio'].trim();SP_MAP[id]={nodo:r['Facility de destino'].trim()||'SVC',status:r['Status do envio'].trim(),subtatus:r['Subtatus do envio'].trim(),rota:r['Rota'].trim()};});SP_IDS=new Set(Object.keys(SP_MAP));setUB('ub3','loaded3',file.name+' \u2014 '+rows.length+' reg.','\u2705 OK','#FF6B00');if(DATA.length)renderOp();});}
+function handleFile4(file){if(!file)return;readCSV(file,text=>{RISK_DATA=parseG(text).filter(r=>r.Shipment);setUB('ub4','loaded4',file.name+' \u2014 '+RISK_DATA.length+' reg.','\u2705 OK','#7B4FBE');renderNodos();});}
 
 function freq(arr,key){const m={};arr.forEach(r=>{const v=r[key]||'(vazio)';m[v]=(m[v]||0)+1;});return Object.entries(m).sort((a,b)=>b[1]-a[1]);}
 function pct(v,t){return t?Math.round(v/t*100):0;}
+function toN(v){return parseFloat(String(v).replace(',','.'))||0;}
 function acColor(ag){return ag<=3?'#00A650':ag<=7?'#FF6B00':'#E5002B';}
 function acBg(ag){return ag<=3?'#e8f5e9':ag<=7?'#fff3e0':'#fde8e8';}
 
-// Retorna o conjunto unificado: INS + SP exclusivos (sem duplicatas)
-function getUnified(){
-  const insIds=new Set(DATA.map(r=>r.ID));
-  // SP exclusivos: IDs no SP que NÃO estão em Insucessos
-  const spExclusivos=Object.keys(SP_MAP).filter(id=>!insIds.has(id));
-  // Transforma SP exclusivos em formato compatível
-  const spRows=spExclusivos.map(id=>{
-    const sp=SP_MAP[id];
-    return {
-      ID: id,
-      Nodo: sp.nodo,
-      Status_principal: sp.status,
-      Sub_status: sp.subtatus,
-      Transportadora: '',
-      ID_Rota: sp.rota,
-      Tipo_veiculo: '',
-      _origem: 'SP'
-    };
-  });
-  return [...DATA.map(r=>({...r,_origem:'INS'})), ...spRows];
+function calcScore(row){
+  let s=0;const sub=row['Substatus Logistics']||'';const aging=parseInt(row['Aging'])||0;const val=toN(row['Valor usd']);
+  if(sub==='missing')s+=40;else if(sub==='stale'&&aging>=11)s+=35;else if(sub==='problem_solving')s+=30;else if(sub==='for_return'&&aging>=11)s+=25;else if(sub==='stale')s+=15;else s+=10;
+  if(aging>=30)s+=30;else if(aging>=11)s+=20;else if(aging>=6)s+=10;else s+=5;
+  if(val>100)s+=30;else if(val>=25)s+=15;else s+=5;
+  if(DIT_IDS.has(row.Shipment))s+=10;
+  return s;
+}
+function riskLabel(score){
+  if(score>=70)return{label:'\uD83D\uDD34 Imediata',cls:'risk-red'};
+  if(score>=40)return{label:'\uD83D\uDFE1 Priorit\u00e1ria',cls:'risk-yellow'};
+  return{label:'\uD83D\uDFE2 Programada',cls:'risk-green'};
 }
 
-function getFiltered(){
-  const unified=getUnified();
-  const t=(document.getElementById('f-transp')||{}).value||'';
-  const s=(document.getElementById('f-status')||{}).value||'';
-  const n=(document.getElementById('f-nodo')||{}).value||'';
-  const d=(document.getElementById('f-dit')||{}).value||'';
-  const o=(document.getElementById('f-origem')||{}).value||'';
-  return unified.filter(r=>{
-    if(t&&r.Transportadora!==t)return false;
-    if(s&&r.Status_principal!==s)return false;
-    if(n&&(r.Nodo||'SVC')!==n)return false;
-    if(d==='dit'&&!DIT_IDS.has(r.ID))return false;
-    if(d==='nodit'&&DIT_IDS.has(r.ID))return false;
-    if(o&&r._origem!==o)return false;
-    return true;
+function renderNodos(){
+  if(!RISK_DATA.length){document.getElementById('main-content-nodos').innerHTML='<div class="welcome"><div class="welcome-card"><p>Carregue o arquivo <strong>4. Risco At Station</strong></p></div></div>';return;}
+  const nodoMap={};
+  RISK_DATA.forEach(r=>{const n=r['Destino']||'(sem nodo)';if(!nodoMap[n])nodoMap[n]={rows:[],totalVal:0,maxAging:0,hasDit:0,scores:[]};const sc=calcScore(r);nodoMap[n].rows.push({...r,_score:sc});nodoMap[n].totalVal+=toN(r['Valor usd']);nodoMap[n].maxAging=Math.max(nodoMap[n].maxAging,parseInt(r['Aging'])||0);if(DIT_IDS.has(r.Shipment))nodoMap[n].hasDit++;nodoMap[n].scores.push(sc);});
+  Object.keys(nodoMap).forEach(n=>{nodoMap[n].maxScore=Math.max(...nodoMap[n].scores);});
+  const nodosSorted=Object.entries(nodoMap).sort((a,b)=>b[1].maxScore-a[1].maxScore);
+  const totalPkg=RISK_DATA.length;const totalVal=RISK_DATA.reduce((s,r)=>s+toN(r['Valor usd']),0);
+  const totalDit=RISK_DATA.filter(r=>DIT_IDS.has(r.Shipment)).length;const criticos=RISK_DATA.filter(r=>calcScore(r)>=70).length;
+
+  let html='<div class="hero-card">';
+  html+='<div style="width:58px;height:58px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 72 72" width="58" height="58"><circle cx="36" cy="36" r="36" fill="rgba(255,230,0,.15)"/><path d="M36 12c-7.7 0-14 6.3-14 14 0 10.5 14 26 14 26s14-15.5 14-26c0-7.7-6.3-14-14-14zm0 19a5 5 0 1 1 0-10 5 5 0 0 1 0 10z" fill="#FFE600"/></svg></div>';
+  html+='<div><div class="hero-title">GEST\u00c3O DE NODOS \u2014 RISCO AT STATION</div><div class="hero-desc">Score de prioridade + confronto DIT + Roman\u00e9io de coleta</div>';
+  html+='<div class="hero-stats"><div class="hstat"><div class="hstat-val">'+totalPkg+'</div><div class="hstat-label">Total Pacotes</div></div><div class="hstat"><div class="hstat-val">'+nodosSorted.length+'</div><div class="hstat-label">Nodos</div></div><div class="hstat" style="background:rgba(229,0,43,.25)"><div class="hstat-val">'+criticos+'</div><div class="hstat-label">Imediata</div></div><div class="hstat" style="background:rgba(255,230,0,.2)"><div class="hstat-val">'+totalDit+'</div><div class="hstat-label">Em DIT</div></div><div class="hstat"><div class="hstat-val">$'+totalVal.toFixed(0)+'</div><div class="hstat-label">USD em risco</div></div></div></div>';
+  html+='<div class="alerts"><div class="alert-item warn"><span style="font-weight:700;color:#ff6b6b">'+criticos+' pacotes</span><span style="color:rgba(255,255,255,.7)"> coleta imediata</span></div><div class="alert-item" style="border-left-color:#FFE600"><span style="font-weight:700;color:#FFE600">$'+totalVal.toFixed(0)+' USD</span><span style="color:rgba(255,255,255,.7)"> risco BPP</span></div>'+(DIT_IDS.size?'<div class="alert-item suc"><span style="font-weight:700;color:#51cf66">'+totalDit+' IDs</span><span style="color:rgba(255,255,255,.7)"> em DIT</span></div>':'')+'</div></div>';
+
+  html+='<div class="section-title" style="margin-top:10px">NODOS POR PRIORIDADE DE COLETA</div>';
+  html+='<div class="nodo-grid">';
+  nodosSorted.forEach(([nodo,data])=>{
+    const rl=riskLabel(data.maxScore);const info=NODOS_DB[nodo]||{};const isSel=selectedNodo===nodo;
+    html+='<div class="nodo-card'+(isSel?' selected':'')+'" id="nc-'+nodo+'" onclick="selectNodo(\''+nodo+'\')">';
+    html+='<div class="nodo-card-header"><div><div class="nodo-code">'+nodo+'</div>'+(info.tipo?'<div style="font-size:9px;color:#888">'+info.tipo+'</div>':'')+'</div><span class="nodo-badge '+rl.cls+'">'+rl.label+'</span></div>';
+    if(info.responsavel)html+='<div style="font-size:10px;color:#555;margin-bottom:4px">\uD83D\uDC64 '+info.responsavel+'</div>';
+    html+='<div class="nodo-stats"><div class="nodo-stat"><div class="nodo-stat-val">'+data.rows.length+'</div><div class="nodo-stat-label">Pacotes</div></div><div class="nodo-stat"><div class="nodo-stat-val">'+data.maxAging+'d</div><div class="nodo-stat-label">Aging Max</div></div><div class="nodo-stat"><div class="nodo-stat-val">$'+data.totalVal.toFixed(0)+'</div><div class="nodo-stat-label">USD</div></div></div>';
+    if(data.hasDit>0)html+='<span class="nodo-dit-badge">\u23f1 '+data.hasDit+' em DIT</span>';
+    html+='</div>';
   });
+  html+='</div>';
+
+  html+='<div class="detail-panel'+(selectedNodo&&nodoMap[selectedNodo]?' open':'')+'" id="detail-panel">';
+  if(selectedNodo&&nodoMap[selectedNodo])html+=buildDetail(selectedNodo,nodoMap[selectedNodo]);
+  html+='</div>';
+
+  document.getElementById('main-content-nodos').innerHTML=html;
+  if(selectedNodo){setTimeout(()=>{const p=document.getElementById('detail-panel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'});},80);}
 }
 
-function getSearchFiltered(base){
-  const id=(document.getElementById('s-id')||{}).value||'';
-  const nd=(document.getElementById('s-nodo')||{}).value||'';
-  const rt=(document.getElementById('s-rota')||{}).value||'';
-  const s1=(document.getElementById('s-status1')||{}).value||'';
-  const sb=(document.getElementById('s-sub1')||{}).value||'';
-  const sd=(document.getElementById('s-dit-filter')||{}).value||'';
-  const so=(document.getElementById('s-origem')||{}).value||'';
-  return base.filter(r=>{
-    if(id&&!r.ID.includes(id))return false;
-    if(nd&&(r.Nodo||'SVC')!==nd)return false;
-    if(rt&&!r.ID_Rota.includes(rt))return false;
-    if(s1&&r.Status_principal!==s1)return false;
-    if(sb&&r.Sub_status!==sb)return false;
-    if(sd==='dit'&&!DIT_IDS.has(r.ID))return false;
-    if(sd==='nodit'&&DIT_IDS.has(r.ID))return false;
-    if(so&&r._origem!==so)return false;
-    return true;
+function selectNodo(nodo){if(selectedNodo===nodo){selectedNodo=null;selectedIds=new Set();renderNodos();return;}selectedNodo=nodo;selectedIds=new Set();renderNodos();}
+
+function buildDetail(nodo,data){
+  const info=NODOS_DB[nodo]||{};const rows=data.rows;const rl=riskLabel(data.maxScore);
+  const imediatos=rows.filter(r=>r._score>=70).length;const prioritarios=rows.filter(r=>r._score>=40&&r._score<70).length;
+  const emDit=rows.filter(r=>DIT_IDS.has(r.Shipment)).length;const comCancel=rows.filter(r=>r['Pedido de cacelamento']==='SIM').length;
+
+  let h='<div class="detail-header"><div><div class="detail-title">\uD83D\uDCCD '+nodo+' <span class="nodo-badge '+rl.cls+'" style="font-size:11px">'+rl.label+'</span></div>';
+  if(info.endereco)h+='<div class="detail-addr">\uD83C\uDFE0 '+info.endereco+'</div>';
+  if(info.responsavel)h+='<div class="detail-resp">\uD83D\uDC64 '+info.responsavel+(info.tel?' &nbsp;\uD83D\uDCDE '+info.tel:'')+'</div>';
+  if(!info.endereco)h+='<div class="detail-resp" style="color:#E5002B">\u26A0 Endere\u00e7o n\u00e3o cadastrado</div>';
+  h+='</div><div class="detail-actions"><span class="sel-count" id="sel-count">'+selectedIds.size+' selecionados</span>';
+  h+='<button class="btn-primary" onclick="selectAllNodo()">&#9745; Todos</button>';
+  h+='<button class="btn-warning" onclick="clearSelNodo()">&#9746; Limpar</button>';
+  h+='<button class="btn-whatsapp" onclick="gerarWppNodo()">\uD83D\uDCAC WhatsApp</button>';
+  h+='<button class="btn-success" onclick="gerarRomaneio()">\uD83D\uDCCB Roman\u00e9io</button>';
+  h+='<button class="btn-download" onclick="downloadIdsNodo()">\u2B07 CSV</button></div></div>';
+
+  h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px">';
+  h+='<div class="nodo-stat" style="background:#fde8e8"><div class="nodo-stat-val" style="color:#E5002B">'+imediatos+'</div><div class="nodo-stat-label">Imediata</div></div>';
+  h+='<div class="nodo-stat" style="background:#fff8e1"><div class="nodo-stat-val" style="color:#c17f00">'+prioritarios+'</div><div class="nodo-stat-label">Priorit\u00e1ria</div></div>';
+  h+='<div class="nodo-stat" style="background:#e8f0ff"><div class="nodo-stat-val">'+emDit+'</div><div class="nodo-stat-label">Em DIT</div></div>';
+  h+='<div class="nodo-stat" style="background:#fff0f0"><div class="nodo-stat-val" style="color:#E5002B">'+comCancel+'</div><div class="nodo-stat-label">Cancel.</div></div>';
+  h+='<div class="nodo-stat"><div class="nodo-stat-val">$'+data.totalVal.toFixed(0)+'</div><div class="nodo-stat-label">USD</div></div></div>';
+
+  const sorted=[...rows].sort((a,b)=>b._score-a._score);
+  h+='<div class="ids-table-wrap"><table class="ids-table"><thead><tr>';
+  h+='<th><input type="checkbox" onchange="toggleAllIds(this)"></th><th>SHIPMENT ID</th><th>SUBSTATUS</th><th>AGING</th><th>VALOR</th><th>CANCEL.</th><th>DIT</th><th>MOTIVO DIT</th><th>SCORE</th></tr></thead><tbody>';
+  sorted.forEach(r=>{
+    const isSel=selectedIds.has(r.Shipment);const dit=RISK_DIT_MAP[r.Shipment];const rlr=riskLabel(r._score);
+    const subCls=r['Substatus Logistics']==='missing'?'b-missing':r['Substatus Logistics']==='stale'?'b-stale':r['Substatus Logistics']==='problem_solving'?'b-ps':r['Substatus Logistics']==='sorting'?'b-sorting':'b-other';
+    h+='<tr class="'+(isSel?'selected-row':'')+'" onclick="toggleId(\''+r.Shipment+'\')">';
+    h+='<td><input type="checkbox" class="rom-checkbox" '+(isSel?'checked':'')+' onchange="toggleId(\''+r.Shipment+'\');event.stopPropagation()"></td>';
+    h+='<td style="font-family:monospace;font-weight:700">'+r.Shipment+'</td>';
+    h+='<td><span class="badge '+subCls+'">'+r['Substatus Logistics']+'</span></td>';
+    h+='<td><span class="aging-badge" style="background:'+acBg(parseInt(r['Aging'])||0)+';color:'+acColor(parseInt(r['Aging'])||0)+'">'+r['Aging']+'d</span></td>';
+    h+='<td>'+(r['Valor usd']?'$'+r['Valor usd']:'—')+'</td>';
+    h+='<td style="font-weight:700;color:'+(r['Pedido de cacelamento']==='SIM'?'#E5002B':'#00A650')+'">'+r['Pedido de cacelamento']+'</td>';
+    h+='<td>'+(dit?'<span class="badge b-dit">\u23f1 DIT</span>':'<span class="badge b-nodit">\u2014</span>')+'</td>';
+    h+='<td style="font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis">'+(dit?dit.motivo:'—')+'</td>';
+    h+='<td><span class="nodo-badge '+rlr.cls+'">'+r._score+'</span></td></tr>';
   });
+  h+='</tbody></table></div>';
+  return h;
 }
 
-function populateSelects(){
-  const unified=getUnified();
-  const transpV=[...new Set(DATA.map(r=>r.Transportadora).filter(Boolean))].sort();
-  const statusV=[...new Set(unified.map(r=>r.Status_principal).filter(Boolean))].sort();
-  const nodoV=[...new Set(unified.map(r=>r.Nodo||'SVC').filter(Boolean))].sort();
-  function fill(id,vals,all){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">'+all+'</option>';vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});el.value=cur;}
-  fill('f-transp',transpV,'Todas');fill('f-status',statusV,'Todos');fill('f-nodo',nodoV,'Todos');
-  ['f-transp','f-status','f-nodo','f-dit','f-origem'].forEach(id=>{const el=document.getElementById(id);if(el)el.onchange=renderDashboard;});
-}
+function toggleId(id){if(selectedIds.has(id))selectedIds.delete(id);else selectedIds.add(id);const sc=document.getElementById('sel-count');if(sc)sc.textContent=selectedIds.size+' selecionados';document.querySelectorAll('.ids-table tbody tr').forEach(tr=>{const c=tr.querySelectorAll('td');if(c.length>1){const rid=c[1].textContent.trim();tr.className=selectedIds.has(rid)?'selected-row':'';const cb=c[0].querySelector('input');if(cb)cb.checked=selectedIds.has(rid);}});}
+function toggleAllIds(cb){const rows=RISK_DATA.filter(r=>r['Destino']===selectedNodo);if(cb.checked)rows.forEach(r=>selectedIds.add(r.Shipment));else selectedIds.clear();const sc=document.getElementById('sel-count');if(sc)sc.textContent=selectedIds.size+' selecionados';document.querySelectorAll('.ids-table tbody tr').forEach(tr=>{const c=tr.querySelectorAll('td');if(c.length>1){const rid=c[1].textContent.trim();tr.className=selectedIds.has(rid)?'selected-row':'';const cbr=c[0].querySelector('input');if(cbr)cbr.checked=selectedIds.has(rid);}});}
+function selectAllNodo(){RISK_DATA.filter(r=>r['Destino']===selectedNodo).forEach(r=>selectedIds.add(r.Shipment));renderNodos();}
+function clearSelNodo(){selectedIds.clear();renderNodos();}
 
-function downloadCSV(){
-  const base=getFiltered();
-  const rows=getSearchFiltered(base);
-  const ditMap={};
-  DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
-  const header=['ID','Nodo','ID_Rota','Status_principal','Sub_status','Transportadora','Tipo_veiculo','Origem','DIT','Motivo_DIT','Aging_DIT'];
-  const lines=[header.join(',')];
-  rows.forEach(r=>{
-    const dit=ditMap[r.ID];
-    lines.push([r.ID,r.Nodo||'SVC',r.ID_Rota,r.Status_principal,r.Sub_status,r.Transportadora,r.Tipo_veiculo,r._origem,dit?'SIM':'NAO',dit?dit.motivo:'',dit?dit.aging:''].join(','));
-  });
+function downloadIdsNodo(){
+  const ids=selectedIds.size>0?[...selectedIds]:RISK_DATA.filter(r=>r['Destino']===selectedNodo).map(r=>r.Shipment);
+  const rows=RISK_DATA.filter(r=>ids.includes(r.Shipment));
+  const hdr=['Shipment','Destino','Substatus Logistics','Aging','Valor usd','Pedido de cacelamento','Status promessa','DIT','Motivo DIT','Score'];
+  const lines=[hdr.join(',')];
+  rows.forEach(r=>{const dit=RISK_DIT_MAP[r.Shipment];lines.push([r.Shipment,r['Destino'],r['Substatus Logistics'],r['Aging'],r['Valor usd'],r['Pedido de cacelamento'],r['Status promessa'],dit?'SIM':'NAO',dit?dit.motivo:'',calcScore(r)].join(','));});
   const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download='insucessos_filtrados_'+new Date().toISOString().slice(0,10)+'.csv';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='coleta_'+selectedNodo+'_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
 
-function renderDashboard(){
-  if(!DATA.length){showWelcome();return;}
-  const filt=getFiltered(),total=filt.length;
-  if(!total){document.getElementById('main-content').innerHTML='<div style="text-align:center;padding:40px;color:#aaa">Nenhum registro encontrado com os filtros aplicados.</div>';return;}
+function gerarWppNodo(){
+  const ids=selectedIds.size>0?[...selectedIds]:RISK_DATA.filter(r=>r['Destino']===selectedNodo).map(r=>r.Shipment);
+  const rows=RISK_DATA.filter(r=>ids.includes(r.Shipment)).sort((a,b)=>calcScore(b)-calcScore(a));
+  if(!rows.length){alert('Nenhum ID selecionado.');return;}
+  const info=NODOS_DB[selectedNodo]||{};
+  const now=new Date();const dh=now.toLocaleDateString('pt-BR')+' \u00e0s '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const svc=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP';
+  const imediatos=rows.filter(r=>calcScore(r)>=70).length;const emDit=rows.filter(r=>DIT_IDS.has(r.Shipment)).length;
+  const totalVal=rows.reduce((s,r)=>s+toN(r['Valor usd']),0);
+  const subFreq={};rows.forEach(r=>{const s=r['Substatus Logistics']||'';subFreq[s]=(subFreq[s]||0)+1;});
+  const subSorted=Object.entries(subFreq).sort((a,b)=>b[1]-a[1]);
+
+  let msg='\uD83D\uDCE6 *COLETA URGENTE \u2014 '+svc+'*\n\uD83D\uDCC5 '+dh+'\n\uD83D\uDCCD *Nodo: '+selectedNodo+'*\n';
+  if(info.endereco)msg+='\uD83C\uDFE0 '+info.endereco+'\n';
+  if(info.responsavel)msg+='\uD83D\uDC64 '+info.responsavel+(info.tel?' | '+info.tel:'')+'\n';
+  msg+='\n*Total: '+rows.length+' pacotes*\n\uD83D\uDD34 Imediata: *'+imediatos+'*\n';
+  if(DIT_IDS.size)msg+='\u23f1 Em DIT: *'+emDit+'*\n';
+  msg+='$'+totalVal.toFixed(0)+' USD em risco\n\n';
+  msg+='\uD83D\uDCCB *Substatus:*\n';
+  subSorted.forEach(([s,v])=>{msg+='\u2022 '+s+': *'+v+'* ('+pct(v,rows.length)+'%)\n';});
+  msg+='\n*Rela\u00e7\u00e3o de IDs:*\n';
+  rows.forEach(r=>{const dit=RISK_DIT_MAP[r.Shipment];msg+=r.Shipment+' _('+r['Substatus Logistics']+(dit?' / DIT: '+dit.motivo+' ('+dit.aging+'d)':'')+'_)\n';});
+  msg+='\n_Gerado via Dashboard ML_';
+  openWpp(msg,selectedNodo+' \u2014 '+rows.length+' pacotes');
+}
+
+function gerarRomaneio(){
+  const ids=selectedIds.size>0?[...selectedIds]:RISK_DATA.filter(r=>r['Destino']===selectedNodo).map(r=>r.Shipment);
+  if(!ids.length){alert('Nenhum ID selecionado.');return;}
+  const rows=RISK_DATA.filter(r=>ids.includes(r.Shipment)).sort((a,b)=>calcScore(b)-calcScore(a));
+  const info=NODOS_DB[selectedNodo]||{};
+  const svc=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP15';
+
+  let h='<table class="rom-header-table"><tr><td colspan="3" class="rom-title">ROMAN\u00c9IO '+svc+'</td></tr>';
+  h+='<tr><td colspan="3"><strong>Data De Coleta:</strong> '+new Date().toLocaleDateString('pt-BR')+'</td></tr>';
+  h+='<tr><td>Nome e assinatura do motorista: ___________________________</td><td>Documento: _______________</td><td>Nome e assinatura do Place: ___________________________</td></tr></table>';
+  h+='<div class="rom-info"><div class="rom-info-card"><div class="rom-info-label">NODO / PLACE</div><div class="rom-info-val">'+selectedNodo+'</div></div>';
+  h+='<div class="rom-info-card"><div class="rom-info-label">ENDERE\u00c7O</div><div class="rom-info-val">'+(info.endereco||'<span style="color:#E5002B">N\u00e3o cadastrado</span>')+'</div></div>';
+  h+='<div class="rom-info-card"><div class="rom-info-label">RESPONS\u00c1VEL</div><div class="rom-info-val">'+(info.responsavel||'—')+'</div></div>';
+  h+='<div class="rom-info-card"><div class="rom-info-label">TELEFONE</div><div class="rom-info-val">'+(info.tel||'—')+'</div></div></div>';
+  h+='<div class="rom-place-title">'+selectedNodo+(info.endereco?' \u2014 '+info.endereco:'')+(info.tipo?' | '+info.tipo:'')+'</div>';
+  h+='<table class="rom-table"><thead><tr><th style="width:145px">C\u00f3digo do Pacote</th><th style="width:70px">Coletado?</th><th>Substatus</th><th style="width:55px">Aging</th><th style="width:65px">Valor USD</th><th>Teve Algum Problema?</th></tr></thead><tbody>';
+  rows.forEach(r=>{
+    const ag=parseInt(r['Aging'])||0;
+    const sc=r['Substatus Logistics']==='missing'?{bg:'#fde8e8',cl:'#E5002B'}:r['Substatus Logistics']==='stale'?{bg:'#fff3e0',cl:'#FF6B00'}:{bg:'#e8f5e9',cl:'#00A650'};
+    h+='<tr><td class="rom-id">'+r.Shipment+'</td><td style="text-align:center"><input type="checkbox" class="rom-checkbox"> Sim</td>';
+    h+='<td><span class="rom-status-badge" style="background:'+sc.bg+';color:'+sc.cl+'">'+r['Substatus Logistics']+'</span></td>';
+    h+='<td style="text-align:center"><span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+r['Aging']+'d</span></td>';
+    h+='<td>'+(r['Valor usd']?'$'+r['Valor usd']:'—')+'</td>';
+    h+='<td style="font-size:10px"><label><input type="checkbox"> Pac. n\u00e3o est\u00e1</label> &nbsp;<label><input type="checkbox"> Danificado</label> &nbsp;<label><input type="checkbox"> Perdido</label> &nbsp;<label><input type="checkbox"> Entregue ao Cliente</label> &nbsp;Outro: _______________</td></tr>';
+  });
+  h+='</tbody></table>';
+  h+='<table class="rom-sign-table"><tr><td>Nome do Condutor:<br><br>Assinatura: ___________________________</td><td>Assinatura Respons\u00e1vel Place:<br><br>___________________________</td><td>Observa\u00e7\u00f5es:<br><br>___________________________</td></tr></table>';
+  document.getElementById('romaneio-body').innerHTML=h;
+  document.getElementById('rom-overlay').classList.add('open');
+}
+
+function getUnified(){const insIds=new Set(DATA.map(r=>r.ID));const spRows=Object.keys(SP_MAP).filter(id=>!insIds.has(id)).map(id=>({...SP_MAP[id],ID:id,Nodo:SP_MAP[id].nodo,Status_principal:SP_MAP[id].status,Sub_status:SP_MAP[id].subtatus,ID_Rota:SP_MAP[id].rota,Transportadora:'',Tipo_veiculo:'',_origem:'SP'}));return[...DATA.map(r=>({...r,_origem:'INS'})),...spRows];}
+function getFilt(){const uni=getUnified();const t=(document.getElementById('f-transp')||{}).value||'';const s=(document.getElementById('f-status')||{}).value||'';const n=(document.getElementById('f-nodo')||{}).value||'';const d=(document.getElementById('f-dit')||{}).value||'';const o=(document.getElementById('f-origem')||{}).value||'';return uni.filter(r=>{if(t&&r.Transportadora!==t)return false;if(s&&r.Status_principal!==s)return false;if(n&&(r.Nodo||'SVC')!==n)return false;if(d==='dit'&&!DIT_IDS.has(r.ID))return false;if(d==='nodit'&&DIT_IDS.has(r.ID))return false;if(o&&r._origem!==o)return false;return true;});}
+function getSFilt(base){const id=(document.getElementById('s-id')||{}).value||'';const nd=(document.getElementById('s-nodo')||{}).value||'';const rt=(document.getElementById('s-rota')||{}).value||'';const s1=(document.getElementById('s-status1')||{}).value||'';const sb=(document.getElementById('s-sub1')||{}).value||'';const sd=(document.getElementById('s-dit-filter')||{}).value||'';const so=(document.getElementById('s-origem')||{}).value||'';return base.filter(r=>{if(id&&!r.ID.includes(id))return false;if(nd&&(r.Nodo||'SVC')!==nd)return false;if(rt&&!r.ID_Rota.includes(rt))return false;if(s1&&r.Status_principal!==s1)return false;if(sb&&r.Sub_status!==sb)return false;if(sd==='dit'&&!DIT_IDS.has(r.ID))return false;if(sd==='nodit'&&DIT_IDS.has(r.ID))return false;if(so&&r._origem!==so)return false;return true;});}
+function populateSelects(){const uni=getUnified();const tV=[...new Set(DATA.map(r=>r.Transportadora).filter(Boolean))].sort();const sV=[...new Set(uni.map(r=>r.Status_principal).filter(Boolean))].sort();const nV=[...new Set(uni.map(r=>r.Nodo||'SVC').filter(Boolean))].sort();function fill(id,vals,all){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">'+all+'</option>';vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});el.value=cur;}fill('f-transp',tV,'Todas');fill('f-status',sV,'Todos');fill('f-nodo',nV,'Todos');['f-transp','f-status','f-nodo','f-dit','f-origem'].forEach(id=>{const el=document.getElementById(id);if(el)el.onchange=renderOp;});}
+
+function openWpp(msg,sub){document.getElementById('wpp-preview').textContent=msg;document.getElementById('wpp-modal-sub').textContent=sub;document.getElementById('wpp-copy-btn').textContent='\uD83D\uDCCB Copiar';document.getElementById('wpp-copy-btn').classList.remove('copied');document.getElementById('wpp-overlay').classList.add('open');}
+function copyWpp(){const txt=document.getElementById('wpp-preview').textContent;const done=()=>{const b=document.getElementById('wpp-copy-btn');b.textContent='\u2705 Copiado!';b.classList.add('copied');setTimeout(()=>{b.textContent='\uD83D\uDCCB Copiar';b.classList.remove('copied');},2500);};if(navigator.clipboard)navigator.clipboard.writeText(txt).then(done).catch(()=>{fbCopy(txt);done();});else{fbCopy(txt);done();}}
+function fbCopy(txt){const ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}
+
+function downloadCSV(){const base=getFilt();const rows=getSFilt(base);const ditMap={};DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});const hdr=['ID','Nodo','ID_Rota','Status_principal','Sub_status','Transportadora','Tipo_veiculo','Origem','DIT','Motivo_DIT','Aging_DIT'];const lines=[hdr.join(',')];rows.forEach(r=>{const dit=ditMap[r.ID];lines.push([r.ID,r.Nodo||'SVC',r.ID_Rota,r.Status_principal,r.Sub_status,r.Transportadora,r.Tipo_veiculo,r._origem,dit?'SIM':'NAO',dit?dit.motivo:'',dit?dit.aging:''].join(','));});const blob=new Blob(['\uFEFF'+lines.join('\n')],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='insucessos_'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);}
+
+function gerarResumoWpp(){
+  const base=getFilt();const rows=getSFilt(base);if(!rows.length){alert('Nenhum registro.');return;}
+  const fNodo=(document.getElementById('s-nodo')||{}).value||'';const fStatus=(document.getElementById('s-status1')||{}).value||'';const fSub=(document.getElementById('s-sub1')||{}).value||'';const fDit=(document.getElementById('s-dit-filter')||{}).value||'';const fOrigem=(document.getElementById('s-origem')||{}).value||'';const fId=(document.getElementById('s-id')||{}).value||'';
+  const now=new Date();const dh=now.toLocaleDateString('pt-BR')+' \u00e0s '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  const svcName=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP';
+  let fl=[];if(fNodo)fl.push('Nodo: '+fNodo);if(fStatus)fl.push('Status: '+fStatus);if(fSub)fl.push('Sub: '+fSub);if(fDit==='dit')fl.push('Somente DIT');if(fDit==='nodit')fl.push('Sem DIT');if(fOrigem)fl.push('Origem: '+fOrigem);if(fId)fl.push('ID: '+fId);
+  const total=rows.length;const sC={};rows.forEach(r=>{const s=r.Status_principal||'(vazio)';sC[s]=(sC[s]||0)+1;});const subC={};rows.forEach(r=>{const s=r.Sub_status||'(vazio)';subC[s]=(subC[s]||0)+1;});
+  const emDit=rows.filter(r=>DIT_IDS.has(r.ID)).length;const insC=rows.filter(r=>r._origem==='INS').length;const spC=rows.filter(r=>r._origem==='SP').length;
+  const nC={};rows.forEach(r=>{const n=r.Nodo||'SVC';nC[n]=(nC[n]||0)+1;});const nS=Object.entries(nC).sort((a,b)=>b[1]-a[1]);
+  const subS=Object.entries(subC).sort((a,b)=>b[1]-a[1]);const sS=Object.entries(sC).sort((a,b)=>b[1]-a[1]);
+  const ditMap={};DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
+  let msg='\uD83D\uDCE6 *INSUCESSOS \u2014 '+svcName+'*\n\uD83D\uDCC5 '+dh+'\n';
+  if(fl.length)msg+='\uD83D\uDD0D _Filtro: '+fl.join(' | ')+'_\n';
+  msg+='\n*Total: '+total+'*\n\n\uD83D\uDCCA *Status D1:*\n';
+  sS.forEach(([s,v])=>{msg+=(s==='on_route'?'\uD83D\uDE97':'\uD83C\uDFE2')+' '+s+': *'+v+'* ('+pct(v,total)+'%)\n';});
+  msg+='\n\uD83D\uDCCB *Sub-status:*\n';subS.slice(0,6).forEach(([s,v])=>{msg+='\u2022 '+s+': *'+v+'* ('+pct(v,total)+'%)\n';});msg+='\n';
+  if(DIT_IDS.size){msg+='\u23f1 *DIT:*\n\u2705 Em DIT: *'+emDit+'* ('+pct(emDit,total)+'%)\n\u274c Sem: *'+(total-emDit)+'*\n\n';}
+  if(SP_IDS.size){msg+='\uD83D\uDCCC *Origem:*\n\u26A0 Insucessos: *'+insC+'*\n\uD83D\uDD27 SP: *'+spC+'*\n\n';}
+  if(!fNodo&&nS.length>1){msg+='\uD83D\uDCCD *Top Nodos:*\n';nS.slice(0,5).forEach(([n,v])=>{msg+='\u2022 '+n+': *'+v+'* ('+pct(v,total)+'%)\n';});msg+='\n';}
+  msg+='\n*Rela\u00e7\u00e3o de IDs:*\n';
+  rows.forEach(r=>{const dit=ditMap[r.ID];const cl=dit?r.Sub_status+' / DIT: '+dit.motivo+' ('+dit.aging+'d)':r.Sub_status;msg+=r.ID+' _('+cl+')_\n';});
+  msg+='\n_Gerado via Dashboard ML_';
+  openWpp(msg,(fl.length?fl.join(' | '):'Todos')+' \u2014 '+total+' reg.');
+}
+
+function renderOp(){
+  if(!DATA.length)return;
+  const filt=getFilt(),total=filt.length;
+  if(!total){document.getElementById('main-content-op').innerHTML='<div style="text-align:center;padding:40px;color:#aaa">Nenhum registro encontrado.</div>';return;}
   document.getElementById('filter-count').textContent=total+' de '+getUnified().length+' pacotes';
-
-  const insRows=filt.filter(r=>r._origem==='INS');
-  const spRows=filt.filter(r=>r._origem==='SP');
-  const inDIT=filt.filter(r=>DIT_IDS.has(r.ID));
-  const notDIT=filt.filter(r=>!DIT_IDS.has(r.ID));
-  const byNodo=freq(filt,'Nodo').filter(x=>x[0]!='(vazio)');
-  // Corrige SVC para itens sem nodo
-  const nodoFiltAjustado=filt.map(r=>({...r,Nodo:r.Nodo||'SVC'}));
-  const byNodoAjust=freq(nodoFiltAjustado,'Nodo').filter(x=>x[0]!='(vazio)');
-  const topNodo=byNodoAjust[0];
-  const onR=filt.filter(r=>r.Status_principal==='on_route').length;
-  const atS=filt.filter(r=>r.Status_principal==='at_station').length;
-  const perdidos=filt.filter(r=>r.Sub_status==='Perdido').length;
-
-  // DIT
-  const ditMatchIds=new Set(inDIT.map(r=>r.ID));
-  const ditRows=DIT_DATA.filter(r=>ditMatchIds.has(r.SHP_SHIPMENT_ID));
-  const motivoFreq={};
-  ditRows.forEach(r=>{const m=r.Motivo||'';motivoFreq[m]=(motivoFreq[m]||0)+1;});
-  const motivosSorted=Object.entries(motivoFreq).sort((a,b)=>b[1]-a[1]);
-  const agingFreq={};
-  ditRows.forEach(r=>{const a=parseInt(r.Aging)||0;const k=a<=3?'1-3 dias':(a<=7?'4-7 dias':'8+ dias');agingFreq[k]=(agingFreq[k]||0)+1;});
+  const insRows=filt.filter(r=>r._origem==='INS');const spRows=filt.filter(r=>r._origem==='SP');
+  const inDIT=filt.filter(r=>DIT_IDS.has(r.ID));const notDIT=filt.filter(r=>!DIT_IDS.has(r.ID));
+  const nodoFilt=filt.map(r=>({...r,Nodo:r.Nodo||'SVC'}));const byNodo=freq(nodoFilt,'Nodo').filter(x=>x[0]!='(vazio)');const topNodo=byNodo[0];
+  const onR=filt.filter(r=>r.Status_principal==='on_route').length;const atS=filt.filter(r=>r.Status_principal==='at_station').length;const perdidos=filt.filter(r=>r.Sub_status==='Perdido').length;
+  const ditMatchIds=new Set(inDIT.map(r=>r.ID));const ditRows=DIT_DATA.filter(r=>ditMatchIds.has(r.SHP_SHIPMENT_ID));
+  const motivoFreq={};ditRows.forEach(r=>{const m=r.Motivo||'';motivoFreq[m]=(motivoFreq[m]||0)+1;});const motivosSorted=Object.entries(motivoFreq).sort((a,b)=>b[1]-a[1]);
+  const agingFreq={};ditRows.forEach(r=>{const a=parseInt(r.Aging)||0;const k=a<=3?'1-3 dias':(a<=7?'4-7 dias':'8+ dias');agingFreq[k]=(agingFreq[k]||0)+1;});
   const agingAvg=ditRows.length?Math.round(ditRows.reduce((s,r)=>s+(parseInt(r.Aging)||0),0)/ditRows.length*10)/10:0;
+  const spSubFreq={};spRows.forEach(r=>{spSubFreq[r.Sub_status]=(spSubFreq[r.Sub_status]||0)+1;});const spSubSorted=Object.entries(spSubFreq).sort((a,b)=>b[1]-a[1]);const spInDIT=spRows.filter(r=>DIT_IDS.has(r.ID)).length;
+  const svcName=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP';
 
-  // SP subtatus
-  const spSubFreq={};
-  spRows.forEach(r=>{spSubFreq[r.Sub_status]=(spSubFreq[r.Sub_status]||0)+1;});
-  const spSubSorted=Object.entries(spSubFreq).sort((a,b)=>b[1]-a[1]);
-  const spInDIT=spRows.filter(r=>DIT_IDS.has(r.ID)).length;
+  let html='<div class="hero-card"><div style="width:60px;height:60px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 80 80" width="60" height="60"><rect x="8" y="30" width="50" height="24" rx="5" fill="#FFE600"/><rect x="38" y="22" width="22" height="18" rx="3" fill="#fff" opacity=".9"/><rect x="40" y="24" width="18" height="14" rx="2" fill="#a8d8ff"/><circle cx="18" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="18" cy="56" r="3" fill="#FFE600"/><circle cx="46" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="46" cy="56" r="3" fill="#FFE600"/><rect x="56" y="36" width="16" height="18" rx="3" fill="#FFE600" stroke="#2D3277" stroke-width="1.5"/></svg></div>';
+  html+='<div><div class="hero-title">MERCADO LIVRE \u2014 '+svcName+'</div><div class="hero-desc">Painel unificado: Insucessos + SP + DIT</div>';
+  html+='<div class="hero-stats"><div class="hstat"><div class="hstat-val">'+total+'</div><div class="hstat-label">Total</div></div><div class="hstat"><div class="hstat-val">'+insRows.length+'</div><div class="hstat-label">Insucessos</div></div>'+(SP_IDS.size?'<div class="hstat" style="background:rgba(255,107,0,.2)"><div class="hstat-val">'+spRows.length+'</div><div class="hstat-label">SP</div></div>':'')+'<div class="hstat"><div class="hstat-val">'+[...new Set(nodoFilt.map(r=>r.Nodo).filter(Boolean))].length+'</div><div class="hstat-label">Nodos</div></div><div class="hstat"><div class="hstat-val">'+perdidos+'</div><div class="hstat-label">Perdidos</div></div>'+(DIT_IDS.size?'<div class="hstat" style="background:rgba(255,230,0,.2)"><div class="hstat-val">'+inDIT.length+'</div><div class="hstat-label">Em DIT</div></div>':'')+'</div></div>';
+  html+='<div class="alerts"><div class="alert-item"><span style="color:rgba(255,255,255,.7)">Nodo cr\u00edtico: </span><span style="font-weight:700;color:#FFE600">'+(topNodo?topNodo[0]:'-')+'</span>'+(topNodo?' <span style="color:rgba(255,255,255,.7)">('+topNodo[1]+')</span>':'')+'</div><div class="alert-item warn"><span style="font-weight:700;color:#ff6b6b">'+perdidos+' perdidos</span></div><div class="alert-item suc"><span style="font-weight:700;color:#51cf66">'+onR+' em rota</span><span style="color:rgba(255,255,255,.7)"> ('+pct(onR,total)+'%)</span></div>'+(DIT_IDS.size?'<div class="alert-item" style="border-left-color:#FFE600"><span style="font-weight:700;color:#FFE600">'+inDIT.length+' em DIT</span><span style="color:rgba(255,255,255,.7)"> ('+pct(inDIT.length,total)+'%)</span></div>':'')+(SP_IDS.size?'<div class="alert-item orange"><span style="font-weight:700;color:#FF6B00">'+spRows.length+' em SP</span></div>':'')+'</div></div>';
 
-  const svcName=document.getElementById('page-title').textContent.replace('INSUCESSOS DE ENTREGA \u2014 ','');
-
-  let html='';
-
-  // HERO
-  html+='<div class="hero-card">';
-  html+='<div style="width:70px;height:70px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 80 80" width="70" height="70"><rect x="8" y="30" width="50" height="24" rx="5" fill="#FFE600"/><rect x="38" y="22" width="22" height="18" rx="3" fill="#fff" opacity=".9"/><rect x="40" y="24" width="18" height="14" rx="2" fill="#a8d8ff"/><circle cx="18" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="18" cy="56" r="3" fill="#FFE600"/><circle cx="46" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="46" cy="56" r="3" fill="#FFE600"/><rect x="56" y="36" width="16" height="18" rx="3" fill="#FFE600" stroke="#2D3277" stroke-width="1.5"/></svg></div>';
-  html+='<div><div class="hero-title">MERCADO LIVRE \u2014 '+svcName+'</div>';
-  html+='<div class="hero-desc">Painel unificado: Insucessos + Solu\u00e7\u00e3o de Problemas + Confronto DIT.</div>';
-  html+='<div class="hero-stats">';
-  html+='<div class="hstat"><div class="hstat-val">'+total+'</div><div class="hstat-label">Total Unificado</div></div>';
-  html+='<div class="hstat"><div class="hstat-val">'+insRows.length+'</div><div class="hstat-label">Insucessos</div></div>';
-  if(SP_IDS.size)html+='<div class="hstat" style="background:rgba(255,107,0,.2)"><div class="hstat-val">'+spRows.length+'</div><div class="hstat-label">Soluc. Problemas</div></div>';
-  html+='<div class="hstat"><div class="hstat-val">'+[...new Set(nodoFiltAjustado.map(r=>r.Nodo).filter(Boolean))].length+'</div><div class="hstat-label">Nodos Ativos</div></div>';
-  html+='<div class="hstat"><div class="hstat-val">'+[...new Set(filt.map(r=>r.ID_Rota).filter(Boolean))].length+'</div><div class="hstat-label">Rotas</div></div>';
-  html+='<div class="hstat"><div class="hstat-val">'+perdidos+'</div><div class="hstat-label">Perdidos</div></div>';
-  if(DIT_IDS.size)html+='<div class="hstat" style="background:rgba(255,230,0,.2)"><div class="hstat-val">'+inDIT.length+'</div><div class="hstat-label">Em DIT</div></div>';
-  html+='</div></div>';
-  html+='<div class="alerts">';
-  html+='<div class="alert-item"><span style="color:rgba(255,255,255,.7)">Nodo cr\u00edtico: </span><span style="font-weight:700;color:#FFE600">'+(topNodo?topNodo[0]:'-')+'</span>'+(topNodo?' <span style="color:rgba(255,255,255,.7)">('+topNodo[1]+' pkg)</span>':'')+'</div>';
-  html+='<div class="alert-item warn"><span style="font-weight:700;color:#ff6b6b">'+perdidos+' perdidos</span><span style="color:rgba(255,255,255,.7)"> \u2014 aten\u00e7\u00e3o</span></div>';
-  html+='<div class="alert-item suc"><span style="font-weight:700;color:#51cf66">'+onR+' em rota</span><span style="color:rgba(255,255,255,.7)"> ('+pct(onR,total)+'%)</span></div>';
-  if(DIT_IDS.size)html+='<div class="alert-item" style="border-left-color:#FFE600"><span style="font-weight:700;color:#FFE600">'+inDIT.length+' em DIT</span><span style="color:rgba(255,255,255,.7)"> ('+pct(inDIT.length,total)+'%)</span></div>';
-  if(SP_IDS.size)html+='<div class="alert-item orange"><span style="font-weight:700;color:#FF6B00">'+spRows.length+' em SP</span><span style="color:rgba(255,255,255,.7)"> ('+pct(spRows.length,total)+'%)</span></div>';
-  html+='</div></div>';
-
-  // PAINEL SP
-  if(SP_IDS.size && spRows.length>0){
-    html+='<div class="section-title">\ud83d\udd27 SOLU\u00c7\u00c3O DE PROBLEMAS \u2014 DEMONSTRATIVO</div>';
-    html+='<div class="sp-banner">';
-    html+='<div class="dit-banner-top"><div class="sp-badge">SP \u2014 Solu\u00e7\u00e3o de Problemas</div><div style="font-size:12px;color:#555">IDs exclusivos (n\u00e3o presentes em Insucessos) com nodo via Facility de destino</div></div>';
-    html+='<div class="dit-kpis">';
-    html+='<div class="dit-kpi orange"><div class="dit-kpi-val">'+spRows.length+'</div><div class="dit-kpi-label">Pacotes SP exclusivos</div></div>';
-    html+='<div class="dit-kpi"><div class="dit-kpi-val">'+(SP_IDS.size-spRows.length)+'</div><div class="dit-kpi-label">SP j\u00e1 em Insucessos</div></div>';
-    html+='<div class="dit-kpi success"><div class="dit-kpi-val">'+pct(spRows.length,total)+'%</div><div class="dit-kpi-label">% do total unificado</div></div>';
-    html+='<div class="dit-kpi highlight"><div class="dit-kpi-val">'+spInDIT+'</div><div class="dit-kpi-label">SP tamb\u00e9m em DIT</div></div>';
-    html+='</div>';
-    html+='<div class="dit-grid">';
-    html+='<div class="sp-card"><div class="sp-card-title">\ud83d\udccb Subtatus SP</div>';
-    spSubSorted.forEach((x,i)=>{const maxS=spSubSorted[0][1];html+='<div class="dit-bar-row"><div class="dit-bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/maxS*100)+'%;background:'+(['#FF6B00','#2D3277','#00A650'][i%3])+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],spRows.length)+'%</div></div>';});
-    html+='</div>';
-    // Nodos SP
-    const spNodoFreq={};
-    spRows.forEach(r=>{const n=r.Nodo||'SVC';spNodoFreq[n]=(spNodoFreq[n]||0)+1;});
-    const spNodoSorted=Object.entries(spNodoFreq).sort((a,b)=>b[1]-a[1]);
-    const maxSN=spNodoSorted[0]?spNodoSorted[0][1]:1;
-    html+='<div class="sp-card"><div class="sp-card-title">\ud83d\udccd Distribui\u00e7\u00e3o por Nodo (SP)</div>';
-    spNodoSorted.slice(0,8).forEach((x,i)=>{html+='<div class="dit-bar-row"><div class="dit-bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/maxSN*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],spRows.length)+'%</div></div>';});
+  if(SP_IDS.size&&spRows.length>0){
+    html+='<div class="section-title">\uD83D\uDD27 SP</div><div class="sp-banner"><div class="dit-banner-top"><div class="sp-badge">SP</div><div style="font-size:12px;color:#555">IDs exclusivos</div></div>';
+    html+='<div class="dit-kpis"><div class="dit-kpi orange"><div class="dit-kpi-val">'+spRows.length+'</div><div class="dit-kpi-label">SP exclusivos</div></div><div class="dit-kpi"><div class="dit-kpi-val">'+(SP_IDS.size-spRows.length)+'</div><div class="dit-kpi-label">J\u00e1 em INS</div></div><div class="dit-kpi success"><div class="dit-kpi-val">'+pct(spRows.length,total)+'%</div><div class="dit-kpi-label">% total</div></div><div class="dit-kpi highlight"><div class="dit-kpi-val">'+spInDIT+'</div><div class="dit-kpi-label">SP em DIT</div></div></div>';
+    html+='<div class="dit-grid"><div class="dit-card"><div class="dit-card-title">Subtatus SP</div>';
+    spSubSorted.forEach((x,i)=>{const mx=spSubSorted[0][1];html+='<div class="dit-bar-row"><div class="dit-bar-label">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/mx*100)+'%;background:'+(['#FF6B00','#2D3277','#00A650'][i%3])+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],spRows.length)+'%</div></div>';});
+    html+='</div><div class="dit-card"><div class="dit-card-title">Nodos SP</div>';
+    const spNF={};spRows.forEach(r=>{const n=r.Nodo||'SVC';spNF[n]=(spNF[n]||0)+1;});const spNS=Object.entries(spNF).sort((a,b)=>b[1]-a[1]);const mSN=spNS[0]?spNS[0][1]:1;
+    spNS.slice(0,8).forEach((x,i)=>{html+='<div class="dit-bar-row"><div class="dit-bar-label">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/mSN*100)+'%;background:'+ML[i%ML.length]+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],spRows.length)+'%</div></div>';});
     html+='</div></div></div>';
   }
 
-  // PAINEL DIT
   if(DIT_IDS.size){
-    html+='<div class="section-title">\u23f1 DEMONSTRATIVO DIT \u2014 CONFRONTO COM BASE UNIFICADA</div>';
-    html+='<div class="dit-banner"><div class="dit-banner-top"><div class="dit-badge">DIT \u2014 Delay in Transit</div><div style="font-size:12px;color:#555">IDs presentes na base unificada (Insucessos + SP) que constam em DIT</div></div>';
-    html+='<div class="dit-kpis"><div class="dit-kpi highlight"><div class="dit-kpi-val">'+inDIT.length+'</div><div class="dit-kpi-label">Unificados em DIT</div></div><div class="dit-kpi"><div class="dit-kpi-val">'+notDIT.length+'</div><div class="dit-kpi-label">Sem DIT</div></div><div class="dit-kpi success"><div class="dit-kpi-val">'+pct(inDIT.length,total)+'%</div><div class="dit-kpi-label">% em DIT do total</div></div><div class="dit-kpi danger"><div class="dit-kpi-val">'+agingAvg+'d</div><div class="dit-kpi-label">Aging m\u00e9dio</div></div></div>';
-    html+='<div class="dit-grid"><div class="dit-card"><div class="dit-card-title">\ud83d\udccb Motivos DIT</div>';
-    motivosSorted.slice(0,8).forEach((x,i)=>{const maxM=motivosSorted[0][1];html+='<div class="dit-bar-row"><div class="dit-bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/maxM*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],inDIT.length)+'%</div></div>';});
-    html+='</div><div class="dit-card"><div class="dit-card-title">\u23f3 Distribui\u00e7\u00e3o por Aging</div>';
-    Object.entries(agingFreq).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([k,v])=>{const c=k.startsWith('1')?'#00A650':(k.startsWith('4')?'#FF6B00':'#E5002B');const bg=k.startsWith('1')?'#e8f5e9':(k.startsWith('4')?'#fff3e0':'#fde8e8');html+='<div class="aging-row"><span class="aging-badge" style="background:'+bg+';color:'+c+'">'+k+'</span><div style="flex:1;margin:0 8px;background:#e8e8f0;border-radius:3px;height:11px"><div style="width:'+pct(v,inDIT.length)+'%;height:100%;border-radius:3px;background:'+c+'"></div></div><span style="font-weight:700;color:#2D3277;min-width:28px;text-align:right">'+v+'</span><span style="color:#888;font-size:10px;min-width:34px;text-align:right">'+pct(v,inDIT.length)+'%</span></div>';});
-    html+='<div style="margin-top:8px;padding-top:8px;border-top:1px solid #e0e3f5"><div style="font-size:11px;color:#555;margin-bottom:5px">Detalhamento por ID:</div><div style="max-height:120px;overflow-y:auto">';
-    ditRows.slice(0,30).forEach(r=>{const ag=parseInt(r.Aging)||0;html+='<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px solid #f0f0f0"><span style="color:#2D3277;font-family:monospace">'+r.SHP_SHIPMENT_ID+'</span><span style="color:#555;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 6px">'+r.Motivo+'</span><span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+r.Aging+'d</span></div>';});
-    if(ditRows.length>30)html+='<div style="text-align:center;color:#888;font-size:10px;padding-top:4px">+'+(ditRows.length-30)+' registros</div>';
-    html+='</div></div></div></div></div>';
+    html+='<div class="section-title">\u23f1 DIT</div><div class="dit-banner"><div class="dit-banner-top"><div class="dit-badge">DIT</div><div style="font-size:12px;color:#555">Delay in Transit</div></div>';
+    html+='<div class="dit-kpis"><div class="dit-kpi highlight"><div class="dit-kpi-val">'+inDIT.length+'</div><div class="dit-kpi-label">Em DIT</div></div><div class="dit-kpi"><div class="dit-kpi-val">'+notDIT.length+'</div><div class="dit-kpi-label">Sem DIT</div></div><div class="dit-kpi success"><div class="dit-kpi-val">'+pct(inDIT.length,total)+'%</div><div class="dit-kpi-label">% DIT</div></div><div class="dit-kpi danger"><div class="dit-kpi-val">'+agingAvg+'d</div><div class="dit-kpi-label">Aging m\u00e9d.</div></div></div>';
+    html+='<div class="dit-grid"><div class="dit-card"><div class="dit-card-title">Motivos DIT</div>';
+    motivosSorted.slice(0,8).forEach((x,i)=>{const mM=motivosSorted[0][1];html+='<div class="dit-bar-row"><div class="dit-bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="dit-bar-track"><div class="dit-bar-fill" style="width:'+Math.round(x[1]/mM*100)+'%;background:'+ML[i%ML.length]+'">'+x[1]+'</div></div><div class="dit-bar-pct">'+pct(x[1],inDIT.length)+'%</div></div>';});
+    html+='</div><div class="dit-card"><div class="dit-card-title">Aging</div>';
+    Object.entries(agingFreq).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([k,v])=>{const c=k.startsWith('1')?'#00A650':(k.startsWith('4')?'#FF6B00':'#E5002B');const bg=k.startsWith('1')?'#e8f5e9':(k.startsWith('4')?'#fff3e0':'#fde8e8');html+='<div class="aging-row"><span class="aging-badge" style="background:'+bg+';color:'+c+'">'+k+'</span><div style="flex:1;margin:0 7px;background:#e8e8f0;border-radius:3px;height:10px"><div style="width:'+pct(v,inDIT.length)+'%;height:100%;border-radius:3px;background:'+c+'"></div></div><span style="font-weight:700;color:#2D3277;min-width:26px;text-align:right">'+v+'</span><span style="color:#888;font-size:10px;min-width:32px;text-align:right">'+pct(v,inDIT.length)+'%</span></div>';});
+    html+='</div></div></div>';
   }
 
-  // DIST
-  html+='<div class="section-title">DISTRIBUI\u00c7\u00c3O DE STATUS D1 \u2014 VIS\u00c3O GERAL</div>';
-  html+='<div class="dist-grid"><div class="dist-card"><div style="width:40px;height:40px;border-radius:10px;background:#fff8e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="26" height="26" viewBox="0 0 28 28"><rect x="3" y="8" width="18" height="14" rx="3" fill="#FFE600"/><circle cx="7" cy="23" r="3" fill="#2D3277"/><circle cx="17" cy="23" r="3" fill="#2D3277"/></svg></div><div style="flex:1"><div class="dist-num">'+atS+'</div><div class="dist-pct">'+pct(atS,total)+'%</div><div class="dist-label">Na Esta\u00e7\u00e3o</div><div class="dist-bar"><div class="dist-fill" style="width:'+pct(atS,total)+'%;background:#FFE600"></div></div></div></div>';
-  html+='<div class="dist-card"><div style="width:40px;height:40px;border-radius:10px;background:#e8eaf6;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="26" height="26" viewBox="0 0 28 28"><rect x="2" y="10" width="18" height="11" rx="3" fill="#2D3277"/><circle cx="6" cy="22" r="3" fill="#2D3277" stroke="#fff" stroke-width="1.5"/><circle cx="16" cy="22" r="3" fill="#2D3277" stroke="#fff" stroke-width="1.5"/><path d="M20 14L26 14L26 18L20 18" fill="#FFE600"/></svg></div><div style="flex:1"><div class="dist-num">'+onR+'</div><div class="dist-pct">'+pct(onR,total)+'%</div><div class="dist-label">Em Rota</div><div class="dist-bar"><div class="dist-fill" style="width:'+pct(onR,total)+'%;background:#2D3277"></div></div></div></div></div>';
+  html+='<div class="section-title">STATUS D1</div><div class="dist-grid"><div class="dist-card"><div style="width:36px;height:36px;border-radius:9px;background:#fff8e1;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 28 28"><rect x="3" y="8" width="18" height="14" rx="3" fill="#FFE600"/><circle cx="7" cy="23" r="3" fill="#2D3277"/><circle cx="17" cy="23" r="3" fill="#2D3277"/></svg></div><div style="flex:1"><div class="dist-num">'+atS+'</div><div class="dist-pct">'+pct(atS,total)+'%</div><div class="dist-label">Na Esta\u00e7\u00e3o</div><div class="dist-bar"><div class="dist-fill" style="width:'+pct(atS,total)+'%;background:#FFE600"></div></div></div></div>';
+  html+='<div class="dist-card"><div style="width:36px;height:36px;border-radius:9px;background:#e8eaf6;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 28 28"><rect x="2" y="10" width="18" height="11" rx="3" fill="#2D3277"/><circle cx="6" cy="22" r="3" fill="#2D3277" stroke="#fff" stroke-width="1.5"/><circle cx="16" cy="22" r="3" fill="#2D3277" stroke="#fff" stroke-width="1.5"/><path d="M20 14L26 14L26 18L20 18" fill="#FFE600"/></svg></div><div style="flex:1"><div class="dist-num">'+onR+'</div><div class="dist-pct">'+pct(onR,total)+'%</div><div class="dist-label">Em Rota</div><div class="dist-bar"><div class="dist-fill" style="width:'+pct(onR,total)+'%;background:#2D3277"></div></div></div></div></div>';
 
-  // CHARTS
-  html+='<div class="charts-grid"><div class="chart-card"><div class="section-title">STATUS D1 \u2014 PROPOR\u00c7\u00c3O</div><div style="position:relative;height:185px"><canvas id="donut1" role="img" aria-label="Status D1">Status D1</canvas></div><div class="legend" id="leg1"></div></div>';
-  html+='<div class="chart-card"><div class="section-title">SUB-STATUS MAIS FREQUENTES</div><div id="substatus-bars"></div></div></div>';
-  html+='<div class="charts-grid"><div class="chart-card"><div class="section-title">SUB-STATUS D0</div><div style="position:relative;height:185px"><canvas id="donut2" role="img" aria-label="Sub-status D0">Sub-status D0</canvas></div><div class="legend" id="leg2"></div></div>';
-  html+='<div class="chart-card"><div class="section-title">DISTRIBUI\u00c7\u00c3O POR NODO</div><div style="position:relative;height:185px"><canvas id="donut3" role="img" aria-label="Nodos">Nodos</canvas></div><div class="legend" id="leg3"></div></div>';
-  html+='<div class="chart-card"><div class="section-title">\u26a0 CR\u00cdTICOS POR NODO</div><div id="criticos-bars"></div></div>';
-  html+='<div class="chart-card"><div class="section-title">TRANSPORTADORAS \u2014 TOP 8</div><div id="transp-bars"></div></div></div>';
-  html+='<div class="section-title">\ud83d\udce6 PACOTES POR NODO (UNIFICADO)</div><div class="chart-card" style="margin-bottom:12px"><div id="nodo-bars"></div></div>';
+  html+='<div class="charts-grid"><div class="chart-card"><div class="section-title">STATUS D1</div><div style="position:relative;height:175px"><canvas id="donut1" role="img" aria-label="Status D1">Status D1</canvas></div><div class="legend" id="leg1"></div></div>';
+  html+='<div class="chart-card"><div class="section-title">SUB-STATUS</div><div id="substatus-bars"></div></div></div>';
+  html+='<div class="charts-grid"><div class="chart-card"><div class="section-title">SUB-STATUS D0</div><div style="position:relative;height:175px"><canvas id="donut2" role="img" aria-label="Sub-status D0">Sub-status D0</canvas></div><div class="legend" id="leg2"></div></div>';
+  html+='<div class="chart-card"><div class="section-title">NODOS</div><div style="position:relative;height:175px"><canvas id="donut3" role="img" aria-label="Nodos">Nodos</canvas></div><div class="legend" id="leg3"></div></div>';
+  html+='<div class="chart-card"><div class="section-title">\u26A0 CR\u00cdTICOS</div><div id="criticos-bars"></div></div>';
+  html+='<div class="chart-card"><div class="section-title">TRANSPORTADORAS</div><div id="transp-bars"></div></div></div>';
+  html+='<div class="section-title">\uD83D\uDCE6 PACOTES POR NODO</div><div class="chart-card" style="margin-bottom:10px"><div id="nodo-bars"></div></div>';
 
-  // BUSCA
-  html+='<div class="search-section"><div class="search-title">\ud83d\udd0d BUSCA AVAN\u00c7ADA <span class="search-sub">Base unificada \u2014 Insucessos + SP</span><div style="margin-left:auto;display:flex;gap:6px"><button class="btn-download" onclick="downloadCSV()">\u2b07 Baixar CSV</button><button class="btn-whatsapp" onclick="gerarResumoWpp()">\ud83d\udcac Resumo WhatsApp</button></div></div>';
+  html+='<div class="search-section"><div class="search-title">\uD83D\uDD0D BUSCA AVAN\u00c7ADA <span style="font-size:11px;color:#999;font-weight:400">Base unificada</span><div style="margin-left:auto;display:flex;gap:5px"><button class="btn-download" onclick="downloadCSV()">\u2B07 CSV</button><button class="btn-whatsapp" onclick="gerarResumoWpp()">\uD83D\uDCAC WhatsApp</button></div></div>';
   html+='<div class="search-filters"><div class="sf-group"><div class="sf-label">ID PACOTE</div><input type="text" id="s-id" placeholder="" oninput="renderTable()"></div><div class="sf-group"><div class="sf-label">NODO</div><select id="s-nodo" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">ID ROTA</div><input type="text" id="s-rota" placeholder="" oninput="renderTable()"></div><div class="sf-group"><div class="sf-label">STATUS D1</div><select id="s-status1" onchange="renderTable()"><option value="">Todos</option></select></div></div>';
-  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div class="sf-group"><div class="sf-label">SUB STATUS</div><select id="s-sub1" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">DIT</div><select id="s-dit-filter" onchange="renderTable()"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select></div><div class="sf-group"><div class="sf-label">ORIGEM</div><select id="s-origem" onchange="renderTable()"><option value="">Todos</option><option value="INS">Insucessos</option><option value="SP">Soluc. Problemas</option></select></div><div style="display:flex;align-items:flex-end;gap:6px"><button class="btn-clear" onclick="clearSearch()">\u2715 Limpar</button><span class="filter-count" id="s-count" style="padding-bottom:4px"></span></div></div>';
-  html+='<div class="tbl-wrap"><table><thead><tr><th onclick="sortTable(\'ID\')">ID PACOTE \u2195</th><th onclick="sortTable(\'Nodo\')">NODO \u2195</th><th onclick="sortTable(\'ID_Rota\')">ID ROTA \u2195</th><th onclick="sortTable(\'Status_principal\')">STATUS D1 \u2195</th><th onclick="sortTable(\'Sub_status\')">SUB STATUS \u2195</th><th onclick="sortTable(\'Transportadora\')">TRANSPORTADORA \u2195</th><th>ORIGEM</th><th>DIT</th><th>MOTIVO DIT</th><th>AGING</th></tr></thead><tbody id="tbl-body"></tbody></table></div></div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:7px;margin-bottom:9px"><div class="sf-group"><div class="sf-label">SUB STATUS</div><select id="s-sub1" onchange="renderTable()"><option value="">Todos</option></select></div><div class="sf-group"><div class="sf-label">DIT</div><select id="s-dit-filter" onchange="renderTable()"><option value="">Todos</option><option value="dit">Somente DIT</option><option value="nodit">Sem DIT</option></select></div><div class="sf-group"><div class="sf-label">ORIGEM</div><select id="s-origem" onchange="renderTable()"><option value="">Todos</option><option value="INS">Insucessos</option><option value="SP">SP</option></select></div><div style="display:flex;align-items:flex-end;gap:6px"><button class="btn-clear" onclick="clearSearch()">\u2715 Limpar</button><span class="filter-count" id="s-count" style="padding-bottom:3px"></span></div></div>';
+  html+='<div class="tbl-wrap"><table><thead><tr><th onclick="sortT(\'ID\')">ID \u2195</th><th onclick="sortT(\'Nodo\')">NODO \u2195</th><th onclick="sortT(\'ID_Rota\')">ROTA \u2195</th><th onclick="sortT(\'Status_principal\')">STATUS \u2195</th><th onclick="sortT(\'Sub_status\')">SUB STATUS \u2195</th><th onclick="sortT(\'Transportadora\')">TRANSPORTADORA \u2195</th><th>ORIGEM</th><th>DIT</th><th>MOTIVO DIT</th><th>AGING</th></tr></thead><tbody id="tbl-body"></tbody></table></div></div>';
 
-  document.getElementById('main-content').innerHTML=html;
+  document.getElementById('main-content-op').innerHTML=html;
   populateSearchSelects();
-  renderCharts(filt,total,byNodoAjust,onR,atS);
+  renderCharts(filt,total,byNodo,onR,atS);
   renderTable();
 }
 
-function populateSearchSelects(){
-  const unified=getUnified();
-  const nodoV=[...new Set(unified.map(r=>r.Nodo||'SVC').filter(Boolean))].sort();
-  const statusV=[...new Set(unified.map(r=>r.Status_principal).filter(Boolean))].sort();
-  const subV=[...new Set(unified.map(r=>r.Sub_status).filter(Boolean))].sort();
-  function fill(id,vals){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">Todos</option>';vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});el.value=cur;}
-  fill('s-nodo',nodoV);fill('s-status1',statusV);fill('s-sub1',subV);
-}
+function populateSearchSelects(){const uni=getUnified();const nV=[...new Set(uni.map(r=>r.Nodo||'SVC').filter(Boolean))].sort();const sV=[...new Set(uni.map(r=>r.Status_principal).filter(Boolean))].sort();const subV=[...new Set(uni.map(r=>r.Sub_status).filter(Boolean))].sort();function fill(id,vals){const el=document.getElementById(id);if(!el)return;const cur=el.value;el.innerHTML='<option value="">Todos</option>';vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;el.appendChild(o);});el.value=cur;}fill('s-nodo',nV);fill('s-status1',sV);fill('s-sub1',subV);}
 
 function renderCharts(filt,total,byNodo,onR,atS){
   Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}});charts={};
   const p=(v,t)=>t?Math.round(v/t*100):0;
   charts.d1=new Chart(document.getElementById('donut1'),{type:'doughnut',data:{labels:['Em Rota','Na Esta\u00e7\u00e3o'],datasets:[{data:[onR,atS],backgroundColor:['#2D3277','#FFE600'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+' ('+p(ctx.parsed,total)+'%)'}}}}});
   document.getElementById('leg1').innerHTML='<span class="leg-item"><span class="leg-dot" style="background:#2D3277"></span>Em Rota '+onR+' ('+pct(onR,total)+'%)</span><span class="leg-item"><span class="leg-dot" style="background:#FFE600"></span>Na Esta\u00e7\u00e3o '+atS+' ('+pct(atS,total)+'%)</span>';
-  const unified=getFiltered();
-  const subD1=freq(unified,'Sub_status').slice(0,8);const maxD1=subD1[0]?subD1[0][1]:1;
-  document.getElementById('substatus-bars').innerHTML=subD1.map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/maxD1*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
-  const subD0=freq(unified,'Sub_status').slice(0,8);
-  charts.d2=new Chart(document.getElementById('donut2'),{type:'doughnut',data:{labels:subD0.map(x=>x[0]),datasets:[{data:subD0.map(x=>x[1]),backgroundColor:ML_COLORS.slice(0,subD0.length),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+' ('+p(ctx.parsed,total)+'%)'}}}}});
-  document.getElementById('leg2').innerHTML=subD0.slice(0,5).map((x,i)=>'<span class="leg-item"><span class="leg-dot" style="background:'+ML_COLORS[i]+'"></span>'+x[0].slice(0,20)+' '+pct(x[1],total)+'%</span>').join('');
-  const nodoDist=byNodo.slice(0,10);
-  charts.d3=new Chart(document.getElementById('donut3'),{type:'doughnut',data:{labels:nodoDist.map(x=>x[0]),datasets:[{data:nodoDist.map(x=>x[1]),backgroundColor:ML_COLORS.slice(0,nodoDist.length),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+' ('+p(ctx.parsed,total)+'%)'}}}}});
-  document.getElementById('leg3').innerHTML=nodoDist.slice(0,5).map((x,i)=>'<span class="leg-item"><span class="leg-dot" style="background:'+ML_COLORS[i]+'"></span>'+x[0]+' '+pct(x[1],total)+'%</span>').join('');
-  const maxN=byNodo[0]?byNodo[0][1]:1;
-  document.getElementById('criticos-bars').innerHTML=byNodo.slice(0,8).map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/maxN*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
-  const transp=freq(filt,'Transportadora').filter(x=>x[0]!='(vazio)'&&x[0]!='').slice(0,8);const maxT=transp[0]?transp[0][1]:1;
-  document.getElementById('transp-bars').innerHTML=transp.map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/maxT*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
-  document.getElementById('nodo-bars').innerHTML=byNodo.map((x,i)=>'<div class="node-row"><div class="node-label" title="'+x[0]+'">'+x[0]+'</div><div class="node-bar-track"><div class="node-bar-fill" style="width:'+Math.round(x[1]/maxN*100)+'%;background:'+ML_COLORS[i%ML_COLORS.length]+'">'+x[1]+' pkg</div></div><div class="node-pct">'+pct(x[1],total)+'%</div></div>').join('');
+  const uni=getFilt();const subD1=freq(uni,'Sub_status').slice(0,8);const mD1=subD1[0]?subD1[0][1]:1;
+  document.getElementById('substatus-bars').innerHTML=subD1.map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/mD1*100)+'%;background:'+ML[i%ML.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
+  const subD0=freq(uni,'Sub_status').slice(0,8);
+  charts.d2=new Chart(document.getElementById('donut2'),{type:'doughnut',data:{labels:subD0.map(x=>x[0]),datasets:[{data:subD0.map(x=>x[1]),backgroundColor:ML.slice(0,subD0.length),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+' ('+p(ctx.parsed,total)+'%)'}}}}});
+  document.getElementById('leg2').innerHTML=subD0.slice(0,5).map((x,i)=>'<span class="leg-item"><span class="leg-dot" style="background:'+ML[i]+'"></span>'+x[0].slice(0,16)+' '+pct(x[1],total)+'%</span>').join('');
+  const nD=byNodo.slice(0,10);
+  charts.d3=new Chart(document.getElementById('donut3'),{type:'doughnut',data:{labels:nD.map(x=>x[0]),datasets:[{data:nD.map(x=>x[1]),backgroundColor:ML.slice(0,nD.length),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.parsed+' ('+p(ctx.parsed,total)+'%)'}}}}});
+  document.getElementById('leg3').innerHTML=nD.slice(0,5).map((x,i)=>'<span class="leg-item"><span class="leg-dot" style="background:'+ML[i]+'"></span>'+x[0]+' '+pct(x[1],total)+'%</span>').join('');
+  const mN=byNodo[0]?byNodo[0][1]:1;
+  document.getElementById('criticos-bars').innerHTML=byNodo.slice(0,8).map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/mN*100)+'%;background:'+ML[i%ML.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
+  const transp=freq(filt,'Transportadora').filter(x=>x[0]&&x[0]!='(vazio)').slice(0,8);const mT=transp[0]?transp[0][1]:1;
+  document.getElementById('transp-bars').innerHTML=transp.map((x,i)=>'<div class="bar-row"><div class="bar-label" title="'+x[0]+'">'+x[0]+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(x[1]/mT*100)+'%;background:'+ML[i%ML.length]+'">'+x[1]+'</div></div><div class="bar-pct">'+pct(x[1],total)+'%</div></div>').join('');
+  document.getElementById('nodo-bars').innerHTML=byNodo.map((x,i)=>'<div class="node-row"><div class="node-label" title="'+x[0]+'">'+x[0]+'</div><div class="node-bar-track"><div class="node-bar-fill" style="width:'+Math.round(x[1]/mN*100)+'%;background:'+ML[i%ML.length]+'">'+x[1]+' pkg</div></div><div class="node-pct">'+pct(x[1],total)+'%</div></div>').join('');
 }
 
 function renderTable(){
   const tbody=document.getElementById('tbl-body');if(!tbody)return;
-  const base=getFiltered();let rows=getSearchFiltered(base);
+  const base=getFilt();let rows=getSFilt(base);
   if(sortCol)rows.sort((a,b)=>a[sortCol]>b[sortCol]?sortDir:-sortDir);
   const sc=document.getElementById('s-count');if(sc)sc.textContent=rows.length+' registros';
-  const ditMap={};
-  DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
-  tbody.innerHTML=rows.slice(0,300).map(r=>{
-    const dit=ditMap[r.ID];const ag=dit?parseInt(dit.aging):null;
-    const nodo=r.Nodo||'SVC';
-    return '<tr><td style="font-family:monospace;font-size:11px">'+r.ID+'</td><td>'+nodo+'</td><td style="font-size:11px">'+r.ID_Rota+'</td><td><span class="badge '+(r.Status_principal==='on_route'?'b-on':'b-at')+'">'+(r.Status_principal==='on_route'?'\ud83d\ude97':'\ud83c\udfe2')+' '+r.Status_principal+'</span></td><td>'+r.Sub_status+'</td><td>'+(r.Transportadora||'-')+'</td><td><span class="badge '+(r._origem==='SP'?'b-sp':'b-ins')+'">'+(r._origem==='SP'?'\ud83d\udd27 SP':'\u26a0 INS')+'</span></td><td>'+(dit?'<span class="badge b-dit">\u23f1 DIT</span>':'<span class="badge b-nodit">\u2014</span>')+'</td><td style="font-size:11px;max-width:150px;overflow:hidden;text-overflow:ellipsis">'+(dit?dit.motivo:'-')+'</td><td>'+(dit?'<span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+dit.aging+'d</span>':'-')+'</td></tr>';
-  }).join('');
+  const ditMap={};DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
+  tbody.innerHTML=rows.slice(0,300).map(r=>{const dit=ditMap[r.ID];const ag=dit?parseInt(dit.aging):null;const nodo=r.Nodo||'SVC';return'<tr><td style="font-family:monospace;font-size:11px">'+r.ID+'</td><td>'+nodo+'</td><td style="font-size:11px">'+r.ID_Rota+'</td><td><span class="badge '+(r.Status_principal==='on_route'?'b-sorting':'b-stale')+'">'+(r.Status_principal==='on_route'?'\uD83D\uDE97':'\uD83C\uDFE2')+' '+r.Status_principal+'</span></td><td>'+r.Sub_status+'</td><td>'+(r.Transportadora||'—')+'</td><td><span class="badge '+(r._origem==='SP'?'b-ps':'b-other')+'">'+(r._origem==='SP'?'\uD83D\uDD27 SP':'\u26A0 INS')+'</span></td><td>'+(dit?'<span class="badge b-dit">\u23f1 DIT</span>':'<span class="badge b-nodit">\u2014</span>')+'</td><td style="font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis">'+(dit?dit.motivo:'—')+'</td><td>'+(dit?'<span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+dit.aging+'d</span>':'—')+'</td></tr>';}).join('');
 }
 
-function sortTable(col){sortCol=col;sortDir*=-1;renderTable();}
-function clearFilters(){['f-transp','f-status','f-nodo','f-dit','f-origem'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderDashboard();}
+function sortT(col){sortCol=col;sortDir*=-1;renderTable();}
+function clearFilters(){['f-transp','f-status','f-nodo','f-dit','f-origem'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderOp();}
 function clearSearch(){['s-id','s-rota'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});['s-nodo','s-status1','s-sub1','s-dit-filter','s-origem'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});renderTable();}
 
-function closeWppModal(e){if(e.target===document.getElementById('wpp-overlay'))document.getElementById('wpp-overlay').classList.remove('open');}
-
-function gerarResumoWpp(){
-  const base=getFiltered();
-  const rows=getSearchFiltered(base);
-  if(!rows.length){alert('Nenhum registro com os filtros aplicados.');return;}
-
-  const fNodo=(document.getElementById('s-nodo')||{}).value||'';
-  const fStatus=(document.getElementById('s-status1')||{}).value||'';
-  const fSub=(document.getElementById('s-sub1')||{}).value||'';
-  const fDit=(document.getElementById('s-dit-filter')||{}).value||'';
-  const fOrigem=(document.getElementById('s-origem')||{}).value||'';
-  const fId=(document.getElementById('s-id')||{}).value||'';
-
-  const now=new Date();
-  const dataHora=now.toLocaleDateString('pt-BR')+' \u00e0s '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  const svcName=document.getElementById('page-title').textContent.replace('INSUCESSOS DE ENTREGA \u2014 ','')||'SSP';
-
-  let filtrosAtivos=[];
-  if(fNodo)filtrosAtivos.push('Nodo: '+fNodo);
-  if(fStatus)filtrosAtivos.push('Status: '+fStatus);
-  if(fSub)filtrosAtivos.push('Sub-status: '+fSub);
-  if(fDit==='dit')filtrosAtivos.push('Somente DIT');
-  if(fDit==='nodit')filtrosAtivos.push('Sem DIT');
-  if(fOrigem==='INS')filtrosAtivos.push('Origem: Insucessos');
-  if(fOrigem==='SP')filtrosAtivos.push('Origem: Soluc. Problemas');
-  if(fId)filtrosAtivos.push('ID: '+fId);
-
-  const total=rows.length;
-
-  const statusCount={};
-  rows.forEach(r=>{const s=r.Status_principal||'(vazio)';statusCount[s]=(statusCount[s]||0)+1;});
-  const statusSorted=Object.entries(statusCount).sort((a,b)=>b[1]-a[1]);
-
-  const subCount={};
-  rows.forEach(r=>{const s=r.Sub_status||'(vazio)';subCount[s]=(subCount[s]||0)+1;});
-  const subSorted=Object.entries(subCount).sort((a,b)=>b[1]-a[1]);
-
-  const emDit=rows.filter(r=>DIT_IDS.has(r.ID)).length;
-  const semDit=total-emDit;
-  const insCount=rows.filter(r=>r._origem==='INS').length;
-  const spCount=rows.filter(r=>r._origem==='SP').length;
-
-  const nodoCount={};
-  rows.forEach(r=>{const n=r.Nodo||'SVC';nodoCount[n]=(nodoCount[n]||0)+1;});
-  const nodoSorted=Object.entries(nodoCount).sort((a,b)=>b[1]-a[1]);
-
-  let msg='';
-  msg+='\ud83d\udce6 *INSUCESSOS \u2014 '+svcName+'*\n';
-  msg+='\ud83d\udcc5 '+dataHora+'\n';
-  if(filtrosAtivos.length)msg+='\ud83d\udd0d _Filtro: '+filtrosAtivos.join(' | ')+'_\n';
-  msg+='\n*Total de pacotes: '+total+'*\n\n';
-
-  msg+='\ud83d\udcca *Status D1:*\n';
-  statusSorted.forEach(([s,v])=>{
-    const icon=s==='on_route'?'\ud83d\ude97':s==='at_station'?'\ud83c\udfe2':'\u2022';
-    msg+=icon+' '+s+': *'+v+'* ('+pct(v,total)+'%)\n';
-  });
-  msg+='\n';
-
-  msg+='\ud83d\udccb *Sub-status:*\n';
-  subSorted.slice(0,6).forEach(([s,v])=>{msg+='\u2022 '+s+': *'+v+'* ('+pct(v,total)+'%)\n';});
-  if(subSorted.length>6)msg+='\u2022 Outros: *'+(total-subSorted.slice(0,6).reduce((a,x)=>a+x[1],0))+'*\n';
-  msg+='\n';
-
-  if(DIT_IDS.size){
-    msg+='\u23f1 *DIT (Delay in Transit):*\n';
-    msg+='\u2705 Em DIT: *'+emDit+'* ('+pct(emDit,total)+'%)\n';
-    msg+='\u274c Sem DIT: *'+semDit+'* ('+pct(semDit,total)+'%)\n\n';
-  }
-
-  if(SP_IDS.size){
-    msg+='\ud83d\udccc *Origem:*\n';
-    if(insCount)msg+='\u26a0 Insucessos: *'+insCount+'*\n';
-    if(spCount)msg+='\ud83d\udd27 Soluc. Problemas: *'+spCount+'*\n';
-    msg+='\n';
-  }
-
-  if(!fNodo&&nodoSorted.length>1){
-    msg+='\ud83d\udccd *Top Nodos:*\n';
-    nodoSorted.slice(0,5).forEach(([n,v])=>{msg+='\u2022 '+n+': *'+v+'* ('+pct(v,total)+'%)\n';});
-    if(nodoSorted.length>5)msg+='\u2022 +outros '+(nodoSorted.length-5)+' nodos\n';
-    msg+='\n';
-  }
-
-  // Lista de IDs com classificação
-  const ditMap={};
-  DIT_DATA.forEach(r=>{if(!ditMap[r.SHP_SHIPMENT_ID])ditMap[r.SHP_SHIPMENT_ID]={motivo:r.Motivo,aging:r.Aging};});
-
-  msg+='*Relação de IDs:*\n';
-  rows.forEach(r=>{
-    const dit=ditMap[r.ID];
-    const classificacao=dit&&dit.motivo?r.Sub_status+' / DIT: '+dit.motivo+' ('+dit.aging+'d)':r.Sub_status;
-    msg+=r.ID+' _('+classificacao+')_\n';
-  });
-  msg+='\n_Gerado via Dashboard ML_';
-
-  document.getElementById('wpp-preview').textContent=msg;
-  const sub=filtrosAtivos.length?'Filtros: '+filtrosAtivos.join(' | '):'Todos os registros (sem filtros)';
-  document.getElementById('wpp-modal-sub').textContent=sub+' \u2014 '+total+' pacotes';
-  document.getElementById('wpp-copy-btn').textContent='\ud83d\udccb Copiar mensagem';
-  document.getElementById('wpp-copy-btn').classList.remove('copied');
-  document.getElementById('wpp-overlay').classList.add('open');
-}
-
-function copyWpp(){
-  const txt=document.getElementById('wpp-preview').textContent;
-  const copy=()=>{
-    const btn=document.getElementById('wpp-copy-btn');
-    btn.textContent='\u2705 Copiado!';btn.classList.add('copied');
-    setTimeout(()=>{btn.textContent='\ud83d\udccb Copiar mensagem';btn.classList.remove('copied');},2500);
-  };
-  if(navigator.clipboard){navigator.clipboard.writeText(txt).then(copy).catch(()=>{fallbackCopy(txt);copy();});}
-  else{fallbackCopy(txt);copy();}
-}
-function fallbackCopy(txt){
-  const ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';
-  document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-}
-
-showWelcome();
 </script>
 </body>
 </html>
