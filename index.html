@@ -375,7 +375,7 @@ function renderNodos(){
   const nodoMap={};
   RISK_DATA.forEach(r=>{const n=r['Destino']||'(sem nodo)';if(!nodoMap[n])nodoMap[n]={rows:[],totalVal:0,maxAging:0,hasDit:0,scores:[]};const sc=calcScore(r);nodoMap[n].rows.push({...r,_score:sc});nodoMap[n].totalVal+=toN(r['Valor usd']);nodoMap[n].maxAging=Math.max(nodoMap[n].maxAging,parseInt(r['Aging'])||0);if(DIT_IDS.has(r.Shipment))nodoMap[n].hasDit++;nodoMap[n].scores.push(sc);});
   Object.keys(nodoMap).forEach(n=>{nodoMap[n].maxScore=Math.max(...nodoMap[n].scores);});
-  const nodosSorted=Object.entries(nodoMap).sort((a,b)=>b[1].maxScore-a[1].maxScore);
+  const nodosSorted=Object.entries(nodoMap).sort((a,b)=>b[1].rows.length-a[1].rows.length);
   const totalPkg=RISK_DATA.length;const totalVal=RISK_DATA.reduce((s,r)=>s+toN(r['Valor usd']),0);
   const totalDit=RISK_DATA.filter(r=>DIT_IDS.has(r.Shipment)).length;const criticos=RISK_DATA.filter(r=>calcScore(r)>=70).length;
 
@@ -386,7 +386,22 @@ function renderNodos(){
   html+='<div class="alerts"><div class="alert-item warn"><span style="font-weight:700;color:#ff6b6b">'+criticos+' pacotes</span><span style="color:rgba(255,255,255,.7)"> coleta imediata</span></div><div class="alert-item" style="border-left-color:#FFE600"><span style="font-weight:700;color:#FFE600">$'+totalVal.toFixed(0)+' USD</span><span style="color:rgba(255,255,255,.7)"> risco BPP</span></div>'+(DIT_IDS.size?'<div class="alert-item suc"><span style="font-weight:700;color:#51cf66">'+totalDit+' IDs</span><span style="color:rgba(255,255,255,.7)"> em DIT</span></div>':'')+'</div></div>';
 
   html+='<div class="section-title" style="margin-top:10px">NODOS POR PRIORIDADE DE COLETA</div>';
-  html+='<div class="nodo-grid">';
+
+  // Gráficos
+  html+='<div class="charts-grid" style="margin-bottom:10px">';
+  // Gráfico 1 - pacotes por nodo
+  html+='<div class="chart-card"><div class="section-title">PACOTES PENDENTES POR NODO (TOP 15)</div><div style="position:relative;height:220px"><canvas id="chart-nodo-qtd" role="img" aria-label="Pacotes por nodo">Pacotes por nodo</canvas></div></div>';
+  // Gráfico 2 - valor por nodo
+  html+='<div class="chart-card"><div class="section-title">VALOR USD PENDENTE POR NODO (TOP 15)</div><div style="position:relative;height:220px"><canvas id="chart-nodo-val" role="img" aria-label="Valor por nodo">Valor por nodo</canvas></div></div>';
+  html+='</div>';
+
+  // Filtro
+  html+='<div style="margin-bottom:10px;display:flex;align-items:center;gap:8px">';
+  html+='<input type="text" id="nodo-filter-input" placeholder="Filtrar nodo..." oninput="filterNodoGrid()" style="background:#fff;border:1.5px solid #2D3277;color:#333;padding:6px 12px;border-radius:7px;font-size:13px;width:220px">';
+  html+='<span style="font-size:11px;color:#888" id="nodo-filter-count"></span>';
+  html+='</div>';
+
+  html+='<div class="nodo-grid" id="nodo-grid-container">';
   nodosSorted.forEach(([nodo,data])=>{
     const rl=riskLabel(data.maxScore);const info=NODOS_DB[nodo]||{};const isSel=selectedNodo===nodo;
     html+='<div class="nodo-card'+(isSel?' selected':'')+'" id="nc-'+nodo+'" onclick="selectNodo(\''+nodo+'\')">';
@@ -403,7 +418,65 @@ function renderNodos(){
   html+='</div>';
 
   document.getElementById('main-content-nodos').innerHTML=html;
+  setTimeout(()=>renderNodoCharts(nodosSorted),50);
   if(selectedNodo){setTimeout(()=>{const p=document.getElementById('detail-panel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+}
+
+function filterNodoGrid(){
+  const val=document.getElementById('nodo-filter-input');
+  if(!val)return;
+  const term=val.value.toLowerCase();
+  const cards=document.querySelectorAll('.nodo-card');
+  let visible=0;
+  cards.forEach(c=>{
+    const id=c.id.replace('nc-','').toLowerCase();
+    const show=!term||id.includes(term);
+    c.style.display=show?'':'none';
+    if(show)visible++;
+  });
+  const cnt=document.getElementById('nodo-filter-count');
+  if(cnt)cnt.textContent=term?visible+' encontrado(s)':'';
+}
+
+function renderNodoCharts(nodosSorted){
+  // Destrói se já existir
+  if(window._chartNodoQtd){try{window._chartNodoQtd.destroy();}catch(e){}}
+  if(window._chartNodoVal){try{window._chartNodoVal.destroy();}catch(e){}}
+
+  const top15=nodosSorted.slice(0,15);
+  const labels=top15.map(([n])=>n);
+  const qtds=top15.map(([,d])=>d.rows.length);
+  const vals=top15.map(([,d])=>Math.round(d.totalVal));
+
+  const canvasQtd=document.getElementById('chart-nodo-qtd');
+  const canvasVal=document.getElementById('chart-nodo-val');
+  if(!canvasQtd||!canvasVal)return;
+
+  window._chartNodoQtd=new Chart(canvasQtd,{
+    type:'bar',
+    data:{
+      labels:labels,
+      datasets:[{label:'Pacotes',data:qtds,backgroundColor:'#2D3277',borderRadius:4}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.parsed.y+' pacotes'}}},
+      scales:{x:{ticks:{font:{size:10},maxRotation:45}},y:{ticks:{font:{size:10}}}}
+    }
+  });
+
+  window._chartNodoVal=new Chart(canvasVal,{
+    type:'bar',
+    data:{
+      labels:labels,
+      datasets:[{label:'Valor USD',data:vals,backgroundColor:'#FFE600',borderRadius:4,borderColor:'#2D3277',borderWidth:1}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'$'+ctx.parsed.y+' USD'}}},
+      scales:{x:{ticks:{font:{size:10},maxRotation:45}},y:{ticks:{font:{size:10},callback:v=>'$'+v}}}
+    }
+  });
 }
 
 function selectNodo(nodo){if(selectedNodo===nodo){selectedNodo=null;selectedIds=new Set();renderNodos();return;}selectedNodo=nodo;selectedIds=new Set();renderNodos();}
