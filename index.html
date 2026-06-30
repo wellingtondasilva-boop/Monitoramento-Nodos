@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -281,7 +280,7 @@ tr:hover td{background:#fffde7}
     <p style="font-size:12px;color:#888">Carregue o arquivo <strong>4. Risco At Station</strong> para ativar esta aba.</p>
   </div></div>
 </div></div>
-<div class="footer">Mercado Livre &#8212; Dashboard Unificado &#183; Operacional + Nodos + DIT + Romanéio</div>
+<div class="footer">Mercado Livre &#8212; Dashboard Unificado &#183; Operacional + Nodos + DIT + Romaneio</div>
 <div class="modal-overlay" id="wpp-overlay" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal-box">
     <div class="modal-title"><svg width="18" height="18" viewBox="0 0 20 20"><circle cx="10" cy="10" r="10" fill="#25D366"/><path d="M14.5 12.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.3-.1-.5.1-.1.2-.5.7-.6.8-.1.1-.2.1-.4 0-.2-.1-.8-.3-1.6-1-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.3.1-.4l.3-.4c.1-.1.1-.2.2-.3 0-.1 0-.2-.1-.3-.1-.1-.5-1.1-.6-1.5-.2-.4-.3-.3-.5-.3h-.4c-.1 0-.4.1-.6.3-.2.2-.7.7-.7 1.7s.7 2 .8 2.1c.1.1 1.4 2.2 3.5 3 .5.2.9.3 1.2.4.5.1 1 .1 1.3.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1-.1-.1-.2-.1-.4-.2z" fill="#fff"/></svg>Resumo WhatsApp</div>
@@ -296,7 +295,7 @@ tr:hover td{background:#fffde7}
 <div class="romaneio-modal-overlay" id="rom-overlay">
   <div class="romaneio-modal">
     <div class="romaneio-header">
-      <div class="romaneio-header-title">&#128203; ROMANÉIO DE COLETA</div>
+      <div class="romaneio-header-title">&#128203; ROMANEIO DE COLETA</div>
       <div class="romaneio-actions">
         <button class="btn-warning" onclick="window.print()">&#128438; Imprimir</button>
         <button class="btn-danger" onclick="document.getElementById('rom-overlay').classList.remove('open')">&#10005; Fechar</button>
@@ -343,7 +342,7 @@ function parseG(text){
     return obj;
   });
 }
-function setSvc(name){const m=name.match(/SSP\d+/i);if(m){document.getElementById('page-title').textContent='DASHBOARD ML \u2014 '+m[0].toUpperCase();document.title='Dashboard ML \u2014 '+m[0].toUpperCase();}}
+function setSvc(name){/* titulo fixo sem codigo SVC */}
 function setUB(id,cls,sub,st,col){document.getElementById(id).className='upload-box '+cls;document.getElementById(id+'-sub').textContent=sub;const e=document.getElementById(id+'-status');e.textContent=st;e.style.color=col;}
 
 function handleFile1(file){if(!file)return;readCSV(file,text=>{const rows=parseG(text).filter(r=>r.ID);if(!rows.length){alert('Coluna ID nao encontrada.');return;}DATA=rows;setSvc(file.name);setUB('ub1','loaded',file.name+' \u2014 '+rows.length+' reg.','\u2705 OK','#00A650');populateSelects();renderOp();});}
@@ -382,7 +381,7 @@ function renderNodos(){
 
   let html='<div class="hero-card">';
   html+='<div style="width:58px;height:58px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 72 72" width="58" height="58"><circle cx="36" cy="36" r="36" fill="rgba(255,230,0,.15)"/><path d="M36 12c-7.7 0-14 6.3-14 14 0 10.5 14 26 14 26s14-15.5 14-26c0-7.7-6.3-14-14-14zm0 19a5 5 0 1 1 0-10 5 5 0 0 1 0 10z" fill="#FFE600"/></svg></div>';
-  html+='<div><div class="hero-title">GEST\u00c3O DE NODOS \u2014 RISCO AT STATION</div><div class="hero-desc">Score de prioridade + confronto DIT + Roman\u00e9io de coleta</div>';
+  html+='<div><div class="hero-title">GEST\u00c3O DE NODOS \u2014 RISCO AT STATION</div><div class="hero-desc">Score de prioridade + confronto DIT + Romaneio de coleta</div>';
   html+='<div class="hero-stats"><div class="hstat"><div class="hstat-val">'+totalPkg+'</div><div class="hstat-label">Total Pacotes</div></div><div class="hstat"><div class="hstat-val">'+nodosSorted.length+'</div><div class="hstat-label">Nodos</div></div><div class="hstat" style="background:rgba(229,0,43,.25)"><div class="hstat-val">'+criticos+'</div><div class="hstat-label">Imediata</div></div><div class="hstat" style="background:rgba(255,230,0,.2)"><div class="hstat-val">'+totalDit+'</div><div class="hstat-label">Em DIT</div></div><div class="hstat"><div class="hstat-val">$'+totalVal.toFixed(0)+'</div><div class="hstat-label">USD em risco</div></div></div></div>';
   html+='<div class="alerts"><div class="alert-item warn"><span style="font-weight:700;color:#ff6b6b">'+criticos+' pacotes</span><span style="color:rgba(255,255,255,.7)"> coleta imediata</span></div><div class="alert-item" style="border-left-color:#FFE600"><span style="font-weight:700;color:#FFE600">$'+totalVal.toFixed(0)+' USD</span><span style="color:rgba(255,255,255,.7)"> risco BPP</span></div>'+(DIT_IDS.size?'<div class="alert-item suc"><span style="font-weight:700;color:#51cf66">'+totalDit+' IDs</span><span style="color:rgba(255,255,255,.7)"> em DIT</span></div>':'')+'</div></div>';
 
@@ -422,7 +421,7 @@ function buildDetail(nodo,data){
   h+='<button class="btn-primary" onclick="selectAllNodo()">&#9745; Todos</button>';
   h+='<button class="btn-warning" onclick="clearSelNodo()">&#9746; Limpar</button>';
   h+='<button class="btn-whatsapp" onclick="gerarWppNodo()">\uD83D\uDCAC WhatsApp</button>';
-  h+='<button class="btn-success" onclick="gerarRomaneio()">\uD83D\uDCCB Roman\u00e9io</button>';
+  h+='<button class="btn-success" onclick="gerarRomaneio()">\uD83D\uDCCB Romaneio</button>';
   h+='<button class="btn-download" onclick="downloadIdsNodo()">\u2B07 CSV</button></div></div>';
 
   h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px">';
@@ -443,7 +442,7 @@ function buildDetail(nodo,data){
     h+='<td style="font-family:monospace;font-weight:700">'+r.Shipment+'</td>';
     h+='<td><span class="badge '+subCls+'">'+r['Substatus Logistics']+'</span></td>';
     h+='<td><span class="aging-badge" style="background:'+acBg(parseInt(r['Aging'])||0)+';color:'+acColor(parseInt(r['Aging'])||0)+'">'+r['Aging']+'d</span></td>';
-    h+='<td>'+(r['Valor usd']?'$'+r['Valor usd']:'—')+'</td>';
+    
     h+='<td style="font-weight:700;color:'+(r['Pedido de cacelamento']==='SIM'?'#E5002B':'#00A650')+'">'+r['Pedido de cacelamento']+'</td>';
     h+='<td>'+(dit?'<span class="badge b-dit">\u23f1 DIT</span>':'<span class="badge b-nodit">\u2014</span>')+'</td>';
     h+='<td style="font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis">'+(dit?dit.motivo:'—')+'</td>';
@@ -474,7 +473,7 @@ function gerarWppNodo(){
   if(!rows.length){alert('Nenhum ID selecionado.');return;}
   const info=NODOS_DB[selectedNodo]||{};
   const now=new Date();const dh=now.toLocaleDateString('pt-BR')+' \u00e0s '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  const svc=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP';
+  const svc='SSP';
   const imediatos=rows.filter(r=>calcScore(r)>=70).length;const emDit=rows.filter(r=>DIT_IDS.has(r.Shipment)).length;
   const totalVal=rows.reduce((s,r)=>s+toN(r['Valor usd']),0);
   const subFreq={};rows.forEach(r=>{const s=r['Substatus Logistics']||'';subFreq[s]=(subFreq[s]||0)+1;});
@@ -501,7 +500,7 @@ function gerarRomaneio(){
   const info=NODOS_DB[selectedNodo]||{};
   const svc=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP15';
 
-  let h='<table class="rom-header-table"><tr><td colspan="3" class="rom-title">ROMAN\u00c9IO '+svc+'</td></tr>';
+  let h='<table class="rom-header-table"><tr><td colspan="3" class="rom-title">ROMANEIO '+svc+'</td></tr>';
   h+='<tr><td colspan="3"><strong>Data De Coleta:</strong> '+new Date().toLocaleDateString('pt-BR')+'</td></tr>';
   h+='<tr><td>Nome e assinatura do motorista: ___________________________</td><td>Documento: _______________</td><td>Nome e assinatura do Place: ___________________________</td></tr></table>';
   h+='<div class="rom-info"><div class="rom-info-card"><div class="rom-info-label">NODO / PLACE</div><div class="rom-info-val">'+selectedNodo+'</div></div>';
@@ -509,14 +508,10 @@ function gerarRomaneio(){
   h+='<div class="rom-info-card"><div class="rom-info-label">RESPONS\u00c1VEL</div><div class="rom-info-val">'+(info.responsavel||'—')+'</div></div>';
   h+='<div class="rom-info-card"><div class="rom-info-label">TELEFONE</div><div class="rom-info-val">'+(info.tel||'—')+'</div></div></div>';
   h+='<div class="rom-place-title">'+selectedNodo+(info.endereco?' \u2014 '+info.endereco:'')+(info.tipo?' | '+info.tipo:'')+'</div>';
-  h+='<table class="rom-table"><thead><tr><th style="width:145px">C\u00f3digo do Pacote</th><th style="width:70px">Coletado?</th><th>Substatus</th><th style="width:55px">Aging</th><th style="width:65px">Valor USD</th><th>Teve Algum Problema?</th></tr></thead><tbody>';
+  h+='<table class="rom-table"><thead><tr><th style="width:145px">C\u00f3digo do Pacote</th><th style="width:70px">Coletado?</th><th>Teve Algum Problema?</th></tr></thead><tbody>';
   rows.forEach(r=>{
-    const ag=parseInt(r['Aging'])||0;
-    const sc=r['Substatus Logistics']==='missing'?{bg:'#fde8e8',cl:'#E5002B'}:r['Substatus Logistics']==='stale'?{bg:'#fff3e0',cl:'#FF6B00'}:{bg:'#e8f5e9',cl:'#00A650'};
     h+='<tr><td class="rom-id">'+r.Shipment+'</td><td style="text-align:center"><input type="checkbox" class="rom-checkbox"> Sim</td>';
-    h+='<td><span class="rom-status-badge" style="background:'+sc.bg+';color:'+sc.cl+'">'+r['Substatus Logistics']+'</span></td>';
-    h+='<td style="text-align:center"><span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+r['Aging']+'d</span></td>';
-    h+='<td>'+(r['Valor usd']?'$'+r['Valor usd']:'—')+'</td>';
+    
     h+='<td style="font-size:10px"><label><input type="checkbox"> Pac. n\u00e3o est\u00e1</label> &nbsp;<label><input type="checkbox"> Danificado</label> &nbsp;<label><input type="checkbox"> Perdido</label> &nbsp;<label><input type="checkbox"> Entregue ao Cliente</label> &nbsp;Outro: _______________</td></tr>';
   });
   h+='</tbody></table>';
@@ -540,7 +535,7 @@ function gerarResumoWpp(){
   const base=getFilt();const rows=getSFilt(base);if(!rows.length){alert('Nenhum registro.');return;}
   const fNodo=(document.getElementById('s-nodo')||{}).value||'';const fStatus=(document.getElementById('s-status1')||{}).value||'';const fSub=(document.getElementById('s-sub1')||{}).value||'';const fDit=(document.getElementById('s-dit-filter')||{}).value||'';const fOrigem=(document.getElementById('s-origem')||{}).value||'';const fId=(document.getElementById('s-id')||{}).value||'';
   const now=new Date();const dh=now.toLocaleDateString('pt-BR')+' \u00e0s '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  const svcName=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP';
+  const svcName='SSP';
   let fl=[];if(fNodo)fl.push('Nodo: '+fNodo);if(fStatus)fl.push('Status: '+fStatus);if(fSub)fl.push('Sub: '+fSub);if(fDit==='dit')fl.push('Somente DIT');if(fDit==='nodit')fl.push('Sem DIT');if(fOrigem)fl.push('Origem: '+fOrigem);if(fId)fl.push('ID: '+fId);
   const total=rows.length;const sC={};rows.forEach(r=>{const s=r.Status_principal||'(vazio)';sC[s]=(sC[s]||0)+1;});const subC={};rows.forEach(r=>{const s=r.Sub_status||'(vazio)';subC[s]=(subC[s]||0)+1;});
   const emDit=rows.filter(r=>DIT_IDS.has(r.ID)).length;const insC=rows.filter(r=>r._origem==='INS').length;const spC=rows.filter(r=>r._origem==='SP').length;
@@ -575,7 +570,7 @@ function renderOp(){
   const agingFreq={};ditRows.forEach(r=>{const a=parseInt(r.Aging)||0;const k=a<=3?'1-3 dias':(a<=7?'4-7 dias':'8+ dias');agingFreq[k]=(agingFreq[k]||0)+1;});
   const agingAvg=ditRows.length?Math.round(ditRows.reduce((s,r)=>s+(parseInt(r.Aging)||0),0)/ditRows.length*10)/10:0;
   const spSubFreq={};spRows.forEach(r=>{spSubFreq[r.Sub_status]=(spSubFreq[r.Sub_status]||0)+1;});const spSubSorted=Object.entries(spSubFreq).sort((a,b)=>b[1]-a[1]);const spInDIT=spRows.filter(r=>DIT_IDS.has(r.ID)).length;
-  const svcName=document.getElementById('page-title').textContent.replace('DASHBOARD ML \u2014 ','')||'SSP';
+  const svcName='SSP';
 
   let html='<div class="hero-card"><div style="width:60px;height:60px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 80 80" width="60" height="60"><rect x="8" y="30" width="50" height="24" rx="5" fill="#FFE600"/><rect x="38" y="22" width="22" height="18" rx="3" fill="#fff" opacity=".9"/><rect x="40" y="24" width="18" height="14" rx="2" fill="#a8d8ff"/><circle cx="18" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="18" cy="56" r="3" fill="#FFE600"/><circle cx="46" cy="56" r="7" fill="#2D3277" stroke="#fff" stroke-width="2"/><circle cx="46" cy="56" r="3" fill="#FFE600"/><rect x="56" y="36" width="16" height="18" rx="3" fill="#FFE600" stroke="#2D3277" stroke-width="1.5"/></svg></div>';
   html+='<div><div class="hero-title">MERCADO LIVRE \u2014 '+svcName+'</div><div class="hero-desc">Painel unificado: Insucessos + SP + DIT</div>';
