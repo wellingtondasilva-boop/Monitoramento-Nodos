@@ -506,7 +506,7 @@ function buildDetail(nodo,data){
 
   const sorted=[...rows].sort((a,b)=>b._score-a._score);
   h+='<div class="ids-table-wrap"><table class="ids-table"><thead><tr>';
-  h+='<th><input type="checkbox" onchange="toggleAllIds(this)"></th><th>SHIPMENT ID</th><th>SUBSTATUS</th><th>AGING</th><th>VALOR</th><th>CANCEL.</th><th>DIT</th><th>MOTIVO DIT</th><th>SCORE</th></tr></thead><tbody>';
+  h+='<th><input type="checkbox" onchange="toggleAllIds(this)"></th><th>SHIPMENT ID</th><th>SUBSTATUS</th><th>AGING</th><th>CANCEL.</th><th>DIT</th><th>MOTIVO DIT</th><th>SCORE</th></tr></thead><tbody>';
   sorted.forEach(r=>{
     const isSel=selectedIds.has(r.Shipment);const dit=RISK_DIT_MAP[r.Shipment];const rlr=riskLabel(r._score);
     const subCls=r['Substatus Logistics']==='missing'?'b-missing':r['Substatus Logistics']==='stale'?'b-stale':r['Substatus Logistics']==='problem_solving'?'b-ps':r['Substatus Logistics']==='sorting'?'b-sorting':'b-other';
