@@ -578,7 +578,6 @@ function buildDetail(nodo,data){
     h+='<td style="font-family:monospace;font-weight:700">'+r.Shipment+'</td>';
     h+='<td><span class="badge '+subCls+'">'+r['Substatus Logistics']+'</span></td>';
     h+='<td><span class="aging-badge" style="background:'+acBg(parseInt(r['Aging'])||0)+';color:'+acColor(parseInt(r['Aging'])||0)+'">'+r['Aging']+'d</span></td>';
-    h+='<td>'+(r['Valor usd']?'$'+r['Valor usd']:'—')+'</td>';
     h+='<td style="font-weight:700;color:'+(r['Pedido de cacelamento']==='SIM'?'#E5002B':'#00A650')+'">'+r['Pedido de cacelamento']+'</td>';
     h+='<td>'+(dit?'<span class="badge b-dit">\u23f1 DIT</span>':'<span class="badge b-nodit">\u2014</span>')+'</td>';
     h+='<td style="font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis">'+(dit?dit.motivo:'—')+'</td>';
