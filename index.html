@@ -204,13 +204,19 @@ tr:hover td{background:#fffde7}
 .footer{background:#2D3277;color:rgba(255,255,255,.5);text-align:center;padding:9px;font-size:11px;margin-top:8px}
 @media print{
   body > *{display:none!important}
-  .romaneio-modal-overlay{display:block!important;position:fixed!important;inset:0!important;background:#fff!important;z-index:9999!important}
+  .romaneio-modal-overlay{display:block!important;position:static!important;background:#fff!important;overflow:visible!important}
   .romaneio-modal-overlay.open{display:block!important}
-  .romaneio-modal{width:100%!important;max-height:none!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important}
+  .romaneio-modal{width:100%!important;max-height:none!important;height:auto!important;box-shadow:none!important;border-radius:0!important;overflow:visible!important;position:static!important}
   .romaneio-header{display:none!important}
-  .romaneio-body{display:block!important;padding:10px!important}
+  .romaneio-body{display:block!important;padding:8px!important;overflow:visible!important;max-height:none!important;height:auto!important}
+  .rom-table{width:100%!important;page-break-inside:auto!important}
+  .rom-table tr{page-break-inside:avoid!important;page-break-after:auto!important}
   .rom-table td,.rom-table th{font-size:10px!important;padding:3px 5px!important}
   .rom-header-table td{font-size:11px!important}
+  .rom-info{display:grid!important;grid-template-columns:1fr 1fr!important}
+  .rom-info-card{font-size:11px!important}
+  .rom-place-title{font-size:11px!important;padding:4px 8px!important}
+  .rom-sign-table td{padding:14px 8px 4px!important;font-size:10px!important}
 }
 @media(max-width:700px){
   .hero-card{grid-template-columns:1fr}.alerts{min-width:unset}
@@ -638,14 +644,11 @@ function gerarRomaneio(){
   h+='<div class="rom-info-card"><div class="rom-info-label">RESPONS\u00c1VEL</div><div class="rom-info-val">'+(info.responsavel||'—')+'</div></div>';
   h+='<div class="rom-info-card"><div class="rom-info-label">TELEFONE</div><div class="rom-info-val">'+(info.tel||'—')+'</div></div></div>';
   h+='<div class="rom-place-title">'+selectedNodo+(info.endereco?' \u2014 '+info.endereco:'')+(info.tipo?' | '+info.tipo:'')+'</div>';
-  h+='<table class="rom-table"><thead><tr><th style="width:145px">C\u00f3digo do Pacote</th><th style="width:70px">Coletado?</th><th>Substatus</th><th style="width:55px">Aging</th><th style="width:65px">Valor USD</th><th>Teve Algum Problema?</th></tr></thead><tbody>';
+  h+='<table class="rom-table"><thead><tr><th style="width:160px">C\u00f3digo do Pacote</th><th style="width:70px">Coletado?</th><th>Teve Algum Problema?</th></tr></thead><tbody>';
   rows.forEach(r=>{
     const ag=parseInt(r['Aging'])||0;
     const sc=r['Substatus Logistics']==='missing'?{bg:'#fde8e8',cl:'#E5002B'}:r['Substatus Logistics']==='stale'?{bg:'#fff3e0',cl:'#FF6B00'}:{bg:'#e8f5e9',cl:'#00A650'};
     h+='<tr><td class="rom-id">'+r.Shipment+'</td><td style="text-align:center"><input type="checkbox" class="rom-checkbox"> Sim</td>';
-    h+='<td><span class="rom-status-badge" style="background:'+sc.bg+';color:'+sc.cl+'">'+r['Substatus Logistics']+'</span></td>';
-    h+='<td style="text-align:center"><span class="aging-badge" style="background:'+acBg(ag)+';color:'+acColor(ag)+'">'+r['Aging']+'d</span></td>';
-    h+='<td>'+(r['Valor usd']?'$'+r['Valor usd']:'—')+'</td>';
     h+='<td style="font-size:10px"><label><input type="checkbox"> Pac. n\u00e3o est\u00e1</label> &nbsp;<label><input type="checkbox"> Danificado</label> &nbsp;<label><input type="checkbox"> Perdido</label> &nbsp;<label><input type="checkbox"> Entregue ao Cliente</label> &nbsp;Outro: _______________</td></tr>';
   });
   h+='</tbody></table>';
